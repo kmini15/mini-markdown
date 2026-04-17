@@ -13,15 +13,15 @@
 [WITHOUT_TITLE](https://www.google.com)
 
 Autolink URL: <http://www.naver.com>  
-Autolink E-mail: <whimin@kaist.ac.kr>
+Autolink E-mail: <kmini15@naver.com>
 
 ### Reference Links
 
-[1]: https://www.naver.com
-[2]: https://www.naver.com "Naver"
-[3]: https://www.google.com "Google"
+[1]: http://www.kmini15.com
+[2]: http://www.naver.com "Naver"
+[3]: http://www.google.com "Google"
 
-[Naver][1]  
+[Mini Archive][1]  
 [Naver][2]  
 [Google][3]
 

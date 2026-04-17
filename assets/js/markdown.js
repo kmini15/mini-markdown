@@ -27,15 +27,15 @@ class LineReader {
 class BlockParser {
   constructor() {
     this.patterns = [
-      { type: "HTML", regex: /^\s*<([A-Za-z][A-Za-z0-9-]*)(\s[^>]*)?>\s*$/g },
       { type: "LINK_REFERENCE", regex: /^\s*\[([^\n\]]+)\]:\s+([^\n\s]+)(\s+"([^"\n]*)")?\s*$/ },
+      { type: "HTML", regex: /^\s*<([A-Za-z][A-Za-z0-9-]*)(\s[^>]*)?>\s*$/g },
+      { type: "CODE_BLOCK", regex: /^(\s{4})([^\n]+)$/ },
+      { type: "BLOCKQUOTE", regex: /^(\s*)(>+)\s+([^\n]*)$/ },
       { type: "O_LIST", regex: /^(\s*)(\d+\.)\s+([^\n]*)$/ },
       { type: "U_LIST", regex: /^(\s*)([-*+])\s+([^\n]*)$/ },
-      { type: "CODE_BLOCK", regex: /^(\s{4})([^\n]+)$/ },
       { type: "HEADING", regex: /^(\s*)(#{1,6})\s+([^\n]*)$/ },
       { type: "HORIZONTAL_RULE", regex: /^(\s*)([-*_]{3,})\s*$/ },
       { type: "GRID", regex: /^(\s*)[:]{4}\[([^\n:]+)(:[^\n:]+)?(:[^\n:]+)?\]\s*$/ },
-      { type: "BLOCKQUOTE", regex: /^(\s*)(>+)\s+([^\n]*)$/ },
       { type: "PARAGRAPH", regex: /^(\s*)([^\n]+)$/ },
     ]
     this.references = {}; // reference definitions collected during parsing
@@ -496,19 +496,19 @@ class Renderer {
     }
     switch (node.type) {
       case "HEADING":
-        return `<h${node.level}>${result.trim()}</h${node.level}>\n`;
+        return `<h${node.level}>${result}</h${node.level}>\n`;
       case "PARAGRAPH":
-        return `<p>${result.trim()}</p>\n`;
+        return `<p>${result}</p>\n`;
       case "BLOCKQUOTE":
-        return `<blockquote>${result.trim()}</blockquote>\n`;
+        return `<blockquote>${result}</blockquote>\n`;
       case "O_LIST":
-        return `<ol>\n${result.trim()}\n</ol>\n`;
+        return `<ol>\n${result}</ol>\n`;
       case "U_LIST":
-        return `<ul>\n${result.trim()}\n</ul>\n`;
+        return `<ul>\n${result}</ul>\n`;
       case "LIST_ITEM":
-        return `<li>${result.trim()}</li>\n`;
+        return `<li>${result}</li>\n`;
       case "CODE_BLOCK":
-        return `<pre><code>${result.trim()}</code></pre>\n`;
+        return `<pre><code>${result}</code></pre>\n`;
       case "HORIZONTAL_RULE":
         return `<hr>\n`;
       case "HTML":
@@ -523,7 +523,7 @@ class Renderer {
         }
         return `<div class="grid" style="${gridStyle}">${result.trim()}</div>\n`;
       case "GRID_ITEM":
-        return `<div class="grid-item">${result.trim()}</div>\n`;
+        return `<div class="grid-item">${result}</div>\n`;
       default:
         return result;
     }
