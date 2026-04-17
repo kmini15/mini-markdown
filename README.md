@@ -1,6 +1,6 @@
 # Mini Markdown
 
-자바스크립스 정규표현식을 사용하여 구현한 Markdown parser.
+자바스크립트 정규표현식을 사용하여 구현한 Markdown parser.
 
 ## Quick Start Guide
 
@@ -20,7 +20,7 @@ Basic syntax와 Extended syntax를 순차적으로 구현하는 방식으로 제
 #### Basic Syntax
 
 | Group               | Type            | Parameter               | HTML Tag       | Parse     | Nested | Done |
-|:--------------------|-----------------|:------------------------|:--------------:|:----------|:------:|:----:|
+|:--------------------|:----------------|:------------------------|:--------------:|:----------|:------:|:----:|
 | Headings            | HEADING         | level: [1,6]            | `<h1>`~`<h6>`  | Block     |        | V    |
 |                     | HEADING(SETEXT) | level: 1                | `<h1>`         | Block     |        | V    |
 |                     | HEADING(SETEXT) | level: 2                | `<h2>`         | Block     |        | V    |
