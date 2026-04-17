@@ -1,0 +1,78 @@
+:root {
+  --color-bg: #111111;
+  --color-text: #dddddd;
+  --color-text-secondary: #aaaaaa;
+  --color-text-muted: #888888;
+  --color-text-link: #ffffff;
+  --color-text-link-hover: #7272ff;
+  --color-text-link-disabled: #888888;
+  --color-depth-0: #1d1d1d;
+  --color-depth-1: #2a2a2a;
+  --color-depth-2: #393939;
+  --color-depth-3: #484848;
+  --color-depth-4: #585858;
+  --color-depth-5: #686868;
+  --color-depth-6: #787878;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  /* box-shadow: 0 0 0 1px #ff0000; */
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans KR", sans-serif;
+  font-size: 16px;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  margin: 16px;
+}
+
+.view {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+}
+
+.view__left {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 8px;
+}
+
+.view__right {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 8px;
+}
+
+#editor {
+  font-family: 'SF Mono', Monaco, Menlo, Courier, monospace;
+  font-size: 0.8em;
+  height: 25vh;
+}
+
+#parser {
+  font-family: 'SF Mono', Monaco, Menlo, Courier, monospace;
+  font-size: 0.8em;
+  height: 25vh;
+}
+
+#render {
+  font-family: 'SF Mono', Monaco, Menlo, Courier, monospace;
+  font-size: 0.8em;
+  height: 25vh;
+}
+
+#output {
+  font-size: 0.8em;
+}
+
+.view__right .output {
+  padding: 16px;
+  background-color: var(--color-depth-0);
+  border-radius: 8px;
+}

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="stylesheet" href="/assets/css/layout.css" />
+  <link rel="stylesheet" href="/assets/css/markdown.css" />
+  <script src="/assets/js/markdown.js"></script>
+  <title>Mini Markdown Editor</title>
+</head>
+
+<body>
+  <h1>Mini Markdown Editor</h1>
+  <div class="view">
+    <div class="view__left">
+      <p>Input [Markdown Text]</p>
+      <textarea id="editor" wrap="off"></textarea>
+      <p>Parser [Text -> Abstract Syntax Tree]</p>
+      <textarea id="parser" wrap="off"></textarea>
+      <p>Render [Abstract Syntax Tree -> HTML]</p>
+      <textarea id="render" wrap="off"></textarea>
+    </div>
+    <div class="view__right">
+      <p>Output</p>
+      <div class="output">
+        <div id="output" class="markdown-body"></div>
+      </div>
+    </div>
+  </div>
+</body>
+
+<script>
+  const markdown = new Markdown();
+
+  async function readFile(path) {
+    const res = await fetch(path);
+    const text = await res.text();
+    console.log(text);
+    return text;
+  }
+  async function init() {
+    var text = await readFile("/assets/input.md");
+
+    editor = document.getElementById("editor");
+    parser = document.getElementById("parser");
+    render = document.getElementById("render");
+    output = document.getElementById("output");
+
+    editor.value = text;
+    parser_result = markdown.parse(text);
+    parser.value = parser_result;
+    render_result = markdown.render(text);
+    render.value = render_result;
+    output.innerHTML = render_result;
+  }
+
+  editor = document.getElementById("editor");
+  parser = document.getElementById("parser");
+  render = document.getElementById("render");
+  output = document.getElementById("output");
+
+  function debounce(fn, delay) {
+    let timer = null;
+    return function (...args) {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        fn.apply(this, args);
+      }, delay);
+    };
+  }
+
+  editor.addEventListener("input", debounce((e) => {
+    const text = e.target.value;
+    parser_result = markdown.parse(text);
+    parser.value = parser_result;
+    render_result = markdown.render(text);
+    render.value = render_result;
+    output.innerHTML = render_result;
+  }, 200));
+
+  init();
+</script>
