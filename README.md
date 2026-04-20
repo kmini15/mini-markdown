@@ -48,6 +48,36 @@ Basic syntax와 Extended syntax를 순차적으로 구현한다.
 |                     | ESCAPE_RESTORE  |                         |                | Inline    |        | V    |
 | HTML                | HTML            |                         |                | Block     |        | V    |
 
+
+
+| Group               | Type            | Parameter               | HTML Tag       | Parse     | Nested | Done |
+|:--------------------|:----------------|:------------------------|:--------------:|:----------|:------:|:----:|
+|                     | LINK_REFERENCE  | `text`, `href`, `title` |                | Block     |        | V    |
+| HTML                | HTML            |                         |                | Block     |        | V    |
+|                     | CODE_BLOCK      |                         | `<pre><code>`  | Block     |        | V    |
+| Blockquotes         | BLOCKQUOTE      |                         | `<blockquote>` | Block     | Nested | V    |
+| Headings            | HEADING         | level: [1,6]            | `<h1>`~`<h6>`  | Block     |        | V    |
+|                     | HEADING(SETEXT) | level: 1                | `<h1>`         | Block     |        | V    |
+|                     | HEADING(SETEXT) | level: 2                | `<h2>`         | Block     |        | V    |
+| Paragraphs          | PARAGRAPH       |                         | `<p>`          | Block     |        | V    |
+| Lists               | O_LIST          |                         | `<ol>`         | Block     | Nested | V    |
+|                     | U_LIST          |                         | `<ul>`         | Block     | Nested | V    |
+|                     | LIST_ITEM       |                         | `<li>`         | Block     | Nested | V    |
+| Code                | CODE_INLINE     |                         | `<code>`       | Inline    |        | V    |   
+| Horizontal Rules    | HORIZONTAL_RULE |                         | `<hr>`         | Block     |        | V    |
+|                     | LINK            | `text`, `href`, `title` | `<a>`          | Inline    |        | V    |
+|                     | LINK_URL        | `href`,                 | `<a>`          | Inline    |        | V    |
+|                     | LINK_EMAIL      | `href`,                 | `<a>`          | Inline    |        | V    |
+|                     | LINK_REFERENCE  | `text`, `href`, `title` | `<a>`          | Inline    |        | V    |
+| Images              | IMAGE           | `alt`, `src`            | `<img>`        | Inline    |        | V    |
+| Escaping Characters | ESCAPE_PROTECT  |                         |                | Inline    |        | V    |
+|                     | ESCAPE_RESTORE  |                         |                | Inline    |        | V    |
+| Line Breaks         | LINE_BREAK      |                         | `<br>`         | Inline    |        | V    |
+| Emphasis            | BOLD            |                         | `<b>`          | Inline    |        | V    |
+|                     | BOLD_ALT        |                         | `<b>`          | Inline    |        | V    |
+|                     | ITALIC          |                         | `<i>`          | Inline    |        | V    |
+|                     | ITALIC_ALT      |                         | `<i>`          | Inline    |        | V    |
+
 ## Implementation
 
 파서는 다음과 같은 구조로 구성한다.

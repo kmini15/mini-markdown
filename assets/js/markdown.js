@@ -2,44 +2,31 @@ class LineReader {
   constructor(markdown) {
     this.lines = markdown.replace(/\r\n?/g, "\n").split("\n");
     this.pos = 0;
-    this.head = 0;
   }
 
   eof() {
     return this.pos >= this.lines.length;
   }
 
-  current(offset = 0) {
-    return this.lines[this.pos + offset]?.slice(this.head) ?? null;
+  current() {
+    if (this.eof()) return null;
+    return this.lines[this.pos];
   }
 
   advance() {
     if (this.eof()) return null;
-    this.head = 0;
     this.pos++;
   }
 
-  consume(num) {
-    this.head += num;
+  setCurrent(line) {
+    if (this.eof()) return null;
+    this.lines[this.pos] = line;
   }
 }
 
-class BlockParser {
+class HTMLParser {
   constructor() {
-    this.patterns = [
-      { type: "LINK_REFERENCE", regex: /^\s*\[([^\n\]]+)\]:\s+([^\n\s]+)(\s+"([^"\n]*)")?\s*$/ },
-      { type: "HTML", regex: /^\s*<([A-Za-z][A-Za-z0-9-]*)(\s[^>]*)?>\s*$/g },
-      { type: "CODE_BLOCK", regex: /^(\s{4})([^\n]+)$/ },
-      { type: "BLOCKQUOTE", regex: /^(\s*)(>+)\s+([^\n]*)$/ },
-      { type: "O_LIST", regex: /^(\s*)(\d+\.)\s+([^\n]*)$/ },
-      { type: "U_LIST", regex: /^(\s*)([-*+])\s+([^\n]*)$/ },
-      { type: "HEADING", regex: /^(\s*)(#{1,6})\s+([^\n]*)$/ },
-      { type: "HORIZONTAL_RULE", regex: /^(\s*)([-*_]{3,})\s*$/ },
-      { type: "GRID", regex: /^(\s*)[:]{4}\[([^\n:]+)(:[^\n:]+)?(:[^\n:]+)?\]\s*$/ },
-      { type: "PARAGRAPH", regex: /^(\s*)([^\n]+)$/ },
-    ]
-    this.references = {}; // reference definitions collected during parsing
-    this.SELF_CLOSING = new Set([
+    this.SELF_CLOSING_TAGS = new Set([
       "area",
       "base",
       "br",
@@ -57,200 +44,16 @@ class BlockParser {
     ]);
   }
 
-  matchPattern(reader) {
-    const line = reader.current();
-    for (const pattern of this.patterns) {
-      const match = line?.match(pattern.regex);
-      if (!match) continue;
-      return { type: pattern.type, match };
-    }
-    return null;
-  }
-
-  parseHeading(reader) {
-    const pattern = this.matchPattern(reader);
-    reader.advance();
-    return {
-      type: "HEADING",
-      children: [{
-        type: "TEXT",
-        value: pattern.match[3],
-      }],
-      level: pattern.match[2].length
-    }
-  }
-
-  parseParagraph(reader) {
-    // Parse setext-style headings first
-    const line1 = reader.current(0);
-    const line2 = reader.current(1);
-    if (line1 && line2) {
-      const pattern1 = line1.match(/^\s*([^\n]+)\s*$/);
-      const pattern2 = line2.match(/^\s*(=+|-+)\s*$/);
-      if (pattern1 && pattern2) {
-        reader.advance(); // consume heading text
-        reader.advance(); // consume underline
-        return {
-          type: "HEADING",
-          children: [{
-            type: "TEXT",
-            value: pattern1[1],
-          }],
-          level: pattern2[1].startsWith("=") ? 1 : 2,
-        }
-      }
-    }
-    // Otherwise, parse as normal paragraph
+  parse(reader) {
+    let stack = [];
     let lines = [];
-    while (!reader.eof()) {
-      const line2 = reader.current(1);
-      const pattern2 = line2?.match(/^\s*(=+|-+)\s*$/);
-      if (pattern2) { // if next line is setext underline, stop parsing paragraph
-        break;
-      }
-      const nextPattern = this.matchPattern(reader);
-      if (!nextPattern || nextPattern.type !== "PARAGRAPH") break;
-      lines.push(nextPattern.match[2]);
-      reader.advance();
-    }
-    return {
-      type: "PARAGRAPH",
-      children: [{
-        type: "TEXT",
-        value: lines.join("\n"),
-      }],
-    }
-  }
-
-  parseBlockquote(reader) {
-    let lines = [];
-    while (!reader.eof()) {
-      const nextPattern = this.matchPattern(reader);
-      if (!nextPattern || nextPattern.type !== "BLOCKQUOTE") break;
-      const num_prefix = reader.current().match(/^(\s*>{1})/)[1].length;
-      lines.push(reader.current().slice(num_prefix));
-      reader.advance();
-    }
-    const children = this.parseBlocks(lines.join("\n"));
-    for (let i = 0; i < children.length; i++) {
-      if (children[i].type === "PARAGRAPH") {
-        children[i] = children[i].children[0]; // unwrap paragraph
-      }
-    }
-    return {
-      type: "BLOCKQUOTE",
-      children: children,
-    }
-  }
-
-  parseOlist(reader, depth = 0) {
-    let children = [];
-    while (!reader.eof()) {
-      const nextPattern = this.matchPattern(reader);
-      if (!nextPattern || (nextPattern.type !== "O_LIST" && nextPattern.type !== "U_LIST")) break;
-      let next_depth = nextPattern.match[1].length;
-      if (next_depth === depth) {
-        const num_prefix = nextPattern.match[1].length + nextPattern.match[2].length;
-        reader.consume(num_prefix); // consume list marker
-        let child = this.parseBlock(reader, depth);
-        if (child.type === "PARAGRAPH") child = child.children[0]; // unwrap paragraph
-        children.push({ type: "LIST_ITEM", children: [child] });
-        continue;
-      }
-      if (next_depth > depth) {
-        const olist = this.parseBlock(reader, next_depth);
-        children.push(olist);
-        continue;
-      }
-      break;
-    }
-    return {
-      type: "O_LIST",
-      children: children,
-    }
-  }
-
-  parseUlist(reader, depth = 0) {
-    let children = [];
-    while (!reader.eof()) {
-      const nextPattern = this.matchPattern(reader);
-      if (!nextPattern || (nextPattern.type !== "O_LIST" && nextPattern.type !== "U_LIST")) break;
-      let next_depth = nextPattern.match[1].length;
-      if (next_depth === depth) {
-        const num_prefix = nextPattern.match[1].length + nextPattern.match[2].length;
-        reader.consume(num_prefix); // consume list marker
-        let child = this.parseBlock(reader, depth);
-        if (child.type === "PARAGRAPH") child = child.children[0]; // unwrap paragraph
-        children.push({ type: "LIST_ITEM", children: [child] });
-        continue;
-      }
-      if (next_depth > depth) {
-        const ulist = this.parseBlock(reader, next_depth);
-        children.push(ulist);
-        continue;
-      }
-      break;
-    }
-    return {
-      type: "U_LIST",
-      children: children,
-    }
-  }
-
-  parseCodeBlock(reader) {
-    let lines = [];
-    while (!reader.eof()) {
-      const nextPattern = this.matchPattern(reader);
-      if (!nextPattern || nextPattern.type !== "CODE_BLOCK") break;
-      lines.push(nextPattern.match[2]);
-      reader.advance();
-    }
-    return {
-      type: "CODE_BLOCK",
-      children: [{ type: "TEXT", value: lines.join("\n") }],
-    }
-  }
-
-  parseHorizontalRule(reader) {
-    const pattern = this.matchPattern(reader);
-    reader.advance();
-    return {
-      type: "HORIZONTAL_RULE",
-      children: [{ type: "TEXT", value: "<hr>" }],
-    }
-  }
-
-  parseLinkReference(reader) {
-    const pattern = this.matchPattern(reader);
-    reader.advance();
-    this.references[pattern.match[1].toLowerCase()] = {
-      url: pattern.match[2],
-      title: pattern.match[4] || "",
-    };
-    return {
-      type: "LINK_REFERENCE",
-      children: [{ type: "TEXT", value: "" }],
-    };
-  }
-
-  parseHTML(reader) {
-    const first = reader.current();
-    const open = first?.match(/^\s*<([A-Za-z][A-Za-z0-9-]*)\b[^>]*>/);
-    if (!open) return null;
-    const stack = [];
-    const lines = [];
     while (!reader.eof()) {
       const line = reader.current();
-      const openTags = [...line.matchAll(/<([A-Za-z][A-Za-z0-9-]*)\b[^>]*?>/g)];
-      const closeTags = [...line.matchAll(/<\/([A-Za-z][A-Za-z0-9-]*)>/g)];
-      const selfClosing = [...line.matchAll(/<([A-Za-z][A-Za-z0-9-]*)\b[^>]*?\/>/g)];
-      // self closing 제거
-      for (const m of selfClosing) {
-        // stack 영향 없음
-      }
+      const openTags = [...line.matchAll(/<([a-zA-Z][a-zA-Z0-9-]*)(\s[^>]*)?>/g)];
+      const closeTags = [...line.matchAll(/<\/([a-zA-Z][a-zA-Z0-9-]*)>/g)];
       for (const m of openTags) {
         const tag = m[1].toLowerCase();
-        if (!this.SELF_CLOSING.has(tag) && !m[0].endsWith("/>")) {
+        if (!m[0].endsWith("/>") && !this.SELF_CLOSING_TAGS.has(tag)) {
           stack.push(tag);
         }
       }
@@ -264,18 +67,274 @@ class BlockParser {
       reader.advance();
       if (stack.length === 0) break;
     }
+    if (lines.length === 0) return null;
     return {
-      type: "HTML_BLOCK",
-      children: [{ type: "TEXT", value: lines.join("\n") }] ,
+      type: "HTML",
+      children: [{
+        type: "TEXT",
+        children: [],
+        value: lines.join("\n")
+      }],
+    };
+  }
+}
+
+class BlockParser {
+  constructor() {
+    this.references = {};
+    this.BLOCK_RULES = {
+      HTML: {
+        type: "HTML",
+        pattern: /^(\s*)<([a-zA-Z][a-zA-Z0-9\-]*)(\s[^>]*)?>/,
+        indentMode: "none",
+        parser: this.parseHTML.bind(this),
+      },
+      LINK_REFERENCE_DEF: {
+        type: "LINK_REFERENCE_DEF",
+        pattern: /^(\s*)\[([^\]]+)\]:\s*([\S]+)(\s*"([^"]*)")?\s*$/,
+        indentMode: "none",
+        parser: this.parseLinkReferenceDef.bind(this),
+      },
+      LIST: {
+        type: "LIST",
+        pattern: /^(\s*)(([*+-]|\d+\.)\s)(.*)$/,
+        indentMode: "none",
+        parser: this.parseList.bind(this),
+      },
+      CODE_BLOCK: {
+        type: "CODE_BLOCK",
+        pattern: /^(\s{4})(.*)$/,
+        indentMode: "base",
+        parser: this.parseCodeBlock.bind(this),
+      },
+      BLOCKQUOTE: {
+        type: "BLOCK_QUOTE",
+        pattern: /^(\s*)>\s?(.*)$/,
+        indentMode: "none",
+        parser: this.parseBlockquote.bind(this),
+      },
+      HEADING: {
+        type: "HEADING",
+        pattern: /^(\s*)(#{1,6})\s+(.*)$/,
+        indentMode: "none",
+        parser: this.parseHeading.bind(this),
+      },
+      HORIZONTAL_RULE: {
+        type: "HORIZONTAL_RULE",
+        pattern: /^(\s*)([\-\*\_]{3,})\s*$/,
+        indentMode: "none",
+        parser: this.parseHorizontalRule.bind(this),
+      },
+      GRID: {
+        type: "GRID",
+        pattern: /^(\s*):{4}\[([^:]+)(:[^:]+)?(:[^:]+)?\]\s*$/,
+        indentMode: "none",
+        parser: this.parseGrid.bind(this),
+      },
+      PARAGRAPH: {
+        type: "PARAGRAPH",
+        pattern: /^(\s*)(.+)$/,
+        indentMode: "none",
+        parser: this.parseParagraph.bind(this),
+      },
+    }
+  }
+
+  matchBlock(reader, baseIndent) {
+    if (reader.eof()) return null;
+    for (const type in this.BLOCK_RULES) {
+      const rule = this.BLOCK_RULES[type];
+      let line = reader.current();
+      if (rule.indentMode === "base") {
+        const indent = line.match(/^(\s*)/)[1].length;
+        if (indent < baseIndent) continue;
+        line = line.slice(baseIndent);
+      }
+      const match = line.match(rule.pattern);
+      if (match) {
+        return rule;
+      }
+    }
+    return null;
+  }
+
+  parseBlock(reader, baseIndent) {
+    const rule = this.matchBlock(reader, baseIndent);
+    return rule ? rule.parser(reader, baseIndent) : null;
+  }
+
+  parseBlocks(text) {
+    const reader = new LineReader(text);
+    let children = [];
+    while (!reader.eof()) {
+      const block = this.parseBlock(reader, 0);
+      if (block) {
+        children.push(block);
+      } else {
+        reader.advance(); // skip unrecognized line
+      }
+    }
+    return children;
+  }
+
+  parse(text) {
+    this.references = {};
+    const reader = new LineReader(text);
+    const children = this.parseBlocks(text);
+    const references = this.references;
+    this.references = {};
+    return {
+      type: "DOCUMENT",
+      children: children,
+      references: references,
     };
   }
 
-  parseGrid(reader) {
-    const pattern = this.matchPattern(reader);
+  parseHTML(reader, baseIndent) {
+    const parser = new HTMLParser();
+    return parser.parse(reader);
+  }
+
+  parseLinkReferenceDef(reader, baseIndent) {
+    const line = reader.current();
+    const match = line.match(this.BLOCK_RULES.LINK_REFERENCE_DEF.pattern);
+    if (!match) return null;
     reader.advance();
-    const columns = pattern.match[2];
-    const gap = pattern.match[3] ? pattern.match[3].slice(1) : 0;
-    const item_style = pattern.match[4] ? pattern.match[4].slice(1) : "";
+    const id = match[2].toLowerCase();
+    const url = match[3];
+    const title = match[5] || "";
+    this.references[id] = { url, title };
+    return {
+      type: "LINK_REFERENCE_DEF",
+      children: [],
+      id: id,
+      url: url,
+      title: title,
+    };
+  }
+
+  parseList(reader, baseIndent) {
+    let children = [];
+    const line = reader.current();
+    const match = line.match(this.BLOCK_RULES.LIST.pattern);
+    if (!match) return null;
+    const referenceIndent = match[1].length;
+    while (!reader.eof()) {
+      const line = reader.current();
+      const match = line.match(this.BLOCK_RULES.LIST.pattern);
+      if (!match) break;
+      const indent = match[1].length;
+      if (indent < referenceIndent) break;
+      if (indent > referenceIndent) {
+        children.push(this.parseBlock(reader, indent));
+        continue;
+      }
+      const ordered = match[3].endsWith(".");
+      const new_indent = indent + match[2].length;
+      const new_line = " ".repeat(new_indent) + match[4];
+      reader.setCurrent(new_line); // remove list marker for nested parsing
+      let block = this.parseBlock(reader, new_indent);
+      if (block.type === "PARAGRAPH") {
+        block = block.children[0]; // unwrap paragraph
+      }
+      children.push({
+        type: "LIST_ITEM",
+        children: [block],
+        ordered: ordered,
+      });
+    }
+    if (children.length === 0) return null;
+    return {
+      type: "LIST",
+      children: children,
+      ordered: children.length > 0 ? children[0].ordered : false,
+    };
+  }
+
+  parseCodeBlock(reader, baseIndent) {
+    let lines = [];
+    while (!reader.eof()) {
+      const line = reader.current().slice(baseIndent);
+      const match = line.match(this.BLOCK_RULES.CODE_BLOCK.pattern);
+      if (!match) break;
+      lines.push(match[2]);
+      reader.advance();
+    }
+    if (lines.length === 0) return null;
+    return {
+      type: "CODE_BLOCK",
+      children: [{
+        type: "TEXT",
+        children: [],
+        value: lines.join("\n"),
+      }],
+    };
+  }
+
+  parseBlockquote(reader, baseIndent) {
+    let lines = [];
+    const line = reader.current();
+    const match = line.match(this.BLOCK_RULES.BLOCKQUOTE.pattern);
+    if (!match) return null;
+    const referenceIndent = match[1].length;
+    while (!reader.eof()) {
+      const line = reader.current();
+      const match = line.match(this.BLOCK_RULES.BLOCKQUOTE.pattern);
+      if (!match) break;
+      const indent = match[1].length;
+      if (indent < referenceIndent) break;
+      lines.push(match[2]);
+      reader.advance();
+    }
+    if (lines.length === 0) return null;
+    const content = lines.join("\n");
+    const blocks = this.parseBlocks(content);
+    for (let i = 0; i < blocks.length; i++) {
+      if (blocks[i].type === "PARAGRAPH") {
+        blocks[i] = blocks[i].children[0]; // unwrap paragraph
+      }
+    }
+    return {
+      type: "BLOCKQUOTE",
+      children: blocks ? blocks : [],
+    };
+  }
+
+  parseHeading(reader, baseIndent) {
+    const line = reader.current();
+    const match = line.match(this.BLOCK_RULES.HEADING.pattern);
+    if (!match) return null;
+    reader.advance();
+    return {
+      type: "HEADING",
+      children: [{
+        type: "TEXT",
+        children: [],
+        value: match[3].trim(),
+      }],
+      level: match[2].length,
+    };
+  }
+
+  parseHorizontalRule(reader, baseIndent) {
+    const line = reader.current();
+    const match = line.match(this.BLOCK_RULES.HORIZONTAL_RULE.pattern);
+    if (!match) return null;
+    reader.advance();
+    return {
+      type: "HORIZONTAL_RULE",
+      children: [],
+    };
+  }
+
+  parseGrid(reader, baseIndent) {
+    const line = reader.current();
+    const match = line.match(this.BLOCK_RULES.GRID.pattern);
+    if (!match) return null;
+    reader.advance();
+    const columns = match[2].trim();
+    const gap = match[3] ? match[3].slice(1).trim() : 0;
+    const style = match[4] ? match[4].slice(1).trim() : null;
     let children = [];
     while (!reader.eof()) {
       const line = reader.current();
@@ -285,8 +344,12 @@ class BlockParser {
       }
       children.push({
         type: "GRID_ITEM",
-        children: [{ type: "TEXT", value: line }],
-        style: item_style,
+        children: [{
+          type: "TEXT",
+          children: [],
+          value: line
+        }],
+        style: style,
       });
     }
     return {
@@ -294,67 +357,29 @@ class BlockParser {
       children: children,
       columns: columns,
       gap: gap,
-    }
+    };
   }
 
-  parseBlock(reader, depth = 0) {
-    const pattern = this.matchPattern(reader);
-    if (!pattern) return null;
-    switch (pattern.type) {
-      case "HEADING":
-        return this.parseHeading(reader);
-      case "HEADING_SETEXT":
-        return this.parseHeadingSetext(reader);
-      case "PARAGRAPH":
-        return this.parseParagraph(reader);
-      case "BLOCKQUOTE":
-        return this.parseBlockquote(reader);
-      case "O_LIST":
-        return this.parseOlist(reader, pattern.match[1].length);
-      case "U_LIST":
-        return this.parseUlist(reader, pattern.match[1].length);
-      case "CODE_BLOCK":
-        return this.parseCodeBlock(reader);
-      case "HORIZONTAL_RULE":
-        return this.parseHorizontalRule(reader);
-      case "LINK_REFERENCE":
-        return this.parseLinkReference(reader);
-      case "HTML":
-        return this.parseHTML(reader);
-      case "GRID":
-        return this.parseGrid(reader);
-      default:
-        return null;
-    }
-  }
-
-  parseBlocks(text) {
-    let children = [];
-    const reader = new LineReader(text);
+  parseParagraph(reader, baseIndent) {
+    let lines = [];
     while (!reader.eof()) {
-      const block = this.parseBlock(reader);
-      if (block) {
-        children.push(block);
-      } else {
-        reader.advance(); // skip unrecognized token
-      }
+      const line = reader.current();
+      const rule = this.matchBlock(reader, baseIndent);
+      if (!rule || rule.type !== "PARAGRAPH") break;
+      lines.push(line);
+      reader.advance();
     }
-    return children;
-  }
-
-  parse(text) {
-    this.references = {};
-    const children = this.parseBlocks(text);
-    const references = this.references; // collect references during block parsing
-    this.references = {};
+    if (lines.length === 0) return null;
     return {
-      type: "ROOT",
-      children: children,
-      references: references,
-    }
+      type: "PARAGRAPH",
+      children: [{
+        type: "TEXT",
+        children: [],
+        value: lines.join("\n"),
+      }],
+    };
   }
 }
-
 
 class InlineParser {
   constructor() {
@@ -464,6 +489,7 @@ class InlineParser {
     if (node.type === "TEXT") {
       return {
         type: "TEXT",
+        children: [],
         value: this.parseInline(node.value),
       }
     }
@@ -487,9 +513,6 @@ class InlineParser {
 
 class Renderer {
   render(node) {
-    if (node.type === "TEXT") {
-      return node.value;
-    }
     let result = "";
     for (const child of node.children) {
       result += this.render(child);
@@ -501,14 +524,16 @@ class Renderer {
         return `<p>${result}</p>\n`;
       case "BLOCKQUOTE":
         return `<blockquote>${result}</blockquote>\n`;
-      case "O_LIST":
-        return `<ol>\n${result}</ol>\n`;
-      case "U_LIST":
-        return `<ul>\n${result}</ul>\n`;
+      case "LIST":
+        if (node.ordered) {
+          return `<ol>\n${result}</ol>\n`;
+        } else {
+          return `<ul>\n${result}</ul>\n`;
+        }
       case "LIST_ITEM":
         return `<li>${result}</li>\n`;
       case "CODE_BLOCK":
-        return `<pre><code>${result}</code></pre>\n`;
+        return `<pre><code>\n${result}\n</code></pre>\n`;
       case "HORIZONTAL_RULE":
         return `<hr>\n`;
       case "HTML":
@@ -524,6 +549,18 @@ class Renderer {
         return `<div class="grid" style="${gridStyle}">${result.trim()}</div>\n`;
       case "GRID_ITEM":
         return `<div class="grid-item">${result}</div>\n`;
+      case "BOLD":
+        return `<b>${result}</b>`;
+      case "ITALIC":
+        return `<i>${result}</i>`;
+      case "BOLD_ITALIC":
+        return `<b><i>${result}</i></b>`;
+      case "LINE_BREAK":
+        return `<br>\n`;
+      case "CODE_INLINE":
+        return `<code>${node.value}</code>`;
+      case "TEXT":
+        return node.value;
       default:
         return result;
     }
@@ -538,11 +575,18 @@ class Markdown {
 
   toStringAST(node, indent = 0) {
     let result = "";
-    if (node.type === "TEXT") {
-      result += "    ".repeat(indent) + `[${node.type}] ${node.value}\n`;
-      return result;
+    result += "  ".repeat(indent) + `[${node.type}]`;
+    let parameters = [];
+    for (const key in node) {
+      if (key !== "type" && key !== "children") {
+        parameters.push(`${key}=${node[key]}`);
+      }
     }
-    result += "    ".repeat(indent) + `[${node.type}]` + "\n";
+    if (parameters.length > 0) {
+      result += ` { ${parameters.join(", ")} }`;
+    }
+    result += "\n";
+    console.log(node);
     for (const child of node.children) {
       result += this.toStringAST(child, indent + 1);
     }
@@ -550,7 +594,7 @@ class Markdown {
   }
 
   toStringRef(node) {
-    if (node.type === "ROOT") {
+    if (node.type === "DOCUMENT" && node.references) {
       let result = "[REFERENCES]:\n";
       for (const id in node.references) {
         const ref = node.references[id];

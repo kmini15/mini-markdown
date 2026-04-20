@@ -38,6 +38,11 @@ Autolink E-mail: <kmini15@naver.com>
         1. item1
 1. item1
 
+1.     code block 1
+         code block 2
+           code block 3
+             code block 4
+
 ## Code
 
 ### Escape Backticks
