@@ -383,139 +383,465 @@ class BlockParser {
 
 class InlineParser {
   constructor() {
-    this.patterns = [
-      {
-        type: "ESCAPE_PROTECT",
-        regex: /\\([^\n])/g,
-        render: (char) => `\uE000${char}\uE000`
-      },
-      {
-        type: "VIDEO",
-        regex: /#\[([^\n]*)\]\(([^\n]+)\)/g,
-        render: (alt, src) => `<video controls preload="none" poster="${alt}"><source src="${src}" type="video/mp4"></video>`
-      },
-      {
-        type: "IMAGE",
-        regex: /!\[([^\n]*)\]\(([^\n]+)\)/g,
-        render: (alt, src) => `<img src="${src}" alt="${alt}" />`
-      },
-      {
-        type: "LINK",
-        regex: /\[([^\n\]]+)\]\(([^)\s]+)(\s+"([^"\n]*)")?\)/g,
-        render: (text, href, _, title) => {
-          if (title) {
-            return `<a href="${href}" title="${title}">${text}</a>`;
-          } else {
-            return `<a href="${href}">${text}</a>`;
-          }
-        }
-      },
-      {
-        type: "LINK_URL",
-        regex: /<([^>\s]{2,}:[^>\s]+)>/g,
-        render: (href) => `<a href="${href}">${href}</a>`
-      },
-      {
-        type: "LINK_EMAIL",
-        regex: /<([^>\s]{2,}@[^>\s]+)>/g,
-        render: (href) => `<a href="mailto:${href}">${href}</a>`
-      },
-      {
-        type: "LINK_REFERENCE",
-        regex: /\[([^\n\]]+)\]\[([^\n\]]*)\]/g,
-        render: (text, id, _, refs) => {
-          const ref = this.references[id.toLowerCase()] || this.references[text.toLowerCase()];
-          if (ref) {
-            const title_attr = ref.title ? ` title="${ref.title}"` : "";
-            return `<a href="${ref.url}"${title_attr}>${text}</a>`;
-          } else {
-            return text;
-          }
-        }
-      },
-      {
-        type: "LINE_BREAK",
-        regex: /\s{2,}\n/g,
-        render: () => `<br>`
-      },
-      {
-        type: "BOLD",
-        regex: /\*\*([^\n*\uE000]+)\*\*/g,
-        render: (text) => `<b>${text}</b>`
-      },
-      {
-        type: "BOLD_ALT",
-        regex: /(\b)__([^\n_\uE000]+)__(\b)/g,
-        render: (pre, text, post) => `${pre}<b>${text}</b>${post}`
-      },
-      {
-        type: "ITALIC",
-        regex: /\*([^\n*\uE000]+)\*/g,
-        render: (text) => `<i>${text}</i>`
-      },
-      {
-        type: "ITALIC_ALT",
-        regex: /(\b)_([^\n_\uE000]+)_(\b)/g,
-        render: (pre, text, post) => `${pre}<i>${text}</i>${post}`
-      },
-      {
-        type: "CODE_INLINE",
-        regex: /(`+)([\s\S]*?)\1/g,
-        render: (pre, text) => `<code>${text}</code>`
-      },
-      {
-        type: "ESCAPE_RESTORE",
-        regex: /\uE000([^\n])\uE000/g,
-        render: (char) => char
-      },
-    ];
     this.references = {};
+    this.CHAR_TYPES = {
+      DELIMITER: new Set([
+        "\\", "`", "*", "_",
+        "{", "}", "[", "]",
+        "<", ">", "(", ")",
+        "!", "\"",
+      ]),
+      WHITESPACE: new Set([" ", "\t", "\n"]),
+    };
   }
 
-  parseInline(text) {
-    let result = text;
-    for (const pattern of this.patterns) {
-      result = result.replace(pattern.regex, (...args) => {
-        const groups = args.slice(1, -2);
-        return pattern.render(...groups);
-      });
+  tokenizeInline(text) {
+    const tokens = [];
+    let pos = 0;
+    let buffer = "";
+
+    const clearBuffer = () => {
+      if (buffer.length > 0) {
+        tokens.push({
+          type: "CHUNK",
+          value: buffer,
+          lspace: true,
+          rspace: true,
+          lchunk: "",
+          rchunk: "",
+        });
+        buffer = "";
+      }
     }
-    return result;
+
+    while (pos < text.length) {
+      // ESCAPE
+      const curr = text[pos];
+      const next = text[pos + 1];
+      if (curr === "\\" && next && this.CHAR_TYPES.DELIMITER.has(next)) {
+        clearBuffer();
+        tokens.push({
+          type: "CHUNK",
+          value: next,
+          lspace: true,
+          rspace: true,
+          lchunk: "",
+          rchunk: "",
+        });
+        pos += 2;
+        continue;
+      }
+      // DELIMITER
+      if (this.CHAR_TYPES.DELIMITER.has(curr)) {
+        clearBuffer();
+        let end = pos;
+        while (end < text.length && text[end] === curr) {
+          end++;
+        }
+        tokens.push({
+          type: "DELIM",
+          value: text.slice(pos, end),
+          lspace: true,
+          rspace: true,
+          lchunk: "",
+          rchunk: "",
+        });
+        pos = end;
+        continue;
+      }
+      // WHITESPACE
+      if (this.CHAR_TYPES.WHITESPACE.has(curr)) {
+        clearBuffer();
+        let end = pos;
+        while (end < text.length && this.CHAR_TYPES.WHITESPACE.has(text[end])) {
+          end++;
+        }
+        tokens.push({
+          type: "SPACE",
+          value: text.slice(pos, end),
+          lspace: true,
+          rspace: true,
+          lchunk: "",
+          rchunk: "",
+        });
+        pos = end;
+        continue;
+      }
+      buffer += curr;
+      pos++;
+    }
+    clearBuffer();
+    // Set lspace and rspace for each token
+    for (let i = 0; i < tokens.length; i++) {
+      const token = tokens[i];
+      if (i > 0) {
+        token.lspace = tokens[i - 1].type === "SPACE";
+        token.lchunk = tokens[i - 1].value.slice(-1);
+      }
+      if (i < tokens.length - 1) {
+        token.rspace = tokens[i + 1].type === "SPACE";
+        token.rchunk = tokens[i + 1].value.slice(0, 1);
+      }
+    }
+    return tokens;
   }
 
-  parseInlines(node) {
-    if (node.type === "HTML") return node; // don't parse inline elements in HTML blocks
-    if (node.type === "CODE_BLOCK") return node; // don't parse inline elements in code blocks
+  parse(node) {
+    node = this.parseInline(node);
+    return node;
+  }
+
+  parseInline(node) {
+    if (node.type === "HTML") {
+      return node;
+    }
+    if (node.type === "CODE_BLOCK") {
+      return node;
+    }
+    if (node.type === "BLOCKQUOTE") {
+      return node;
+    }
     if (node.type === "TEXT") {
-      return {
-        type: "TEXT",
-        children: [],
-        value: this.parseInline(node.value),
+      node = this.parseText(node);
+    } else {
+      node.children = node.children.map(child => this.parseInline(child));
+    }
+    return node;
+  }
+
+  parseText(node) {
+    let context = {
+      input: this.tokenizeInline(node.value),
+      stack: [],
+      state: "REDUCE",
+    };
+    while (context.input.length > 0) {
+      context.stack.push(context.input.shift());
+      while (context.stack.length > 0) {
+        console.log("STACK:");
+        for (const elem of context.stack) {
+          console.log(elem);
+        }
+        if (this.tryReduceCode(context)) continue;
+        if (this.tryReduceImage(context)) continue;
+        if (this.tryReduceLink(context)) continue;
+        if (this.tryReduceLinkURL(context)) continue;
+        if (this.tryReduceLinkWithTitle(context)) continue;
+        if (this.tryReduceLineBreak(context)) continue;
+        if (this.tryReduceEmphasis(context)) continue;
+        if (this.tryReduceItem(context)) continue;
+        if (this.tryReduceNode(context)) continue;
+        break;
       }
     }
     let children = [];
-    for (const child of node.children) {
-      children.push(this.parseInlines(child));
+    for (const elem of context.stack) {
+      children.push(elem);
     }
     return {
-      ...node,
+      type: "INLINE",
       children: children,
     }
   }
 
-  parse(node) {
-    this.references = node.references || {};
-    node = this.parseInlines(node);
-    this.references = {};
-    return node;
+  tryReduceCode(context) {
+    const N = context.stack.length;
+    const M = context.input.length;
+    if (N < 1) return false;
+    const e0 = context.stack[N - 1];
+    if (e0.type !== "DELIM") return false;
+    if (e0.value !== "`") return false;
+    let matchIndex = -1;
+    for (let i = 0; i < M; i++) {
+      const x = context.input[i];
+      if (x.type !== "DELIM") continue;
+      if (x.value !== "`") continue;
+      if (x.count !== e0.count) continue;
+      matchIndex = i;
+      break;
+    }
+    if (matchIndex < 0) return false;
+    const contents = context.input.slice(0, matchIndex);
+    const e1 = context.input[matchIndex];
+    context.input = context.input.slice(matchIndex + 1);
+    const item = {
+      type: "CODE_INLINE",
+      children: contents,
+      lspace: false,
+      rspace: false,
+    }
+    context.stack.pop();
+    context.stack.push({
+      type: "NODE",
+      children: [item],
+      lspace: e0.lspace,
+      rspace: e1.rspace,
+    });
+    return true;
+  }
+
+  tryReduceLineBreak(context) {
+    const N = context.stack.length;
+    if (N < 1) return false;
+    const e0 = context.stack[N - 1];
+    if (e0.type !== "SPACE") return false;
+    if (!e0.value.includes("  \n")) return false;
+    const item = {
+      type: "LINE_BREAK",
+      children: [],
+      lspace: false,
+      rspace: false,
+    }
+    context.stack.pop();
+    context.stack.push(item);
+    return true;
+  }
+
+  tryReduceEmphasis(context) {
+    const N = context.stack.length;
+    if (N < 3) return false;
+    const e0 = context.stack[N - 1];
+    const e1 = context.stack[N - 2];
+    const e2 = context.stack[N - 3];
+    if (e1.type !== "NODE") return false;
+    if (e0.type !== "DELIM") return false;
+    if (e2.type !== "DELIM") return false;
+    if (e0.value[0] !== e2.value[0]) return false;
+    if (e0.value[0] !== "*" && e0.value[0] !== "_") return false;
+    if (e2.value[0] !== "*" && e2.value[0] !== "_") return false;
+    if (e0.lspace) return false;
+    if (e2.rspace) return false;
+    if (e0.value[0] === "_" && !(e0.rspace || e0.rchunk === "*")) return false;
+    if (e2.value[0] === "_" && !(e2.lspace || e2.lchunk === "*")) return false;
+    if (e0.value.length >= 2 && e2.value.length >= 2) {
+      const item = {
+        type: "NODE",
+        children: [{ type: "BOLD", children: [e1] }],
+        lspace: false,
+        rspace: false,
+      }
+      context.stack.pop();
+      context.stack.pop();
+      context.stack.pop();
+      e2.value = e2.value.slice(2);
+      e0.value = e0.value.slice(2);
+      if (e2.value.length > 0) context.stack.push(e2);
+      context.stack.push(item);
+      if (e0.value.length > 0) context.stack.push(e0);
+      return true;
+    }
+    if (e0.value.length >= 1 && e2.value.length >= 1) {
+      const item = {
+        type: "NODE",
+        children: [{ type: "ITALIC", children: [e1] }],
+        lspace: false,
+        rspace: false,
+      }
+      context.stack.pop();
+      context.stack.pop();
+      context.stack.pop();
+      e2.value = e2.value.slice(1);
+      e0.value = e0.value.slice(1);
+      if (e2.value.length > 0) context.stack.push(e2);
+      context.stack.push(item);
+      if (e0.value.length > 0) context.stack.push(e0);
+      return true;
+    }
+    return false;
+  }
+
+  tryReduceImage(context) {
+    const N = context.stack.length;
+    if (N < 7) return false;
+    const e0 = context.stack[N - 1];
+    const e1 = context.stack[N - 2];
+    const e2 = context.stack[N - 3];
+    const e3 = context.stack[N - 4];
+    const e4 = context.stack[N - 5];
+    const e5 = context.stack[N - 6];
+    const e6 = context.stack[N - 7];
+    if (e0.type !== "DELIM" || e0.value !== ")") return false;
+    if (e1.type !== "NODE") return false;
+    if (e2.type !== "DELIM" || e2.value !== "(") return false;
+    if (e3.type !== "DELIM" || e3.value !== "]") return false;
+    if (e4.type !== "NODE") return false;
+    if (e5.type !== "DELIM" || e5.value !== "[") return false;
+    if (e6.type !== "DELIM" || e6.value !== "!") return false;
+    context.stack.pop();
+    context.stack.pop();
+    context.stack.pop();
+    context.stack.pop();
+    context.stack.pop();
+    context.stack.pop();
+    context.stack.pop();
+    const item = {
+      type: "IMAGE",
+      children: [],
+      alt: e4,
+      src: e1,
+      title: "",
+    }
+    context.stack.push({
+      type: "NODE",
+      children: [item],
+      lspace: e6.lspace,
+      rspace: e0.rspace,
+    });
+    return true;
+  }
+
+  tryReduceLink(context) {
+    const N = context.stack.length;
+    if (N < 6) return false;
+    const e0 = context.stack[N - 1];
+    const e1 = context.stack[N - 2];
+    const e2 = context.stack[N - 3];
+    const e3 = context.stack[N - 4];
+    const e4 = context.stack[N - 5];
+    const e5 = context.stack[N - 6];
+    if (e0.type !== "DELIM" || e0.value !== ")") return false;
+    if (e1.type !== "NODE") return false;
+    if (e2.type !== "DELIM" || e2.value !== "(") return false;
+    if (e3.type !== "DELIM" || e3.value !== "]") return false;
+    if (e4.type !== "NODE") return false;
+    if (e5.type !== "DELIM" || e5.value !== "[") return false;
+    context.stack.pop();
+    context.stack.pop();
+    context.stack.pop();
+    context.stack.pop();
+    context.stack.pop();
+    context.stack.pop();
+    const item = {
+      type: "LINK",
+      children: [],
+      text: e4,
+      href: e1,
+      title: "",
+    }
+    context.stack.push({
+      type: "NODE",
+      children: [item],
+      lspace: e5.lspace,
+      rspace: e0.rspace,
+    });
+    return true;
+  }
+
+  tryReduceLinkWithTitle(context) {
+    const N = context.stack.length;
+    if (N < 9) return false;
+    const e0 = context.stack[N - 1];
+    const e1 = context.stack[N - 2];
+    const e2 = context.stack[N - 3];
+    const e3 = context.stack[N - 4];
+    const e4 = context.stack[N - 5];
+    const e5 = context.stack[N - 6];
+    const e6 = context.stack[N - 7];
+    const e7 = context.stack[N - 8];
+    const e8 = context.stack[N - 9];
+    if (e0.type !== "DELIM" || e0.value !== ")") return false;
+    if (e1.type !== "DELIM" || e1.value !== "\"") return false;
+    if (e2.type !== "NODE") return false;
+    if (e3.type !== "DELIM" || e3.value !== "\"") return false;
+    if (e4.type !== "NODE") return false;
+    if (e5.type !== "DELIM" || e5.value !== "(") return false;
+    if (e6.type !== "DELIM" || e6.value !== "]") return false;
+    if (e7.type !== "NODE") return false;
+    if (e8.type !== "DELIM" || e8.value !== "[") return false;
+    context.stack.pop();
+    context.stack.pop();
+    context.stack.pop();
+    context.stack.pop();
+    context.stack.pop();
+    context.stack.pop();
+    context.stack.pop();
+    context.stack.pop();
+    context.stack.pop();
+    const item = {
+      type: "LINK_WITH_TITLE",
+      children: [],
+      text: e7,
+      href: e4,
+      title: e2,
+    }
+    context.stack.push({
+      type: "NODE",
+      children: [item],
+      lspace: e8.lspace,
+      rspace: e0.rspace,
+    });
+    return true;
+  }
+
+  tryReduceLinkURL(context) {
+    const N = context.stack.length;
+    if (N < 3) return false;
+    const e0 = context.stack[N - 1];
+    const e1 = context.stack[N - 2];
+    const e2 = context.stack[N - 3];
+    if (e0.type !== "DELIM" || e0.value !== ">") return false;
+    if (e1.type !== "NODE") return false;
+    if (e2.type !== "DELIM" || e2.value !== "<") return false;
+    context.stack.pop();
+    context.stack.pop();
+    context.stack.pop();
+    const item = {
+      type: "LINK",
+      children: [],
+      text: e1,
+      href: e1,
+    }
+    context.stack.push({
+      type: "NODE",
+      children: [item],
+      lspace: e2.lspace,
+      rspace: e0.rspace,
+    });
+    return true;
+  }
+
+  tryReduceItem(context) {
+    const N = context.stack.length;
+    if (N < 1) return false;
+    const e0 = context.stack[N - 1];
+    if (e0.type === "NODE") return false;
+    if (e0.type === "DELIM") return false;
+    context.stack.pop();
+    context.stack.push({
+      type: "NODE",
+      children: [e0],
+      lspace: e0.lspace,
+      rspace: e0.rspace,
+    });
+    return true;
+  }
+
+  tryReduceNode(context) {
+    const N = context.stack.length;
+    if (N < 2) return false;
+    const e0 = context.stack[N - 1];
+    const e1 = context.stack[N - 2];
+    if (e0.type !== "NODE") return false;
+    if (e1.type !== "NODE") return false;
+    context.stack.pop();
+    context.stack.pop();
+    context.stack.push({
+      type: "NODE",
+      children: [e1, e0],
+      lspace: e1.lspace,
+      rspace: e0.rspace,
+    });
+    return true;
   }
 }
 
 class Renderer {
   render(node) {
     let result = "";
-    for (const child of node.children) {
-      result += this.render(child);
+    if (node.children) {
+      for (const child of node.children) {
+        result += this.render(child);
+      }
     }
     switch (node.type) {
       case "HEADING":
@@ -549,17 +875,51 @@ class Renderer {
         return `<div class="grid" style="${gridStyle}">${result.trim()}</div>\n`;
       case "GRID_ITEM":
         return `<div class="grid-item">${result}</div>\n`;
+      case "INLINE":
+        return this.renderInline(node);
+      case "TEXT":
+        return node.value;
+      default:
+        return result;
+    }
+  }
+
+  renderInline(node) {
+    let result = "";
+    if (node.children) {
+      for (const child of node.children) {
+        result += this.renderInline(child);
+      }
+    }
+    switch (node.type) {
       case "BOLD":
         return `<b>${result}</b>`;
       case "ITALIC":
         return `<i>${result}</i>`;
-      case "BOLD_ITALIC":
-        return `<b><i>${result}</i></b>`;
       case "LINE_BREAK":
-        return `<br>\n`;
+        return `<br>`;
       case "CODE_INLINE":
-        return `<code>${node.value}</code>`;
-      case "TEXT":
+        return `<code>${result}</code>`;
+      case "IMAGE":
+        const alt = node.alt ? this.renderInline(node.alt) : "";
+        const src = node.src ? this.renderInline(node.src) : "";
+        return `<img src="${src}" alt="${alt}"$>`;
+      case "LINK": {
+        const text = node.text ? this.renderInline(node.text) : "";
+        const href = node.href ? this.renderInline(node.href) : "";
+        return `<a href="${href}">${text}</a>`;
+      }
+      case "LINK_WITH_TITLE": {
+        const text = node.text ? this.renderInline(node.text) : "";
+        const href = node.href ? this.renderInline(node.href) : "";
+        const title = node.title ? this.renderInline(node.title) : "";
+        return `<a href="${href}" title="${title}">${text}</a>`;
+      }
+      case "CHUNK":
+        return node.value;
+      case "SPACE":
+        return node.value;
+      case "DELIM":
         return node.value;
       default:
         return result;
@@ -586,9 +946,10 @@ class Markdown {
       result += ` { ${parameters.join(", ")} }`;
     }
     result += "\n";
-    console.log(node);
-    for (const child of node.children) {
-      result += this.toStringAST(child, indent + 1);
+    if (node.children) {
+      for (const child of node.children) {
+        result += this.toStringAST(child, indent + 1);
+      }
     }
     return result;
   }
