@@ -12,7 +12,7 @@ class Renderer {
       case "HTML":
         return text;
       case "LIST":
-        if (node.ordered) {
+        if (node.fields.ordered) {
           return `<ol>\n${text}</ol>\n`;
         } else {
           return `<ul>\n${text}</ul>\n`;
