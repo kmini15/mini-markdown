@@ -18,7 +18,7 @@ class MiniMarkdown {
       child = this.parseInline(child, references);
     }
     if (node.type === "INLINE") {
-      const inlineNode = this.parserInline.parse(node.value, references);
+      const inlineNode = this.parserInline.parse(node.firstChild.value, references);
       node.insertAfter(inlineNode);
       node.unlink();
       node = inlineNode;

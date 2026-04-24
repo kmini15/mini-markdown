@@ -243,8 +243,10 @@ class ParserBlock {
       if (line.match(/^(\s*)([:]{4})\s*$/)) {
         break;
       }
+      const textNode = new Node("TEXT");
+      textNode.value = line;
       const inlineNode = new Node("INLINE");
-      inlineNode.value = line;
+      inlineNode.appendChild(textNode);
       const itemNode = new Node("GRID_ITEM");
       itemNode.appendChild(inlineNode);
       node.appendChild(itemNode);
@@ -264,8 +266,10 @@ class ParserBlock {
       reader.advance();
     }
     if (lines.length === 0) return null;
+    const textNode = new Node("TEXT");
+    textNode.value = lines.join("\n").trim();
     const inlineNode = new Node("INLINE");
-    inlineNode.value = lines.join("\n").trim();
+    inlineNode.appendChild(textNode);
     const node = new Node("PARAGRAPH");
     node.appendChild(inlineNode);
     return node;
