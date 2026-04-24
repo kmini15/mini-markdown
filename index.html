@@ -7,7 +7,6 @@
   <meta name="robots" content="noindex, nofollow" />
   <link rel="stylesheet" href="/assets/css/layout.css" />
   <link rel="stylesheet" href="/assets/css/markdown.css" />
-  <script src="/assets/js/markdown.js"></script>
   <title>Mini Markdown Editor</title>
 </head>
 
@@ -31,8 +30,9 @@
   </div>
 </body>
 
-<script>
-  const markdown = new Markdown();
+<script type="module">
+  import MiniMarkdown from "/assets/js/mini-markdown.js";
+  const markdown = new MiniMarkdown();
 
   async function readFile(path) {
     const res = await fetch(path);
@@ -43,23 +43,23 @@
   async function init() {
     var text = await readFile("/assets/input.md");
 
-    editor = document.getElementById("editor");
-    parser = document.getElementById("parser");
-    render = document.getElementById("render");
-    output = document.getElementById("output");
+    const editor = document.getElementById("editor");
+    const parser = document.getElementById("parser");
+    const render = document.getElementById("render");
+    const output = document.getElementById("output");
 
     editor.value = text;
-    parser_result = markdown.parse(text);
-    parser.value = parser_result;
-    render_result = markdown.render(text);
-    render.value = render_result;
-    output.innerHTML = render_result;
+    const ast = markdown.parse(text);
+    parser.value = ast.dumpString();
+    const html = markdown.render(ast);
+    render.value = html;
+    output.innerHTML = html;
   }
 
-  editor = document.getElementById("editor");
-  parser = document.getElementById("parser");
-  render = document.getElementById("render");
-  output = document.getElementById("output");
+  const editor = document.getElementById("editor");
+  const parser = document.getElementById("parser");
+  const render = document.getElementById("render");
+  const output = document.getElementById("output");
 
   function debounce(fn, delay) {
     let timer = null;
@@ -73,11 +73,11 @@
 
   editor.addEventListener("input", debounce((e) => {
     const text = e.target.value;
-    parser_result = markdown.parse(text);
-    parser.value = parser_result;
-    render_result = markdown.render(text);
-    render.value = render_result;
-    output.innerHTML = render_result;
+    const ast = markdown.parse(text);
+    parser.value = ast.dumpString();
+    const html = markdown.render(ast);
+    render.value = html;
+    output.innerHTML = html;
   }, 200));
 
   init();

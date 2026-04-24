@@ -108,7 +108,7 @@ c_not Italic_c
 
 
 
-::::[12]
+::::[12:8px]
 ![Alt Text](assets/test.jpg)
 
 
