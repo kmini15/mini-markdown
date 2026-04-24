@@ -75,25 +75,41 @@ Autolink E-mail: <kmini15@naver.com>
 
 ## Emphasis
 
-\*hello\*  
-**bold**  
-*italic*  
-\**not bold**  
-\*not italic*  
+**Bold** not   
+bold **Bold**
 
-\*hello\* **bold** *italic* \**not bold** \*not italic*  
+**Bold *bold&italic* Bold**
 
-__bold__  
-\__not bold__  
-__not bold__c  
-c__not bold__  
-c__not bold__c  
+__Bold__
 
-_italic_  
-\_not italic_  
-_not italic_c  
-c_not Italic_  
-c_not Italic_c  
+*Italic*
+
+_Italic_
+
+***Bold and Italic 0***
+
+___Bold and Italic 1___
+
+**_Bold and Italic 2_**
+
+__*Bold and Italic 3*__
+
+*__Bold and Italic 4__*
+
+_**Bold and Italic 5**_
+
+
+A__not bold not italic__
+
+__not bold not italic__A  
+
+A__not bold not italic__A
+
+A_not bold not italic_  
+
+_not bold not italic_A  
+
+A_not bold not italic_A
 
 ## Blockqoutes
 
