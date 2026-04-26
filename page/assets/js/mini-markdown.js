@@ -17,11 +17,10 @@ class MiniMarkdown {
     for (let child = node.firstChild; child; child = child.next) {
       child = this.parseInline(child, references);
     }
-    if (node.type === "INLINE") {
-      const inlineNode = this.parserInline.parse(node.firstChild.value, references);
+    if (node.type === "TEXT" && node.fields.inline) {
+      const inlineNode = this.parserInline.parse(node.value, references);
       node.insertAfter(inlineNode);
       node.unlink();
-      node = inlineNode;
     }
     return node;
   }

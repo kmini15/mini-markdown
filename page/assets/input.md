@@ -25,8 +25,6 @@ Autolink E-mail: <kmini15@naver.com>
 [Naver][2]  
 [Google][3]
 
-
-
 ## Lists
 
 1. item1
@@ -121,9 +119,6 @@ A_not bold not italic_A
 >> TEST2
 >> TEST2
 
-
-
-
 ::::[12:8px]
 ![Alt Text](assets/test.jpg)
 
@@ -184,6 +179,3 @@ A_not bold not italic_A
 
 ![케이](assets/test.gif)
 ::::
-
-
-

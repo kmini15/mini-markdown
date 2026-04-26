@@ -5,7 +5,11 @@ class Renderer {
   render(node) {
     let text = "";
     for (let child = node.firstChild; child; child = child.next) {
-      text += this.render(child);
+      if (node.type === "LIST_ITEM" && child.type === "PARAGRAPH") {
+        text += this.render(child.firstChild);
+      } else {
+        text += this.render(child);
+      }
     }
     switch (node.type) {
       // BLOCK

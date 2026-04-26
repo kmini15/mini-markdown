@@ -219,12 +219,12 @@ class ParserInline {
   parseBracketLinkReference(openNode) {
     const content = this.match(this.patterns.link_ref);
     if (!content) return false;
-    const id = content[1].trim();
-    const reference = this.references[id];
+    const label = content[1].trim();
+    const reference = this.references[label];
     if (!reference) return false;
-    const { url, title } = reference;
+    const { destination, title } = reference;
     const node = new Node("LINK");
-    node.fields.href = url;
+    node.fields.href = destination;
     node.fields.title = title;
     for (let curr = openNode.next; curr; curr = curr.next) {
       node.appendChild(curr);
