@@ -326,9 +326,9 @@ class LinkReferenceDefinitionRule extends BlockRule {
     context.advance(parsed[0].length);
     const child = new Node(this.type);
     child.fields = {
-      label: parsed[1],
-      destination: parsed[2],
-      title: parsed[3] || "",
+      label: parsed[1].trim(),
+      destination: parsed[2].trim(),
+      title: parsed[3] ? parsed[3].trim() : "",
     };
     return child;
   }

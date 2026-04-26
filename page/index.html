@@ -11,74 +11,110 @@
 </head>
 
 <body>
-  <h1>Mini Markdown Editor</h1>
-  <div class="view">
-    <div class="view__left">
-      <p>Input [Markdown Text]</p>
-      <textarea id="editor" wrap="off"></textarea>
-      <p>Parser [Text -> Abstract Syntax Tree]</p>
-      <textarea id="parser" wrap="off"></textarea>
-      <p>Render [Abstract Syntax Tree -> HTML]</p>
-      <textarea id="render" wrap="off"></textarea>
+  <div class="page">
+    <div class="header">
+      <h1>Mini Markdown Editor</h1>
     </div>
-    <div class="view__right">
-      <p>Output</p>
-      <div class="output">
-        <div id="output" class="markdown-body"></div>
+    <main class="main">
+      <div class="view editor">
+        <div class="tab-list">
+          <div class="tab-button">Markdown</div>
+        </div>
+        <div class="tab-panel on">
+          <textarea id="editor" class="scroll-text"></textarea>
+        </div>
       </div>
-    </div>
+      <div class="view output">
+        <div class="tab-list">
+          <div class="tab-button" data-tab="tab1">Preview</div>
+          <div class="tab-button" data-tab="tab2">HTML</div>
+          <div class="tab-button" data-tab="tab3">AST</div>
+        </div>
+        <div id="tab1" class="tab-panel">
+          <div id="output-preview" class="scroll-text markdown-body"></div>
+        </div>
+        <div id="tab2" class="tab-panel">
+          <div id="output-html" class="scroll-text"></div>
+        </div>
+        <div id="tab3" class="tab-panel">
+          <div id="output-ast" class="scroll-text"></div>
+        </div>
+      </div>
+    </main>
   </div>
-</body>
 
-<script type="module">
-  import MiniMarkdown from "/assets/js/mini-markdown.js";
-  const markdown = new MiniMarkdown();
+  <script>
+    const tabButtons = document.querySelectorAll(".output .tab-button");
+    const tabPanels = document.querySelectorAll(".output .tab-panel");
+    const defaultTab = "tab1";
+    openTab(defaultTab);
+    function openTab(tabName) {
+      tabButtons.forEach(elem => elem.classList.remove("on"));
+      tabPanels.forEach(elem => elem.classList.remove("on"));
+      document.getElementById(tabName).classList.add('on');
+      document
+        .querySelector('.output .tab-button[data-tab="' + tabName + '"]')
+        .classList.add('on');
+    }
+    tabButtons.forEach(elem => {
+      elem.addEventListener("click", () => {
+        openTab(elem.dataset.tab);
+      });
+    });
+  </script>
 
-  async function readFile(path) {
-    const res = await fetch(path);
-    const text = await res.text();
-    console.log(text);
-    return text;
-  }
-  async function init() {
-    var text = await readFile("/assets/input.md");
+  <script type="module">
+    import MiniMarkdown from "/assets/js/mini-markdown.js";
+    const markdown = new MiniMarkdown();
+
+    async function readFile(path) {
+      const res = await fetch(path);
+      const text = await res.text();
+      console.log(text);
+      return text;
+    }
+    async function init() {
+      var text = await readFile("/assets/input.md");
+
+      const editor = document.getElementById("editor");
+      const outputPreview = document.getElementById("output-preview");
+      const outputHtml = document.getElementById("output-html");
+      const outputAst = document.getElementById("output-ast");
+
+      editor.value = text;
+      const ast = markdown.parse(text);
+      const html = markdown.render(ast);
+      outputPreview.innerHTML = html;
+      outputHtml.innerText = html;
+      outputAst.innerText = ast.dumpString();
+    }
 
     const editor = document.getElementById("editor");
-    const parser = document.getElementById("parser");
-    const render = document.getElementById("render");
-    const output = document.getElementById("output");
+    const outputPreview = document.getElementById("output-preview");
+    const outputHtml = document.getElementById("output-html");
+    const outputAst = document.getElementById("output-ast");
 
-    editor.value = text;
-    const ast = markdown.parse(text);
-    parser.value = ast.dumpString();
-    const html = markdown.render(ast);
-    render.value = html;
-    output.innerHTML = html;
-  }
+    function debounce(fn, delay) {
+      let timer = null;
+      return function (...args) {
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+          fn.apply(this, args);
+        }, delay);
+      };
+    }
 
-  const editor = document.getElementById("editor");
-  const parser = document.getElementById("parser");
-  const render = document.getElementById("render");
-  const output = document.getElementById("output");
+    editor.addEventListener("input", debounce((e) => {
+      const text = e.target.value;
+      const ast = markdown.parse(text);
+      const html = markdown.render(ast);
+      outputPreview.innerHTML = html;
+      outputHtml.innerText = html;
+      outputAst.innerText = ast.dumpString();
+    }, 200));
 
-  function debounce(fn, delay) {
-    let timer = null;
-    return function (...args) {
-      clearTimeout(timer);
-      timer = setTimeout(() => {
-        fn.apply(this, args);
-      }, delay);
-    };
-  }
+    init();
+  </script>
+</body>
 
-  editor.addEventListener("input", debounce((e) => {
-    const text = e.target.value;
-    const ast = markdown.parse(text);
-    parser.value = ast.dumpString();
-    const html = markdown.render(ast);
-    render.value = html;
-    output.innerHTML = html;
-  }, 200));
-
-  init();
-</script>
+</html>

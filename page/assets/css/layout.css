@@ -26,53 +26,143 @@ body {
   font-size: 16px;
   background-color: var(--color-bg);
   color: var(--color-text);
-  margin: 16px;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.page {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 16px;
+  min-width: 0;
+  min-height: 0;
+}
+
+.header {
+  margin-bottom: 16px;
+  width: 100%;
+}
+
+.main {
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  gap: 16px;
+  min-width: 0;
+  min-height: 0;
 }
 
 .view {
   display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+}
+
+div .tab-list {
+  display: flex;
   flex-direction: row;
-  gap: 16px;
+  gap: 8px;
+  flex: 0;
 }
 
-.view__left {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  gap: 8px;
+div .tab-button {
+  padding: 8px 16px;
+  border-radius: 8px 8px 0 0;
+  font-weight: 700;
+  cursor: pointer;
 }
 
-.view__right {
+div .editor .tab-button {
+  background: var(--color-depth-0);
+  transition: all 0.1s;
+}
+
+div .output .tab-button {
+  background: var(--color-depth-2);
+  transition: all 0.1s;
+}
+
+div .output .tab-button.on {
+  color: #fff;
+  background: var(--color-depth-0);
+}
+
+div .output .tab-button:hover {
+  padding: 8px 24px
+}
+
+div .tab-panel {
+  flex: 1 1 0;
+  padding: 8px;
+  border-radius: 0 8px 8px 8px;
+  background: var(--color-depth-0);
+  min-width: 0;
+  min-height: 0;
+}
+
+div .editor .tab-panel {
   display: flex;
   flex-direction: column;
+}
+
+div .output .tab-panel {
+  display: none;
+}
+
+div .output .tab-panel.on {
+  display: flex;
+  flex-direction: column;
+}
+
+div .scroll-text {
   flex: 1;
-  gap: 8px;
+  background: var(--color-depth-1);
+  color: var(--color-text);
+  overflow-x: scroll;
+  overflow-y: scroll;
+  scrollbar-gutter: stable;
+  border-radius: 8px;
+  padding: 8px;
 }
 
 #editor {
-  font-family: 'SF Mono', Monaco, Menlo, Courier, monospace;
-  font-size: 0.6em;
-  height: 25vh;
+  font-family: Roboto, "Noto Sans KR", monospace;
+  font-size: 0.8em;
+  white-space: pre;
+  overflow-wrap: normal;
+  word-break: normal;
+  outline: none;
+  resize: none;
+  border: none;
 }
 
-#parser {
-  font-family: 'SF Mono', Monaco, Menlo, Courier, monospace;
-  font-size: 0.6em;
-  height: 25vh;
-}
-
-#render {
-  font-family: 'SF Mono', Monaco, Menlo, Courier, monospace;
-  font-size: 0.6em;
-  height: 25vh;
-}
-
-#output {
+#output-preview {
   font-size: 1.0em;
 }
 
-.view__right .output {
-  padding: 16px;
-  background-color: var(--color-depth-0);
-  border-radius: 8px;
+#output-html {
+  font-family: Roboto, "Noto Sans KR", monospace;
+  font-size: 0.8em;
+  white-space: pre;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+#output-ast {
+  font-family: Roboto, "Noto Sans KR", monospace;
+  font-size: 0.8em;
+  white-space: pre;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+@media (max-width: 768px) {
+  .main {
+    flex-direction: column-reverse;    
+  }
 }
