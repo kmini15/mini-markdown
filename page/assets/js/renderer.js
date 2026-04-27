@@ -39,6 +39,18 @@ class Renderer {
         return `<div class="grid" style="${style}">\n${text}</div>\n`;
       case "GRID_ITEM":
         return `<div class="grid-item">${text}</div>\n`;
+      case "TABLE":
+        return `<table>\n${text}</table>\n`;
+      case "TABLE_HEADER_ROW":
+        return `<tr>\n${text}</tr>\n`;
+      case "TABLE_HEADER_CELL":
+        var alignment = node.fields.alignment ? ` style="text-align: ${node.fields.alignment};"` : "";
+        return `<th${alignment}>${text}</th>\n`;
+      case "TABLE_ROW":
+        return `<tr>\n${text}</tr>\n`;
+      case "TABLE_CELL":
+        var alignment = node.fields.alignment ? ` style="text-align: ${node.fields.alignment};"` : "";
+        return `<td${alignment}>${text}</td>\n`;
       case "PARAGRAPH":
         return `<p>${text}</p>\n`;
       // INLINE

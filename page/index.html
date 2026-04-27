@@ -21,7 +21,7 @@
           <div class="tab-button">Markdown</div>
         </div>
         <div class="tab-panel on">
-          <textarea id="editor" class="scroll-text"></textarea>
+          <textarea id="editor" class="scroll-text" onkeydown="if(event.keyCode===9){var v=this.value,s=this.selectionStart,e=this.selectionEnd;this.value=v.substring(0, s)+'  '+v.substring(e);this.selectionStart=this.selectionEnd=s+2;return false;}"></textarea>
         </div>
       </div>
       <div class="view output">

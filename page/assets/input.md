@@ -119,6 +119,16 @@ A_not bold not italic_A
 >> TEST2
 >> TEST2
 
+# Table
+
+|Group 1|Group 2|Group 3|Group 4| 
+|-------|-------|-------|-------|
+|Item 1 |Item 2 |Item 3 |Item 4 |
+|Item 1 |Item 2 |Item 3 |Item 4 |
+|Item 1 |Item 2 |Item 3 |Item 4 |
+
+# Grid
+
 ::::[12:8px]
 ![Alt Text](assets/test.jpg)
 

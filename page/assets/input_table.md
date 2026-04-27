@@ -1,11 +1,22 @@
 ## Simple Table
-Syntax
+
+Input Syntax
+
     |Group 1|Group 2|Group 3|Group 4| 
     |-------|-------|-------|-------|
     |Item 1 |Item 2 |Item 3 |Item 4 |
     |Item 1 |Item 2 |Item 3 |Item 4 |
     |Item 1 |Item 2 |Item 3 |Item 4 |
-Result
+
+Test Result
+
+|Group 1|Group 2|Group 3|Group 4| 
+|-------|-------|-------|-------|
+|Item 1 |Item 2 |Item 3 |Item 4 |
+|Item 1 |Item 2 |Item 3 |Item 4 |
+|Item 1 |Item 2 |Item 3 |Item 4 |
+
+Answer
 
 <table>
 <tr>
@@ -36,7 +47,7 @@ Result
 
 ## Grid Table
 
-Syntax
+Input Syntax
 
     +-------+-------+-------+-------+
     |Group 1|Group 2|Group 3|Group 4|
@@ -47,7 +58,20 @@ Syntax
     +-------|       |-------|       |
     |Item 1 |       |Item 3 |       |
     +-------+-------+-------+-------+
-Result
+
+Test Result
+
++-------+-------+-------+-------+
+|Group 1|Group 2|Group 3|Group 4|
++=======+=======+=======+=======+
+|Item 1 |Item 2 |Item 3 |Item 4 |
++-------+-------|       |       |
+|Item 1 |Item 2 |       |       |
++-------|       |-------|       |
+|Item 1 |       |Item 3 |       |
++-------+-------+-------+-------+
+
+Answer
 
 <table>
 <tr>
