@@ -24,7 +24,8 @@ class Renderer {
       case "LIST_ITEM":
         return `<li>${text}</li>\n`;
       case "CODE_BLOCK":
-        return `<pre><code>${text}\n</code></pre>\n`;
+        var language = node.fields.language ? ` class="language-${node.fields.language}"` : "";
+        return `<pre><code${language}>${this.escapeHtml(text)}\n</code></pre>\n`;
       case "BLOCKQUOTE":
         return `<blockquote>\n${text}</blockquote>\n`;
       case "HEADING":
@@ -46,8 +47,8 @@ class Renderer {
       case "SOFT_BREAK":
         return "\n";
       case "CODE":
-        return "<code>" + node.value + "</code>";
-      case "IMAGE": 
+        return "<code>" + this.escapeHtml(node.value) + "</code>";
+      case "IMAGE":
         var alt = text;
         var src = node.fields.src || "";
         var title = node.fields.title ? ` title="${node.fields.title}"` : "";
@@ -68,6 +69,16 @@ class Renderer {
     }
     return text;
   }
+
+  escapeHtml(text) {
+    return text
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#39;");
+  }
 }
+
 
 export default Renderer;

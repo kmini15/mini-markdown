@@ -8,6 +8,7 @@ class ParserBlock {
       new HtmlRule(),
       new LinkReferenceDefinitionRule(),
       new CodeBlockRule(),
+      new FencedCodeBlockRule(),
       new BlockquoteRule(),
       new ListRule(),
       new ListItemRule(),
@@ -33,9 +34,6 @@ class ParserBlock {
     while (!reader.eof()) {
       const line = reader.current();
       const context = new LineContext(line);
-      console.log("Processing Line: ", reader.pos);
-      console.log("Processing Input: ", line);
-      console.log("stack:", stack.map(node => node.type).join(" > "));
       let stackIndex = 0;
       stackIndex = this.matchBlocks(stack, stackIndex, reader, context);
       stackIndex = this.carryBlocks(stack, stackIndex, reader, context);
@@ -68,7 +66,6 @@ class ParserBlock {
       const rule = this.getRule(node);
       if (!rule) break; // No rule for this node type
       if (rule.match(node, reader, context)) {
-        console.log("match rule:", rule.type);
         stackIndex = i;
       } else {
         break;
@@ -83,7 +80,6 @@ class ParserBlock {
       const rule = this.getRule(node);
       if (!rule) break; // No rule for this node type
       if (rule.carry(node, reader, context)) {
-        console.log("carry rule:", rule.type);
         stackIndex = i;
       } else {
         break;
@@ -95,7 +91,6 @@ class ParserBlock {
     const rule = this.getRule(lastNode);
     if (!rule) return stackIndex; // No rule for this node type
     if (rule.carry(lastNode, reader, context)) {
-      console.log("paragraph carry rule:", rule.type);
       stackIndex = stack.length - 1;
     }
     return stackIndex;
@@ -106,7 +101,6 @@ class ParserBlock {
       const node = stack.pop();
       const rule = this.getRule(node);
       if (!rule) continue; // No rule for this node type
-      console.log("close rule:", rule.type);
       rule.close(node, reader, context);
     }
     return stackIndex;
@@ -130,7 +124,6 @@ class ParserBlock {
       for (let rule of this.rules) {
         const child = rule.start(parent, reader, context);
         if (!child) continue;
-        console.log("start rule:", rule.type);
         parent.appendChild(child);
         stack.push(child);
         started = true;
@@ -273,8 +266,6 @@ class HtmlRule extends BlockRule {
   }
 
   start(parent, reader, context) {
-    console.log("html rule start");
-    console.log("html rule context:", context.remains());
     const parsed = context.remains().match(this.pattern);
     if (!parsed) return null;
     context.advance(context.remains().length);
@@ -370,7 +361,49 @@ class CodeBlockRule extends BlockRule {
     child.appendChild(textNode);
     child.fields = {
       markerColumn: markerColumn,
-      contentColumn: contentColumn
+      contentColumn: contentColumn,
+      language: ""
+    };
+    return child;
+  }
+}
+
+class FencedCodeBlockRule extends BlockRule {
+  constructor() {
+    super("CODE_BLOCK");
+    this.pattern_open = /^(\s*)(`{3,}|~{3,})([a-zA-Z0-9-]*)?\s*$/;
+    this.pattern_close = /^(\s*)(`{3,}|~{3,})\s*$/;
+  }
+  
+  start(parent, reader, context) {
+    const line = context.remains();
+    const matchOpen = line.match(this.pattern_open);
+    if (!matchOpen) return null;
+    const markerColumn = matchOpen[1].length + context.column;
+    const contentColumn = matchOpen[0].length + context.column;
+    context.advance(line.length);
+    reader.advance();
+    const lines = [];
+    while (!reader.eof()) {
+      const line = reader.current();
+      const matchClose = line.match(this.pattern_close);
+      if (matchClose && matchClose[2] === matchOpen[2]) {
+        break;
+      }
+      lines.push(line);
+      reader.advance();
+    }
+    const textNode = new Node("TEXT");
+    textNode.value = lines.join("\n");
+    textNode.fields = {
+      inline: false,
+    };
+    const child = new Node(this.type);
+    child.appendChild(textNode);
+    child.fields = {
+      markerColumn: markerColumn,
+      contentColumn: contentColumn,
+      language: matchOpen[3] ? matchOpen[3].trim() : ""
     };
     return child;
   }

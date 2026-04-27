@@ -123,9 +123,9 @@ div .scroll-text {
   flex: 1;
   background: var(--color-depth-1);
   color: var(--color-text);
-  overflow-x: scroll;
-  overflow-y: scroll;
-  scrollbar-gutter: stable;
+  overflow: auto;
+  scrollbar-gutter: none;
+  scrollbar-width: thin;
   border-radius: 8px;
   padding: 8px;
 }

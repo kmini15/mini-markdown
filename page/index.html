@@ -5,8 +5,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="robots" content="noindex, nofollow" />
-  <link rel="stylesheet" href="/assets/css/layout.css" />
-  <link rel="stylesheet" href="/assets/css/markdown.css" />
+  <link rel="stylesheet" href="./assets/css/layout.css" />
+  <link rel="stylesheet" href="./assets/css/markdown.css" />
   <title>Mini Markdown Editor</title>
 </head>
 
@@ -43,29 +43,11 @@
     </main>
   </div>
 
-  <script>
-    const tabButtons = document.querySelectorAll(".output .tab-button");
-    const tabPanels = document.querySelectorAll(".output .tab-panel");
-    const defaultTab = "tab1";
-    openTab(defaultTab);
-    function openTab(tabName) {
-      tabButtons.forEach(elem => elem.classList.remove("on"));
-      tabPanels.forEach(elem => elem.classList.remove("on"));
-      document.getElementById(tabName).classList.add('on');
-      document
-        .querySelector('.output .tab-button[data-tab="' + tabName + '"]')
-        .classList.add('on');
-    }
-    tabButtons.forEach(elem => {
-      elem.addEventListener("click", () => {
-        openTab(elem.dataset.tab);
-      });
-    });
-  </script>
-
   <script type="module">
-    import MiniMarkdown from "/assets/js/mini-markdown.js";
+    import MiniMarkdown from "./assets/js/mini-markdown.js";
+    import Highlighter from "./assets/js/highlighter.js";
     const markdown = new MiniMarkdown();
+    const highlighter = new Highlighter();
 
     async function readFile(path) {
       const res = await fetch(path);
@@ -74,7 +56,7 @@
       return text;
     }
     async function init() {
-      var text = await readFile("/assets/input.md");
+      var text = await readFile("./assets/input.md");
 
       const editor = document.getElementById("editor");
       const outputPreview = document.getElementById("output-preview");
@@ -87,6 +69,7 @@
       outputPreview.innerHTML = html;
       outputHtml.innerText = html;
       outputAst.innerText = ast.dumpString();
+      highlighter.highlight();
     }
 
     const editor = document.getElementById("editor");
@@ -111,9 +94,30 @@
       outputPreview.innerHTML = html;
       outputHtml.innerText = html;
       outputAst.innerText = ast.dumpString();
+      highlighter.highlight();
     }, 200));
 
     init();
+  </script>
+
+  <script>
+    const tabButtons = document.querySelectorAll(".output .tab-button");
+    const tabPanels = document.querySelectorAll(".output .tab-panel");
+    const defaultTab = "tab1";
+    openTab(defaultTab);
+    function openTab(tabName) {
+      tabButtons.forEach(elem => elem.classList.remove("on"));
+      tabPanels.forEach(elem => elem.classList.remove("on"));
+      document.getElementById(tabName).classList.add('on');
+      document
+        .querySelector('.output .tab-button[data-tab="' + tabName + '"]')
+        .classList.add('on');
+    }
+    tabButtons.forEach(elem => {
+      elem.addEventListener("click", () => {
+        openTab(elem.dataset.tab);
+      });
+    });
   </script>
 </body>
 
