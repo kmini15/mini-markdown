@@ -1106,6 +1106,50 @@
   border-color: var(--color-highlight-aris-0);
 }
 
+
+
+.markdown-body .grid-table {
+  display: grid;
+  grid-template-columns: repeat(var(--columns), 1fr);
+}
+
+.markdown-body .grid-table-cell {
+  grid-column: var(--col) / span var(--col-span, 1);
+  grid-row: var(--row) / span var(--row-span, 1);
+
+  padding: 6px 10px;
+  border: 1px solid #666;
+
+  text-align: var(--align-h, left);
+  align-content: var(--align-v, center);
+
+  min-width: 1em;
+  min-height: 1em;
+
+  font-size: 0.8em;
+  font-weight: 500;
+  color: var(--color-highlight-text);
+  
+  border: 1px solid var(--color-highlight-aris-0);
+}
+
+.markdown-body .grid-table-cell.grid-table-header {
+  font-weight: 800;
+  background: var(--color-highlight-kei-2);
+}
+
+.markdown-body .grid-table-cell.grid-table-data.row-odd {
+  background: var(--color-highlight-aris-2);
+}
+
+.markdown-body .grid-table-cell.grid-table-data.row-even {
+  background: var(--color-highlight-aris-1);
+}
+
+
+
+
+
 .markdown-body pre {
   background-color: var(--color-highlight-bg);
 }

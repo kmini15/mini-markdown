@@ -43,34 +43,59 @@ class Renderer {
         return `<table>\n${text}</table>\n`;
       case "TABLE_ROW":
         return `<tr>\n${text}</tr>\n`;
-      case "TABLE_HEADER_CELL":
-        var rowspan = node.fields.rowSpan > 1 ? ` rowspan="${node.fields.rowSpan}"` : "";
-        var colspan = node.fields.colSpan > 1 ? ` colspan="${node.fields.colSpan}"` : "";
+      case "TABLE_HEADER":
         var style = "";
+        if (node.fields.align) {
+          style = ` style="text-align: ${node.fields.align};"`;
+        }
+        return `<th${style}>${text}</th>\n`;
+      case "TABLE_DATA":
+        var style = "";
+        if (node.fields.align) {
+          style = ` style="text-align: ${node.fields.align};"`;
+        }
+        return `<td${style}>${text}</td>\n`;
+      case "GRID_TABLE":
+        var columns = node.fields.columns ?? 1;
+        return `<div class="grid-table" style="--columns:${columns};">\n${text}</div>\n`;
+      case "GRID_TABLE_ROW":
+        return text;
+      case "GRID_TABLE_HEADER":
+        var row = node.fields.row ?? 1;
+        var col = node.fields.col ?? 1;
+        var rowSpan = node.fields.rowSpan ?? 1;
+        var colSpan = node.fields.colSpan ?? 1;
+        var style = "";
+        style += `--row:${row};`;
+        style += `--col:${col};`;
+        style += `--row-span:${rowSpan};`;
+        style += `--col-span:${colSpan};`;
         if (node.fields.alignH) {
-          style += `text-align: ${node.fields.alignH};`;
+          style += `--align-h: ${node.fields.alignH};`;
         }
         if (node.fields.alignV) {
-          style += `vertical-align: ${node.fields.alignV};`;
+          style += `--align-v: ${node.fields.alignV};`;
         }
-        if (style) {
-          style = ` style="${style}"`;
-        }
-        return `<th${rowspan}${colspan}${style}>${text}</th>\n`;
-      case "TABLE_CELL":
-        var rowspan = node.fields.rowSpan > 1 ? ` rowspan="${node.fields.rowSpan}"` : "";
-        var colspan = node.fields.colSpan > 1 ? ` colspan="${node.fields.colSpan}"` : "";
+        var row = "row-" + (row % 2 === 1 ? "odd" : "even");
+        return `<div class="grid-table-cell grid-table-header ${row}" style="${style}">${text}</div>\n`;
+      case "GRID_TABLE_DATA":
+        var row = node.fields.row ?? 1;
+        var col = node.fields.col ?? 1;
+        var rowSpan = node.fields.rowSpan ?? 1;
+        var colSpan = node.fields.colSpan ?? 1;
         var style = "";
+        style += `--row:${row};`;
+        style += `--col:${col};`;
+        style += `--row-span:${rowSpan};`;
+        style += `--col-span:${colSpan};`;
         if (node.fields.alignH) {
-          style += `text-align: ${node.fields.alignH};`;
+          style += `--align-h: ${node.fields.alignH};`;
         }
         if (node.fields.alignV) {
-          style += `vertical-align: ${node.fields.alignV};`;
+          style += `--align-v: ${node.fields.alignV};`;
         }
-        if (style) {
-          style = ` style="${style}"`;
-        }
-        return `<td${rowspan}${colspan}${style}>${text}</td>\n`;
+        var row = "row-" + (row % 2 === 1 ? "odd" : "even");
+        return `<div class="grid-table-cell grid-table-data ${row}" style="${style}">${text}</div>\n`;
       case "PARAGRAPH":
         return `<p>${text}</p>\n`;
       // INLINE

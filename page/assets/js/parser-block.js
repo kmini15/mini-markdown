@@ -760,9 +760,9 @@ class TableRule extends BlockRule {
     for (let i = 0; i < headerCells.length; i++) {
       const cell = headerCells[i];
       const alignment = alignments[i];
-      const headerCellNode = new Node("TABLE_HEADER_CELL");
+      const headerCellNode = new Node("TABLE_HEADER");
       headerCellNode.fields = {
-        alignment: alignment,
+        align: alignment,
       };
       const textNode = new Node("TEXT");
       textNode.value = cell;
@@ -781,9 +781,9 @@ class TableRule extends BlockRule {
     for (let i = 0; i < cells.length; i++) {
       const cell = cells[i];
       const alignment = alignments[i];
-      const cellNode = new Node("TABLE_CELL");
+      const cellNode = new Node("TABLE_DATA");
       cellNode.fields = {
-        alignment: alignment,
+        align: alignment,
       };
       const textNode = new Node("TEXT");
       textNode.value = cell;
@@ -804,7 +804,7 @@ class GridTableRule extends BlockRule {
     this.patternRow0 = /^(\s*)[|+][:'.]?[\s]+[:'.]?[|+]/;
     this.patternRow1 = /^(\s*)[|+][:'.]?[\-]+[:'.]?[|+]/;
     this.patternRow2 = /^(\s*)[|+][:'.]?[\=]+[:'.]?[|+]/;
-    this.patternRow3 = /^(\s*)[|+][:'.]?[\s\-=]+[:'.]?[|+]/;
+    this.patternRow3 = /^(\s*)[|+][:'.]?[\s\S]+[:'.]?[|+]/;
   }
 
   parseColumns(rowLine) {
@@ -913,17 +913,17 @@ class GridTableRule extends BlockRule {
       }
       let alignV;
       if (markL === ":") {
-        alignV = "middle";
+        alignV = "center";
       } else if (markL === "'") {
-        alignV = "top";
+        alignV = "start";
       } else if (markL === ".") {
-        alignV = "bottom";
+        alignV = "end";
       } else if (markR === ":") {
-        alignV = "middle";
+        alignV = "center";
       } else if (markR === "'") {
-        alignV = "top";
+        alignV = "start";
       } else if (markR === ".") {
-        alignV = "bottom";
+        alignV = "end";
       } else {
         alignV = "";
       }
@@ -1074,9 +1074,12 @@ class GridTableRule extends BlockRule {
         index = row + 1;
       }
     }
-    const tableNode = new Node("TABLE");
+    const tableNode = new Node("GRID_TABLE");
+    tableNode.fields = {
+      columns: columns.length,
+    };
     for (let row = 0; row < tableRowSpans.length; row++) {
-      const rowNode = new Node("TABLE_ROW");
+      const rowNode = new Node("GRID_TABLE_ROW");
       for (let col = 0; col < columns.length; col++) {
         const divCell = tableDivCells[row][col];
         const rowCell = tableRowCells[row][col];
@@ -1086,11 +1089,11 @@ class GridTableRule extends BlockRule {
         const alignV = tableAlignV[row][col];
         const header = tableHeaders[row][col];
         if (colSpan === 0 || rowSpan === 0) continue;
-        const cellType = (header) ? "TABLE_HEADER_CELL" : "TABLE_CELL";
+        const cellType = (header) ? "GRID_TABLE_HEADER" : "GRID_TABLE_DATA";
         const cellNode = new Node(cellType);
         cellNode.fields = {
-          row: row,
-          col: col,
+          row: row + 1,
+          col: col + 1,
           rowSpan: rowSpan,
           colSpan: colSpan,
           alignH: alignH,
