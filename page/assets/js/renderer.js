@@ -41,16 +41,36 @@ class Renderer {
         return `<div class="grid-item">${text}</div>\n`;
       case "TABLE":
         return `<table>\n${text}</table>\n`;
-      case "TABLE_HEADER_ROW":
-        return `<tr>\n${text}</tr>\n`;
-      case "TABLE_HEADER_CELL":
-        var alignment = node.fields.alignment ? ` style="text-align: ${node.fields.alignment};"` : "";
-        return `<th${alignment}>${text}</th>\n`;
       case "TABLE_ROW":
         return `<tr>\n${text}</tr>\n`;
+      case "TABLE_HEADER_CELL":
+        var rowspan = node.fields.rowSpan > 1 ? ` rowspan="${node.fields.rowSpan}"` : "";
+        var colspan = node.fields.colSpan > 1 ? ` colspan="${node.fields.colSpan}"` : "";
+        var style = "";
+        if (node.fields.alignH) {
+          style += `text-align: ${node.fields.alignH};`;
+        }
+        if (node.fields.alignV) {
+          style += `vertical-align: ${node.fields.alignV};`;
+        }
+        if (style) {
+          style = ` style="${style}"`;
+        }
+        return `<th${rowspan}${colspan}${style}>${text}</th>\n`;
       case "TABLE_CELL":
-        var alignment = node.fields.alignment ? ` style="text-align: ${node.fields.alignment};"` : "";
-        return `<td${alignment}>${text}</td>\n`;
+        var rowspan = node.fields.rowSpan > 1 ? ` rowspan="${node.fields.rowSpan}"` : "";
+        var colspan = node.fields.colSpan > 1 ? ` colspan="${node.fields.colSpan}"` : "";
+        var style = "";
+        if (node.fields.alignH) {
+          style += `text-align: ${node.fields.alignH};`;
+        }
+        if (node.fields.alignV) {
+          style += `vertical-align: ${node.fields.alignV};`;
+        }
+        if (style) {
+          style = ` style="${style}"`;
+        }
+        return `<td${rowspan}${colspan}${style}>${text}</td>\n`;
       case "PARAGRAPH":
         return `<p>${text}</p>\n`;
       // INLINE
