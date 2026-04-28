@@ -821,28 +821,11 @@ class GridTableRule extends BlockRule {
     return columns;
   }
 
-  parseCells(divLine, columns) {
-    const normalizedLine = divLine.trim();
-    const cells = [];
-    let curr = 1; // Start after the first "|"
-    let count = 0;
-    for (const column of columns) {
-      count++;
-      if (normalizedLine[column] !== "|") continue;
-      const content = normalizedLine.slice(curr, column).trim();
-      cells.push(content);
-      cells.push(...Array(count - 1).fill(""));
-      curr = column + 1;
-      count = 0;
-    }
-    return cells;
-  }
-
   parseColSpans(divLine, columns) {
     const normalizedLine = divLine.trim();
     const colSpans = [];
     for (const column of columns) {
-      if (normalizedLine[column] === "|" || normalizedLine[column] === "+") {
+      if (/[|+]/.test(normalizedLine[column])) {
         colSpans.push(1); // line
       } else {
         colSpans.push(0); // no line
@@ -862,10 +845,28 @@ class GridTableRule extends BlockRule {
       } else {
         rowSpans.push(1);
       }
-      console.log(chunk, rowSpans[rowSpans.length - 1]);
       curr = column + 1;
     }
     return rowSpans;
+  }
+
+  parseCells(divLine, columns, colSpans) {
+    const normalizedLine = divLine.trim();
+    const cells = [];
+    let begin = 0;
+    let count = 0;
+    for (let i = 0; i < columns.length; i++) {
+      if (colSpans[i] === 1) {
+        const content = normalizedLine.slice(begin + 1, columns[i]).trim();
+        cells.push(content);
+        cells.push(...Array(count).fill(""));
+        begin = columns[i];
+        count = 0;
+      } else {
+        count++;
+      }
+    }
+    return cells;
   }
 
   parseHorizontalAlignments(rowLine, columns) {
@@ -881,7 +882,7 @@ class GridTableRule extends BlockRule {
         continue;
       }
       if (/[:'.]/.test(markL)) markL = ":";
-      if (/[:'.]/.test(markR)) markR = ":"; 
+      if (/[:'.]/.test(markR)) markR = ":";
       let alignH;
       if (markL === ":" && markR === ":") {
         alignH = "center";
@@ -973,15 +974,17 @@ class GridTableRule extends BlockRule {
     }
     // Matched a table header and delimiter
     const columns = this.parseColumns(openLine);
-    const cells = this.parseCells(divLine, columns);
     const colSpans = this.parseColSpans(divLine, columns);
     const rowSpans = this.parseRowSpans(rowLine, columns);
+    const divCells = this.parseCells(divLine, columns, colSpans);
+    const rowCells = this.parseCells(rowLine, columns, colSpans);
     const alignH = this.parseHorizontalAlignments(rowLine, columns);
     const alignV = this.parseVerticalAlignments(rowLine, columns);
     const headers = this.parseHeaders(rowLine, columns);
-    const tableCells = [cells];
     const tableColSpans = [colSpans];
     const tableRowSpans = [rowSpans];
+    const tableDivCells = [divCells];
+    const tableRowCells = [rowCells];
     const tableAlignH = [alignH];
     const tableAlignV = [alignV];
     const tableHeaders = [headers];
@@ -997,15 +1000,17 @@ class GridTableRule extends BlockRule {
         reader.restore();
         break;
       }
-      const cells = this.parseCells(divLine, columns);
       const colSpans = this.parseColSpans(divLine, columns);
       const rowSpans = this.parseRowSpans(rowLine, columns);
+      const divCells = this.parseCells(divLine, columns, colSpans);
+      const rowCells = this.parseCells(rowLine, columns, colSpans);
       const alignH = this.parseHorizontalAlignments(rowLine, columns);
       const alignV = this.parseVerticalAlignments(rowLine, columns);
       const headers = this.parseHeaders(rowLine, columns);
-      tableCells.push(cells);
       tableColSpans.push(colSpans);
       tableRowSpans.push(rowSpans);
+      tableDivCells.push(divCells);
+      tableRowCells.push(rowCells);
       tableAlignH.push(alignH);
       tableAlignV.push(alignV);
       tableHeaders.push(headers);
@@ -1040,14 +1045,10 @@ class GridTableRule extends BlockRule {
             tableAlignH[row][index] = "";
             tableAlignV[row][index] = "";
           }
-          console.log(alignHL, alignHR, tableAlignH[row][index]);
-          console.log(alignVL, alignVR, tableAlignV[row][index]);
         }
         let header = tableHeaders[row][index];
         for (let i = index + 1; i <= col; i++) {
           header = header || tableHeaders[row][i];
-          tableCells[row][index] += tableCells[row][i];
-          tableCells[row][i] = "";
         }
         tableHeaders[row][index] = header;
         index = col + 1;
@@ -1061,8 +1062,10 @@ class GridTableRule extends BlockRule {
         tableRowSpans[row][col] = 0;
         tableRowSpans[index][col] = row - index + 1;
         for (let i = index + 1; i <= row; i++) {
-          tableCells[index][col] += "\n" + tableCells[i][col];
-          tableCells[i][col] = "";
+          tableDivCells[index][col] += "\n" + tableRowCells[i - 1][col];
+          tableRowCells[i - 1][col] = "";
+          tableDivCells[index][col] += "\n" + tableDivCells[i][col];
+          tableDivCells[i][col] = "";
         }
         // Carry alignments and headers from the bottom cell to the merged cell
         tableAlignH[index][col] = tableAlignH[row][col];
@@ -1072,26 +1075,29 @@ class GridTableRule extends BlockRule {
       }
     }
     const tableNode = new Node("TABLE");
-    for (let i = 0; i < tableRowSpans.length; i++) {
+    for (let row = 0; row < tableRowSpans.length; row++) {
       const rowNode = new Node("TABLE_ROW");
-      for (let j = 0; j < columns.length; j++) {
-        const cell = tableCells[i][j];
-        const colSpan = tableColSpans[i][j];
-        const rowSpan = tableRowSpans[i][j];
-        const alignH = tableAlignH[i][j];
-        const alignV = tableAlignV[i][j];
-        const header = tableHeaders[i][j];
+      for (let col = 0; col < columns.length; col++) {
+        const divCell = tableDivCells[row][col];
+        const rowCell = tableRowCells[row][col];
+        const colSpan = tableColSpans[row][col];
+        const rowSpan = tableRowSpans[row][col];
+        const alignH = tableAlignH[row][col];
+        const alignV = tableAlignV[row][col];
+        const header = tableHeaders[row][col];
         if (colSpan === 0 || rowSpan === 0) continue;
         const cellType = (header) ? "TABLE_HEADER_CELL" : "TABLE_CELL";
         const cellNode = new Node(cellType);
         cellNode.fields = {
+          row: row,
+          col: col,
           rowSpan: rowSpan,
           colSpan: colSpan,
           alignH: alignH,
           alignV: alignV,
         };
         const textNode = new Node("TEXT");
-        textNode.value = cell;
+        textNode.value = divCell;
         textNode.fields = {
           inline: true,
         };
