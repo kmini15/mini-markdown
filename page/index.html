@@ -50,7 +50,7 @@
   <!-- Mini Markdown Editor Scripts -->
   <script type="module">
     import MiniMarkdown from "./assets/js/mini-markdown.js";
-    import Highlighter from "./assets/js/highlighter.js";
+    import MiniHighlighter from "./components/mini-highlighter/mhl.js";
     import MiniAssetManager from "./components/mini-asset-manager/mam.js";
 
     const editor = document.getElementById("editor");
@@ -59,8 +59,11 @@
     const outputAst = document.getElementById("output-ast");
 
     const mmd = new MiniMarkdown();
-    const mhl = new Highlighter();
+    const mhl = new MiniHighlighter();
     const mam = new MiniAssetManager();
+
+    const mhlElem = document.getElementById("output-preview");
+    await mhl.mount(mhlElem);
 
     const mamElem = document.getElementById("mini-asset-manager");
     await mam.mount(mamElem);
