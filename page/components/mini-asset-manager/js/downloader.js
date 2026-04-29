@@ -1,0 +1,57 @@
+import JSZip from "https://cdn.jsdelivr.net/npm/jszip/+esm";
+
+class Downloader {
+  constructor() {
+  }
+
+  async downloadZip(markdownText, htmlText, uploadedFiles, path, zipName = "markdown-post.zip") {
+    const zip = new JSZip();
+    // 이미지 파일 추가
+    for (const item of uploadedFiles) {
+      const variants = item.variants;
+      for (const [variant, assets] of Object.entries(variants)) {
+        const filePath = `${path}/${assets.filename}`;
+        zip.file(filePath, assets.blob);
+      }
+    }
+    // markdown 파일 추가
+    if (markdownText && markdownText.trim() !== "") {
+      zip.file("index.md", markdownText);
+    }
+    // HTML 파일 추가
+    if (htmlText && htmlText.trim() !== "") {
+      const previewDoc = document.implementation.createHTMLDocument("Preview");
+      const previewUrl = new URL("../html/preview.html", import.meta.url);
+      const response = await fetch(previewUrl);
+      const previewHtml = await response.text();
+      previewDoc.documentElement.innerHTML = previewHtml;
+      const div = previewDoc.getElementById("preview");
+      if (div) {
+        div.innerHTML = htmlText;
+      }
+      zip.file("preview.html", previewDoc.documentElement.outerHTML);
+      // CSS 파일 추가
+      const cssFiles = [
+        "assets/css/markdown.css"
+      ];
+      for (const path of cssFiles) {
+        const res = await fetch(path);
+        const blob = await res.blob();
+        zip.file(path, blob);
+      }
+    }
+    // ZIP 파일 생성
+    const zipBlob = await zip.generateAsync({
+      type: "blob"
+    });
+    // ZIP 파일 다운로드
+    const url = URL.createObjectURL(zipBlob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = zipName;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+}
+
+export default Downloader;

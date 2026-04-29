@@ -1,4 +1,4 @@
-.markdown-asset-manager {
+.mini-asset-manager {
   --color-text-text: #ffffff;
   --color-text-link: #66aaff;
   --color-background: #1e1e1e;
@@ -7,20 +7,13 @@
   --color-depth-2: rgb(70, 70, 70);
 }
 
-.markdown-asset-manager * {
+.mini-asset-manager * {
   flex: 0 0 0;
   margin: 0;
   padding: 0;
 }
 
-.markdown-asset-manager {
-  flex: 1 1 0;
-  display: flex;
-  flex-direction: column;
-  min-height: 160px;
-}
-
-.markdown-asset-manager .section {
+.mini-asset-manager {
   flex: 1 1 0;
   display: flex;
   flex-direction: column;
@@ -28,9 +21,10 @@
   padding: 8px;
   background-color: var(--color-depth-0);
   border-radius: 8px;
+  min-height: 160px;
 }
 
-.markdown-asset-manager .header {
+.mini-asset-manager .header {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -41,7 +35,7 @@
   font-weight: 600;
 }
 
-.markdown-asset-manager .main {
+.mini-asset-manager .main {
   flex: 1 1 0;
   display: flex;
   flex-direction: column;
@@ -51,13 +45,13 @@
   color: var(--color-text-text);
 }
 
-.markdown-asset-manager .menu {
+.mini-asset-manager .menu {
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-.markdown-asset-manager #uploadButton {
+.mini-asset-manager #uploadButton {
   flex: 1 1 0;
   padding: 8px 16px;
   background-color: var(--color-depth-2);
@@ -69,11 +63,11 @@
   font-weight: 600;
 }
 
-.markdown-asset-manager #uploadButton:hover {
+.mini-asset-manager #uploadButton:hover {
   background-color: var(--color-depth-1);
 }
 
-.markdown-asset-manager #downloadButton {
+.mini-asset-manager #downloadButton {
   flex: 1 1 0;
   padding: 8px 16px;
   background-color: var(--color-depth-2);
@@ -85,11 +79,11 @@
   font-weight: 600;
 }
 
-.markdown-asset-manager #downloadButton:hover {
+.mini-asset-manager #downloadButton:hover {
   background-color: var(--color-depth-1);
 }
 
-.markdown-asset-manager #uploadedFiles {
+.mini-asset-manager #uploadedFiles {
   flex: 1 1 0;
   background-color: var(--color-depth-1);
   display: flex;
@@ -98,7 +92,7 @@
   border-radius: 8px;
 }
 
-.markdown-asset-manager .image-list {
+.mini-asset-manager .image-list {
   flex: 1 1 0;
   display: flex;
   flex-direction: column;
@@ -107,7 +101,7 @@
   overflow: auto;
 }
 
-.markdown-asset-manager .image-item {
+.mini-asset-manager .image-item {
   display: flex;
   flex-direction: row;
   gap: 8px;
@@ -116,7 +110,7 @@
   padding: 8px;
 }
 
-.markdown-asset-manager .image-preview {
+.mini-asset-manager .image-preview {
   object-fit: cover;
   border-radius: 6px;
   width: 3.0em;
@@ -124,7 +118,7 @@
   flex: 0;
 }
 
-.markdown-asset-manager .file-list {
+.mini-asset-manager .file-list {
   flex: 1 1 0;
   display: flex;
   flex-direction: column;
@@ -133,13 +127,13 @@
   gap: 2px;
 }
 
-.markdown-asset-manager .file-item {
+.mini-asset-manager .file-item {
   flex: 1 1 0;
   text-align: center;
   align-content: center;
 }
 
-.markdown-asset-manager .file-item button {
+.mini-asset-manager .file-item button {
   width: 100%;
   height: 100%;
   background-color: var(--color-depth-1);
@@ -151,18 +145,18 @@
   font-weight: 600;
 }
 
-.markdown-asset-manager .file-item button:hover {
+.mini-asset-manager .file-item button:hover {
   background-color: var(--color-depth-0);
 }
 
-.markdown-asset-manager .file-list .variants {
+.mini-asset-manager .file-list .variants {
   flex: 3 1 0;
   display: flex;
   flex-direction: row;
   gap: 4px;
 }
 
-.markdown-asset-manager .file-list .source {
+.mini-asset-manager .file-list .source {
   flex: 2 1 0;
   display: flex;
   flex-direction: row;

@@ -1,7 +1,7 @@
 import ImageProcessor from "./image-processor.js";
 import Downloader from "./downloader.js";
 
-class MarkdownAssetManager {
+class MiniAssetManager {
   constructor() {
     this.imageProcessor = new ImageProcessor();
     this.downloader = new Downloader();
@@ -16,17 +16,44 @@ class MarkdownAssetManager {
     };
   }
 
-  setMarkdownText(text) {
-    this.markdownText = text;
-  }
-
-  setHtmlText(text) {
-    this.htmlText = text;
-  }
-
   async mount(rootElement) {
     this.rootElement = rootElement;
     await this.render();
+  }
+
+  setTextMarkdown(text) {
+    this.markdownText = text;
+  }
+
+  setTextHtml(text) {
+    this.htmlText = text;
+  }
+
+  resolveImageSources(htmlElement) {
+    const basePath = this.options.path ?? "/assets/uploads";
+
+    htmlElement.querySelectorAll("img").forEach((img) => {
+      const src = img.getAttribute("src");
+      if (!src) return;
+
+      const normalizedSrc = src;
+
+      for (const file of this.uploadedFiles) {
+        for (const [variant, assets] of Object.entries(file.variants)) {
+          const expectedPath =
+            `${basePath}/${assets.filename}`;
+
+          if (normalizedSrc !== expectedPath) continue;
+
+          if (!assets.previewUrl) {
+            assets.previewUrl = URL.createObjectURL(assets.blob);
+          }
+
+          img.src = assets.previewUrl;
+          return;
+        }
+      }
+    });
   }
 
   async render() {
@@ -39,7 +66,7 @@ class MarkdownAssetManager {
   }
 
   async loadCSS() {
-    const url = new URL("./assets/css/style.css", import.meta.url).href;
+    const url = new URL("../css/style.css", import.meta.url).href;
     if (document.querySelector(`link[href="${url}"]`)) return;
     const link = document.createElement("link");
     link.rel = "stylesheet";
@@ -48,12 +75,10 @@ class MarkdownAssetManager {
   }
 
   async loadTemplate() {
-    const url = new URL("./template.html", import.meta.url);
+    const url = new URL("../html/template.html", import.meta.url);
     const res = await fetch(url);
     this.rootElement.innerHTML = await res.text();
-    this.itemElement = this.rootElement.querySelector(
-      ".markdown-asset-manager .image-item"
-    );
+    this.itemElement = this.rootElement.querySelector(".image-item");
     if (this.itemElement) {
       this.itemElement.remove();
     }
@@ -148,33 +173,6 @@ class MarkdownAssetManager {
     }
   }
 
-  replaceMarkdownImageSrc(container) {
-    const basePath = this.options.path ?? "/assets/uploads";
-
-    container.querySelectorAll("img").forEach((img) => {
-      const src = img.getAttribute("src");
-      if (!src) return;
-
-      const normalizedSrc = src;
-
-      for (const file of this.uploadedFiles) {
-        for (const [variant, assets] of Object.entries(file.variants)) {
-          const expectedPath =
-            `${basePath}/${assets.filename}`;
-
-          if (normalizedSrc !== expectedPath) continue;
-
-          if (!assets.previewUrl) {
-            assets.previewUrl = URL.createObjectURL(assets.blob);
-          }
-
-          img.src = assets.previewUrl;
-          return;
-        }
-      }
-    });
-  }
-
   createSafeFileName(file, id, variant) {
     const ext = this.getExtension(file.name, file.type);
     const timestamp = this.getTimestamp();
@@ -212,4 +210,4 @@ class MarkdownAssetManager {
   }
 }
 
-export default MarkdownAssetManager;
+export default MiniAssetManager;

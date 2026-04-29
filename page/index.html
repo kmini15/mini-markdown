@@ -13,20 +13,20 @@
 <body>
   <div class="page">
     <div class="header">
-      <h1>Mini Markdown Editor</h1>
+      <h2>Mini Markdown Editor</h2>
     </div>
     <main class="main">
       <div class="view editor">
         <div class="tab-list">
           <div class="tab-button" data-tab="editor-tab1">Markdown</div>
-          <div class="tab-button" data-tab="editor-tab2">Uploads</div>
+          <div class="tab-button" data-tab="editor-tab2">Assets</div>
         </div>
         <div id="editor-tab1" class="tab-panel on">
           <textarea id="editor" class="scroll-text"
             onkeydown="if(event.keyCode===9){var v=this.value,s=this.selectionStart,e=this.selectionEnd;this.value=v.substring(0, s)+'  '+v.substring(e);this.selectionStart=this.selectionEnd=s+2;return false;}"></textarea>
         </div>
         <div id="editor-tab2" class="tab-panel">
-          <div id="markdown-asset-manager"></div>
+          <div id="mini-asset-manager"></div>
         </div>
       </div>
       <div class="view output">
@@ -51,19 +51,19 @@
   <script type="module">
     import MiniMarkdown from "./assets/js/mini-markdown.js";
     import Highlighter from "./assets/js/highlighter.js";
-    import MarkdownAssetManager from "./assets/js/markdown-asset-manager/markdown-asset-manager.js";
-    
-    const markdownAssetManager = new MarkdownAssetManager();
-    const assetManagerContainer = document.getElementById("markdown-asset-manager");
-    await markdownAssetManager.mount(assetManagerContainer);
-
-    const markdown = new MiniMarkdown();
-    const highlighter = new Highlighter();
+    import MiniAssetManager from "./components/mini-asset-manager/mam.js";
 
     const editor = document.getElementById("editor");
     const outputPreview = document.getElementById("output-preview");
     const outputHtml = document.getElementById("output-html");
     const outputAst = document.getElementById("output-ast");
+
+    const mmd = new MiniMarkdown();
+    const mhl = new Highlighter();
+    const mam = new MiniAssetManager();
+
+    const mamElem = document.getElementById("mini-asset-manager");
+    await mam.mount(mamElem);
 
     async function readFile(path) {
       const res = await fetch(path);
@@ -75,16 +75,30 @@
     async function init() {
       var text = await readFile("./assets/input.md");
       editor.value = text;
-      const ast = markdown.parse(text);
-      const html = markdown.render(ast);
+      const ast = mmd.parse(text);
+      const html = mmd.render(ast);
       outputPreview.innerHTML = html;
       outputHtml.innerText = html;
       outputAst.innerText = ast.dumpString();
-      highlighter.highlight();
-      markdownAssetManager.replaceMarkdownImageSrc(outputPreview);
-      markdownAssetManager.setMarkdownText(text);
-      markdownAssetManager.setHtmlText(html);
+      mhl.highlight();
+      mam.resolveImageSources(outputPreview);
+      mam.setTextMarkdown(text);
+      mam.setTextHtml(html);
     }
+
+    let isFirstFocus = true;
+    editor.addEventListener("focus", () => {
+      if (isFirstFocus) {
+        isFirstFocus = false;
+        editor.value = "";
+        outputPreview.innerHTML = "";
+        outputHtml.innerText = "";
+        outputAst.innerText = "";
+        mam.setTextMarkdown("");
+        mam.setTextHtml("");
+        return;
+      }
+    });
 
     function debounce(fn, delay) {
       let timer = null;
@@ -98,17 +112,17 @@
 
     editor.addEventListener("input", debounce((e) => {
       const text = e.target.value;
-      const ast = markdown.parse(text);
-      const html = markdown.render(ast);
+      const ast = mmd.parse(text);
+      const html = mmd.render(ast);
       outputPreview.innerHTML = html;
       outputHtml.innerText = html;
       outputAst.innerText = ast.dumpString();
-      highlighter.highlight();
-      markdownAssetManager.replaceMarkdownImageSrc(outputPreview);
-      markdownAssetManager.setMarkdownText(text);
-      markdownAssetManager.setHtmlText(html);
+      mhl.highlight();
+      mam.resolveImageSources(outputPreview);
+      mam.setTextMarkdown(text);
+      mam.setTextHtml(html);
     }, 200));
-    
+
     init();
   </script>
   <!-- Editor Tabs -->
@@ -150,9 +164,6 @@
         openOutputTab(elem.dataset.tab);
       });
     });
-  </script>
-  <!-- Markdown Asset Manager -->
-  <script type="module">
   </script>
 
 </body>

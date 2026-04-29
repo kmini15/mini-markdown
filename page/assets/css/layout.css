@@ -139,6 +139,12 @@ div .scroll-text {
   border: none;
 }
 
+#mini-asset-manager {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+}
+
 #output-preview {
   font-size: 1.0em;
 }
