@@ -6,13 +6,13 @@
   --color-text-link: #ffffff;
   --color-text-link-hover: #7272ff;
   --color-text-link-disabled: #888888;
-  --color-depth-0: #1d1d1d;
-  --color-depth-1: #2a2a2a;
-  --color-depth-2: #393939;
-  --color-depth-3: #484848;
-  --color-depth-4: #585858;
-  --color-depth-5: #686868;
-  --color-depth-6: #787878;
+  --color-depth-0: rgb(25, 25, 25);
+  --color-depth-1: rgb(35, 35, 35);
+  --color-depth-2: rgb(40, 40, 40);
+  --color-depth-3: rgb(60, 60, 60);
+  --color-depth-4: rgb(80, 80, 80);
+  --color-depth-5: rgb(100, 100, 100);
+  --color-depth-6: rgb(120, 120, 120);
 }
 
 * {
@@ -75,25 +75,19 @@ div .tab-button {
   border-radius: 8px 8px 0 0;
   font-weight: 700;
   cursor: pointer;
+  transition: all 0.2s;
 }
 
-div .editor .tab-button {
-  background: var(--color-depth-0);
-  transition: all 0.1s;
-}
-
-div .output .tab-button {
+div .tab-button {
   background: var(--color-depth-2);
-  transition: all 0.1s;
 }
 
-div .output .tab-button.on {
-  color: #fff;
+div .tab-button.on {
   background: var(--color-depth-0);
 }
 
-div .output .tab-button:hover {
-  padding: 8px 24px
+div .tab-button:hover {
+  padding: 8px 24px;
 }
 
 div .tab-panel {
@@ -106,6 +100,10 @@ div .tab-panel {
 }
 
 div .editor .tab-panel {
+  display: none;
+}
+
+div .editor .tab-panel.on {
   display: flex;
   flex-direction: column;
 }
@@ -161,8 +159,14 @@ div .scroll-text {
   word-break: normal;
 }
 
+#markdown-asset-manager {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+}
+
 @media (max-width: 768px) {
   .main {
-    flex-direction: column-reverse;    
+    flex-direction: column-reverse;
   }
 }

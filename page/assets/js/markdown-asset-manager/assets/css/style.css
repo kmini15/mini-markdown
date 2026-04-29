@@ -1,0 +1,170 @@
+.markdown-asset-manager {
+  --color-text-text: #ffffff;
+  --color-text-link: #66aaff;
+  --color-background: #1e1e1e;
+  --color-depth-0: rgb(40, 40, 40);
+  --color-depth-1: rgb(50, 50, 50);
+  --color-depth-2: rgb(70, 70, 70);
+}
+
+.markdown-asset-manager * {
+  flex: 0 0 0;
+  margin: 0;
+  padding: 0;
+}
+
+.markdown-asset-manager {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 160px;
+}
+
+.markdown-asset-manager .section {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px;
+  background-color: var(--color-depth-0);
+  border-radius: 8px;
+}
+
+.markdown-asset-manager .header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items:stretch;
+  text-align: center;
+  gap: 8px;
+  font-size: 1.0em;
+  font-weight: 600;
+}
+
+.markdown-asset-manager .main {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+  gap: 8px;
+  color: var(--color-text-text);
+}
+
+.markdown-asset-manager .menu {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.markdown-asset-manager #uploadButton {
+  flex: 1 1 0;
+  padding: 8px 16px;
+  background-color: var(--color-depth-2);
+  color: var(--color-text-text);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.8em;
+  font-weight: 600;
+}
+
+.markdown-asset-manager #uploadButton:hover {
+  background-color: var(--color-depth-1);
+}
+
+.markdown-asset-manager #downloadButton {
+  flex: 1 1 0;
+  padding: 8px 16px;
+  background-color: var(--color-depth-2);
+  color: var(--color-text-text);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.8em;
+  font-weight: 600;
+}
+
+.markdown-asset-manager #downloadButton:hover {
+  background-color: var(--color-depth-1);
+}
+
+.markdown-asset-manager #uploadedFiles {
+  flex: 1 1 0;
+  background-color: var(--color-depth-1);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-radius: 8px;
+}
+
+.markdown-asset-manager .image-list {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px;
+  overflow: auto;
+}
+
+.markdown-asset-manager .image-item {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  background-color: var(--color-depth-2);
+  border-radius: 8px;
+  padding: 8px;
+}
+
+.markdown-asset-manager .image-preview {
+  object-fit: cover;
+  border-radius: 6px;
+  width: 3.0em;
+  aspect-ratio: 1 / 1;
+  flex: 0;
+}
+
+.markdown-asset-manager .file-list {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+  gap: 2px;
+}
+
+.markdown-asset-manager .file-item {
+  flex: 1 1 0;
+  text-align: center;
+  align-content: center;
+}
+
+.markdown-asset-manager .file-item button {
+  width: 100%;
+  height: 100%;
+  background-color: var(--color-depth-1);
+  color: var(--color-text-text);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.8em;
+  font-weight: 600;
+}
+
+.markdown-asset-manager .file-item button:hover {
+  background-color: var(--color-depth-0);
+}
+
+.markdown-asset-manager .file-list .variants {
+  flex: 3 1 0;
+  display: flex;
+  flex-direction: row;
+  gap: 4px;
+}
+
+.markdown-asset-manager .file-list .source {
+  flex: 2 1 0;
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+}

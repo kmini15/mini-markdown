@@ -18,36 +18,52 @@
     <main class="main">
       <div class="view editor">
         <div class="tab-list">
-          <div class="tab-button">Markdown</div>
+          <div class="tab-button" data-tab="editor-tab1">Markdown</div>
+          <div class="tab-button" data-tab="editor-tab2">Uploads</div>
         </div>
-        <div class="tab-panel on">
-          <textarea id="editor" class="scroll-text" onkeydown="if(event.keyCode===9){var v=this.value,s=this.selectionStart,e=this.selectionEnd;this.value=v.substring(0, s)+'  '+v.substring(e);this.selectionStart=this.selectionEnd=s+2;return false;}"></textarea>
+        <div id="editor-tab1" class="tab-panel on">
+          <textarea id="editor" class="scroll-text"
+            onkeydown="if(event.keyCode===9){var v=this.value,s=this.selectionStart,e=this.selectionEnd;this.value=v.substring(0, s)+'  '+v.substring(e);this.selectionStart=this.selectionEnd=s+2;return false;}"></textarea>
+        </div>
+        <div id="editor-tab2" class="tab-panel">
+          <div id="markdown-asset-manager"></div>
         </div>
       </div>
       <div class="view output">
         <div class="tab-list">
-          <div class="tab-button" data-tab="tab1">Preview</div>
-          <div class="tab-button" data-tab="tab2">HTML</div>
-          <div class="tab-button" data-tab="tab3">AST</div>
+          <div class="tab-button" data-tab="output-tab1">Preview</div>
+          <div class="tab-button" data-tab="output-tab2">HTML</div>
+          <div class="tab-button" data-tab="output-tab3">AST</div>
         </div>
-        <div id="tab1" class="tab-panel">
+        <div id="output-tab1" class="tab-panel">
           <div id="output-preview" class="scroll-text markdown-body"></div>
         </div>
-        <div id="tab2" class="tab-panel">
+        <div id="output-tab2" class="tab-panel">
           <div id="output-html" class="scroll-text"></div>
         </div>
-        <div id="tab3" class="tab-panel">
+        <div id="output-tab3" class="tab-panel">
           <div id="output-ast" class="scroll-text"></div>
         </div>
       </div>
     </main>
   </div>
-
+  <!-- Mini Markdown Editor Scripts -->
   <script type="module">
     import MiniMarkdown from "./assets/js/mini-markdown.js";
     import Highlighter from "./assets/js/highlighter.js";
+    import MarkdownAssetManager from "./assets/js/markdown-asset-manager/markdown-asset-manager.js";
+    
+    const markdownAssetManager = new MarkdownAssetManager();
+    const assetManagerContainer = document.getElementById("markdown-asset-manager");
+    await markdownAssetManager.mount(assetManagerContainer);
+
     const markdown = new MiniMarkdown();
     const highlighter = new Highlighter();
+
+    const editor = document.getElementById("editor");
+    const outputPreview = document.getElementById("output-preview");
+    const outputHtml = document.getElementById("output-html");
+    const outputAst = document.getElementById("output-ast");
 
     async function readFile(path) {
       const res = await fetch(path);
@@ -55,14 +71,9 @@
       console.log(text);
       return text;
     }
+
     async function init() {
       var text = await readFile("./assets/input.md");
-
-      const editor = document.getElementById("editor");
-      const outputPreview = document.getElementById("output-preview");
-      const outputHtml = document.getElementById("output-html");
-      const outputAst = document.getElementById("output-ast");
-
       editor.value = text;
       const ast = markdown.parse(text);
       const html = markdown.render(ast);
@@ -70,12 +81,10 @@
       outputHtml.innerText = html;
       outputAst.innerText = ast.dumpString();
       highlighter.highlight();
+      markdownAssetManager.replaceMarkdownImageSrc(outputPreview);
+      markdownAssetManager.setMarkdownText(text);
+      markdownAssetManager.setHtmlText(html);
     }
-
-    const editor = document.getElementById("editor");
-    const outputPreview = document.getElementById("output-preview");
-    const outputHtml = document.getElementById("output-html");
-    const outputAst = document.getElementById("output-ast");
 
     function debounce(fn, delay) {
       let timer = null;
@@ -95,30 +104,57 @@
       outputHtml.innerText = html;
       outputAst.innerText = ast.dumpString();
       highlighter.highlight();
+      markdownAssetManager.replaceMarkdownImageSrc(outputPreview);
+      markdownAssetManager.setMarkdownText(text);
+      markdownAssetManager.setHtmlText(html);
     }, 200));
-
+    
     init();
   </script>
-
+  <!-- Editor Tabs -->
   <script>
-    const tabButtons = document.querySelectorAll(".output .tab-button");
-    const tabPanels = document.querySelectorAll(".output .tab-panel");
-    const defaultTab = "tab1";
-    openTab(defaultTab);
-    function openTab(tabName) {
-      tabButtons.forEach(elem => elem.classList.remove("on"));
-      tabPanels.forEach(elem => elem.classList.remove("on"));
+    const editorTabButtons = document.querySelectorAll(".editor .tab-button");
+    const editorTabPanels = document.querySelectorAll(".editor .tab-panel");
+    const defaultEditorTab = "editor-tab1";
+    openEditorTab(defaultEditorTab);
+    function openEditorTab(tabName) {
+      editorTabButtons.forEach(elem => elem.classList.remove("on"));
+      editorTabPanels.forEach(elem => elem.classList.remove("on"));
+      document.getElementById(tabName).classList.add('on');
+      document
+        .querySelector('.editor .tab-button[data-tab="' + tabName + '"]')
+        .classList.add('on');
+    }
+    editorTabButtons.forEach(elem => {
+      elem.addEventListener("click", () => {
+        openEditorTab(elem.dataset.tab);
+      });
+    });
+  </script>
+  <!-- Output Tabs -->
+  <script>
+    const outputTabButtons = document.querySelectorAll(".output .tab-button");
+    const outputTabPanels = document.querySelectorAll(".output .tab-panel");
+    const defaultOutputTab = "output-tab1";
+    openOutputTab(defaultOutputTab);
+    function openOutputTab(tabName) {
+      outputTabButtons.forEach(elem => elem.classList.remove("on"));
+      outputTabPanels.forEach(elem => elem.classList.remove("on"));
       document.getElementById(tabName).classList.add('on');
       document
         .querySelector('.output .tab-button[data-tab="' + tabName + '"]')
         .classList.add('on');
     }
-    tabButtons.forEach(elem => {
+    outputTabButtons.forEach(elem => {
       elem.addEventListener("click", () => {
-        openTab(elem.dataset.tab);
+        openOutputTab(elem.dataset.tab);
       });
     });
   </script>
+  <!-- Markdown Asset Manager -->
+  <script type="module">
+  </script>
+
 </body>
 
 </html>
