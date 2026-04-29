@@ -1,7 +1,9 @@
 import JSZip from "https://cdn.jsdelivr.net/npm/jszip/+esm";
+import StyleSnapshotter from "./style-snapshotter.js";
 
 class Downloader {
   constructor() {
+    this.styleSnapshotter = new StyleSnapshotter();
   }
 
   async downloadZip(markdownText, htmlText, uploadedFiles, path, zipName = "markdown-post.zip") {
@@ -20,6 +22,15 @@ class Downloader {
     }
     // HTML 파일 추가
     if (htmlText && htmlText.trim() !== "") {
+      // CSS 파일 추가 (스타일 시트 스냅샷)
+      const styles = await this.styleSnapshotter.snapshot();
+      const path = "assets/css";
+      for (const style of styles) {
+        if (style.cssText) {
+          zip.file(`${path}/${style.filename}`, style.cssText);
+        }
+      }
+      // HTML 파일 생성
       const previewDoc = document.implementation.createHTMLDocument("Preview");
       const previewUrl = new URL("../html/preview.html", import.meta.url);
       const response = await fetch(previewUrl);
@@ -29,16 +40,15 @@ class Downloader {
       if (div) {
         div.innerHTML = htmlText;
       }
-      zip.file("preview.html", previewDoc.documentElement.outerHTML);
-      // CSS 파일 추가
-      const cssFiles = [
-        "assets/css/markdown.css"
-      ];
-      for (const path of cssFiles) {
-        const res = await fetch(path);
-        const blob = await res.blob();
-        zip.file(path, blob);
+      // CSS 링크 추가
+      const head = previewDoc.head;
+      for (const style of styles) {
+        const link = previewDoc.createElement("link");
+        link.rel = "stylesheet";
+        link.href = `assets/css/${style.filename}`;
+        head.appendChild(link);
       }
+      zip.file("preview.html", previewDoc.documentElement.outerHTML);
     }
     // ZIP 파일 생성
     const zipBlob = await zip.generateAsync({
