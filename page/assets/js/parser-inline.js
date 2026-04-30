@@ -25,7 +25,7 @@ class ParserInline {
       backticksClose: /`+/,
       initSpace: /^\s*/,
       finiSpace: /\s*$/,
-      chunk: /[^\\\n`\[\]\!*_\<]+/,
+      chunk: /^[^\\\n`\[\]\!*_\<]+/,
       image: /^\(([^\)\]"]*)\s*("([^\)\]]*)")?\s*\)/,
       link: /^\(([^\)\]"]*)\s*("([^\)\]]*)")?\s*\)/,
       link_ref: /^\[([^\]]+)\]/,
