@@ -1,4 +1,7 @@
 import Node from "./node.js";
+import DisplayWidthCalculator from "./util.js";
+
+const dispWidthCalc = new DisplayWidthCalculator();
 
 class ParserBlock {
   constructor() {
@@ -191,13 +194,13 @@ class LineContext {
   }
 
   advance(n = 1) {
+    this.column += dispWidthCalc.measure(this.line.slice(this.index, this.index + n));
     this.index += n;
-    this.column += n;
   }
 
   retreat(n = 1) {
     this.index -= n;
-    this.column -= n;
+    this.column -= dispWidthCalc.measure(this.line.slice(this.index, this.index + n));
   }
 
   remains() {
@@ -343,7 +346,7 @@ class CodeBlockRule extends BlockRule {
   match(node, reader, context) {
     const parsed = context.remains().match(this.pattern);
     if (!parsed) return false;
-    const contentColumn = parsed[1].length + context.column;
+    const contentColumn = dispWidthCalc.measure(parsed[1]) + context.column;
     if (contentColumn < node.fields.contentColumn) return false;
     context.advance(parsed[1].length); // until content
     const textNode = node.firstChild;
@@ -358,7 +361,7 @@ class CodeBlockRule extends BlockRule {
     const parsed = context.remains().match(this.pattern);
     if (!parsed) return null;
     const markerColumn = context.column;
-    const contentColumn = parsed[1].length + context.column;
+    const contentColumn = dispWidthCalc.measure(parsed[1]) + context.column;
     context.advance(parsed[1].length); // until content
     const textNode = new Node("TEXT");
     textNode.value = context.remains();
@@ -388,8 +391,8 @@ class FencedCodeBlockRule extends BlockRule {
     const line = context.remains();
     const matchOpen = line.match(this.pattern_open);
     if (!matchOpen) return null;
-    const markerColumn = matchOpen[1].length + context.column;
-    const contentColumn = matchOpen[0].length + context.column;
+    const markerColumn = dispWidthCalc.measure(matchOpen[1]) + context.column;
+    const contentColumn = dispWidthCalc.measure(matchOpen[0]) + context.column;
     context.advance(line.length);
     reader.advance();
     const lines = [];
@@ -427,7 +430,7 @@ class BlockquoteRule extends BlockRule {
   match(node, reader, context) {
     const parsed = context.remains().match(this.pattern);
     if (!parsed) return false;
-    const markerColumn = parsed[2].length + context.column;
+    const markerColumn = dispWidthCalc.measure(parsed[2]) + context.column;
     if (markerColumn < node.fields.markerColumn) return false;
     context.advance(parsed[1].length);
     return true;
@@ -436,8 +439,8 @@ class BlockquoteRule extends BlockRule {
   start(parent, reader, context) {
     const parsed = context.remains().match(this.pattern);
     if (!parsed) return null;
-    const markerColumn = parsed[2].length + context.column;
-    const contentColumn = parsed[1].length + context.column;
+    const markerColumn = dispWidthCalc.measure(parsed[2]) + context.column;
+    const contentColumn = dispWidthCalc.measure(parsed[1]) + context.column;
     const child = new Node(this.type);
     child.fields = {
       markerColumn: markerColumn,
@@ -457,7 +460,7 @@ class ListRule extends BlockRule {
   match(node, reader, context) {
     const parsed = context.remains().match(this.pattern);
     if (!parsed) return false;
-    const markerColumn = parsed[2].length + context.column;
+    const markerColumn = dispWidthCalc.measure(parsed[2]) + context.column;
     if (markerColumn < node.fields.markerColumn) return false;
     context.advance(parsed[2].length); // until marker
     return true;
@@ -467,8 +470,8 @@ class ListRule extends BlockRule {
     if (parent.type === this.type) return null;
     const parsed = context.remains().match(this.pattern);
     if (!parsed) return null;
-    const markerColumn = parsed[2].length + context.column;
-    const contentColumn = parsed[1].length + context.column;
+    const markerColumn = dispWidthCalc.measure(parsed[2]) + context.column;
+    const contentColumn = dispWidthCalc.measure(parsed[1]) + context.column;
     context.advance(parsed[2].length); // until marker
     const child = new Node(this.type);
     child.fields = {
@@ -482,7 +485,7 @@ class ListRule extends BlockRule {
   carry(node, reader, context) {
     const parsed = context.remains().match(/^(\s*)/);
     if (!parsed) return false;
-    const indentColumn = parsed[1].length + context.column;
+    const indentColumn = dispWidthCalc.measure(parsed[1]) + context.column;
     if (indentColumn < node.fields.contentColumn) return false;
     return true;
   }
@@ -497,7 +500,7 @@ class ListItemRule extends BlockRule {
   match(node, reader, context) {
     const parsed = context.remains().match(this.pattern);
     if (!parsed) return false;
-    const markerColumn = parsed[2].length + context.column;
+    const markerColumn = dispWidthCalc.measure(parsed[2]) + context.column;
     if (markerColumn < node.fields.contentColumn) return false;
     context.advance(parsed[2].length); // until marker
     return true;
@@ -508,8 +511,8 @@ class ListItemRule extends BlockRule {
     if (parent.type === this.type) return null;
     const parsed = context.remains().match(this.pattern);
     if (!parsed) return null;
-    const markerColumn = parsed[2].length + context.column;
-    const contentColumn = parsed[1].length + context.column;
+    const markerColumn = dispWidthCalc.measure(parsed[2]) + context.column;
+    const contentColumn = dispWidthCalc.measure(parsed[1]) + context.column;
     context.advance(parsed[1].length); // until content
     const child = new Node(this.type);
     child.fields = {
@@ -522,7 +525,7 @@ class ListItemRule extends BlockRule {
   carry(node, reader, context) {
     const parsed = context.remains().match(/^(\s*)/);
     if (!parsed) return false;
-    const contentColumn = parsed[1].length + context.column;
+    const contentColumn = dispWidthCalc.measure(parsed[1]) + context.column;
     if (contentColumn < node.fields.contentColumn) return false;
     context.advance(node.fields.contentColumn - context.column);
     return true;
@@ -908,7 +911,7 @@ class GridTableRule extends BlockRule {
     const columns = [];
     let index = 0;
     for (const cell of cells) {
-      index += cell.length + 1;
+      index += dispWidthCalc.measure(cell) + 1;
       columns.push(index);
     }
     return columns;
@@ -918,7 +921,8 @@ class GridTableRule extends BlockRule {
     const normalizedLine = divLine.trim();
     const colSpans = [];
     for (const column of columns) {
-      if (/[|+]/.test(normalizedLine[column])) {
+      const index = dispWidthCalc.indexAtColumn(normalizedLine, column);
+      if (/[|+]/.test(normalizedLine[index])) {
         colSpans.push(1); // line
       } else {
         colSpans.push(0); // no line
@@ -930,15 +934,16 @@ class GridTableRule extends BlockRule {
   parseRowSpans(rowLine, columns) {
     const normalizedLine = rowLine.trim();
     const rowSpans = [];
-    let curr = 1;
+    let currIndex = 1;
     for (const column of columns) {
-      const chunk = normalizedLine.slice(curr, column);
+      const index = dispWidthCalc.indexAtColumn(normalizedLine, column);
+      const chunk = normalizedLine.slice(currIndex, index);
       if (/\s+/.test(chunk)) {
         rowSpans.push(0); // no line
       } else {
         rowSpans.push(1);
       }
-      curr = column + 1;
+      currIndex = index + 1;
     }
     return rowSpans;
   }
@@ -950,10 +955,11 @@ class GridTableRule extends BlockRule {
     let count = 0;
     for (let i = 0; i < columns.length; i++) {
       if (colSpans[i] === 1) {
-        const content = normalizedLine.slice(begin + 1, columns[i]).trim();
+        const index = dispWidthCalc.indexAtColumn(normalizedLine, columns[i]);
+        const content = normalizedLine.slice(begin + 1, index).trim();
         cells.push(content);
         cells.push(...Array(count).fill(""));
-        begin = columns[i];
+        begin = index;
         count = 0;
       } else {
         count++;
@@ -965,13 +971,16 @@ class GridTableRule extends BlockRule {
   parseHorizontalAlignments(rowLine, columns) {
     const normalizedLine = rowLine.trim();
     const alignments = [];
-    let curr = 0;
+    let currIndex = 0;
+    console.log({ normalizedLine, columns });
     for (const column of columns) {
-      let markL = normalizedLine[curr + 1];
-      let markR = normalizedLine[column - 1];
+      const index = dispWidthCalc.indexAtColumn(normalizedLine, column);
+      let markL = normalizedLine[currIndex + 1];
+      let markR = normalizedLine[index - 1];
+      console.log({ markL, markR });
       if (/[:'.]/.test(markL) && /[:'.]/.test(markR) && markL !== markR) {
         alignments.push("");
-        curr = column;
+        currIndex = index + 1;
         continue;
       }
       if (/[:'.]/.test(markL)) markL = ":";
@@ -987,7 +996,7 @@ class GridTableRule extends BlockRule {
         alignH = "";
       }
       alignments.push(alignH);
-      curr = column;
+      currIndex = index;
     }
     return alignments;
   }
@@ -995,13 +1004,14 @@ class GridTableRule extends BlockRule {
   parseVerticalAlignments(rowLine, columns) {
     const normalizedLine = rowLine.trim();
     const alignments = [];
-    let curr = 0;
+    let currIndex = 0;
     for (const column of columns) {
-      let markL = normalizedLine[curr + 1];
-      let markR = normalizedLine[column - 1];
+      const index = dispWidthCalc.indexAtColumn(normalizedLine, column);
+      let markL = normalizedLine[currIndex + 1];
+      let markR = normalizedLine[index - 1];
       if (/[:'.]/.test(markL) && /[:'.]/.test(markR) && markL !== markR) {
         alignments.push("");
-        curr = column;
+        currIndex = index + 1;
         continue;
       }
       let alignV;
@@ -1021,7 +1031,7 @@ class GridTableRule extends BlockRule {
         alignV = "";
       }
       alignments.push(alignV);
-      curr = column;
+      currIndex = index;
     }
     return alignments;
   }
@@ -1029,15 +1039,16 @@ class GridTableRule extends BlockRule {
   parseHeaders(rowLine, columns) {
     const normalizedLine = rowLine.trim();
     const headers = [];
-    let curr = 0;
+    let currIndex = 0;
     for (const column of columns) {
-      const chunk = normalizedLine.slice(curr, column + 1);
+      const index = dispWidthCalc.indexAtColumn(normalizedLine, column);
+      const chunk = normalizedLine.slice(currIndex, index + 1);
       if (chunk.includes("=")) {
         headers.push(true);
       } else {
         headers.push(false);
       }
-      curr = column;
+      currIndex = index + 1;
     }
     return headers;
   }
