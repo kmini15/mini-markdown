@@ -254,8 +254,8 @@
   color: var(--color-table-row-even-fg);
 }
 
-/* Scroll Wrapper (Horizontal Overflow) */
-.markdown-body .scroll-wrapper {
+/* Scroll (Horizontal Overflow) */
+.markdown-body .scroll {
   overflow-x: auto;
   scrollbar-width: thin;
 }

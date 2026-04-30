@@ -21,6 +21,7 @@ class ParserBlock {
       new TableRule(),
       new GridRule(),
       new GridTableRule(),
+      new ScrollRule(),
       new ParagraphRule(),
     ];
     this.rules.at(-1).setRules(this.rules);
@@ -132,6 +133,16 @@ class ParserBlock {
         parent.appendChild(child);
         stack.push(child);
         started = true;
+        // If the block has an innerBlock field, parse it as a nested block.
+        if (child.fields.innerBlock) {
+          const innerBlock = this.parse(child.fields.innerBlock);
+          for (let elem = innerBlock.firstChild; elem;) {
+            const granchild = elem;
+            elem = elem.next;
+            child.appendChild(granchild);
+          }
+          child.fields.innerBlock = "parsed";
+        }
         break;
       }
       if (!started) break;
@@ -1248,6 +1259,45 @@ class GridTableRule extends BlockRule {
     context.advance(openLine.length);
     reader.retreat();
     return tableNode;
+  }
+}
+
+class ScrollRule extends BlockRule {
+  constructor() {
+    super("SCROLL");
+    this.pattern_open = /^(\s*)<::>\s*$/;
+    this.pattern_close = /^(\s*)<::>\s*$/;
+  }
+
+  start(parent, reader, context) {
+    const line = context.remains();
+    const matchOpen = line.match(this.pattern_open);
+    if (!matchOpen) return null;
+    reader.capture();
+    reader.advance();
+    let isClosed = false;
+    const lines = [];
+    while (!reader.eof()) {
+      const line = reader.current();
+      if (line.match(this.pattern_close)) {
+        isClosed = true;
+        reader.advance();
+        break;
+      }
+      lines.push(line);
+      reader.advance();
+    }
+    if (lines.length === 0 || !isClosed) {
+      reader.restore();
+      return null;
+    }
+    const scrollNode = new Node(this.type);
+    scrollNode.fields = {
+      innerBlock: lines.join("\n"),
+    };
+    context.advance(line.length);
+    reader.retreat();
+    return scrollNode;
   }
 }
 

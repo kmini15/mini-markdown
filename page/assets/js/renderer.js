@@ -70,7 +70,7 @@ class Renderer {
         return `<td${style}>${text}</td>\n`;
       case "GRID_TABLE":
         var columns = node.fields.columns ?? 1;
-        return `<div class="scroll-wrapper"><div class="grid-table" style="--columns:${columns};">\n${text}</div></div>\n`;
+        return `<div class="grid-table" style="--columns:${columns};">\n${text}</div>\n`;
       case "GRID_TABLE_ROW":
         return text;
       case "GRID_TABLE_HEADER":
@@ -121,6 +121,8 @@ class Renderer {
         }
         var row = "row-" + (row % 2 === 1 ? "odd" : "even");
         return `<div class="grid-table-cell grid-table-data ${row}" style="${style}">${text}</div>\n`;
+      case "SCROLL":
+        return `<div class="scroll">\n${text}</div>\n`;
       case "PARAGRAPH":
         return `<p>${text}</p>\n`;
       // INLINE
