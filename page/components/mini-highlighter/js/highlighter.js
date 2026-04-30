@@ -41,17 +41,15 @@ class MiniHighlighter {
   }
 
   async loadCSS() {
-    const href = new URL("../css/style.css", import.meta.url).href;
-    const existing = document.querySelector(`link[data-mini-highlighter-css="${href}"]`);
-    if (existing) return;
+    const url = new URL("../css/style.css", import.meta.url).href;
+    if (document.querySelector(`link[href="${url}"]`)) return;
     return new Promise((resolve, reject) => {
       const link = document.createElement("link");
       link.rel = "stylesheet";
-      link.href = href;
-      link.dataset.miniHighlighterCss = href;
+      link.href = url;
       link.onload = () => resolve();
       link.onerror = () => {
-        reject(new Error(`Failed to load CSS: ${href}`));
+        reject(new Error(`Failed to load CSS: ${url}`));
       };
       document.head.appendChild(link);
     });

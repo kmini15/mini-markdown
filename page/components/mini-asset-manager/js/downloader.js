@@ -25,11 +25,11 @@ class Downloader {
       // CSS 파일 추가 (스타일 시트 스냅샷)
       const styles = await this.styleSnapshotter.snapshot();
       const path = "assets/css";
-      for (const style of styles) {
+      styles.forEach((style, index) => {
         if (style.cssText) {
-          zip.file(`${path}/${style.filename}`, style.cssText);
+          zip.file(`${path}/${index}-${style.filename}`, style.cssText);
         }
-      }
+      });
       // HTML 파일 생성
       const previewDoc = document.implementation.createHTMLDocument("Preview");
       const previewUrl = new URL("../html/preview.html", import.meta.url);
@@ -42,12 +42,12 @@ class Downloader {
       }
       // CSS 링크 추가
       const head = previewDoc.head;
-      for (const style of styles) {
+      styles.forEach((style, index) => {
         const link = previewDoc.createElement("link");
         link.rel = "stylesheet";
-        link.href = `assets/css/${style.filename}`;
+        link.href = `assets/css/${index}-${style.filename}`;
         head.appendChild(link);
-      }
+      });
       zip.file("preview.html", previewDoc.documentElement.outerHTML);
     }
     // ZIP 파일 생성

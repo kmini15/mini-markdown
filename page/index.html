@@ -84,9 +84,9 @@
       outputHtml.innerText = html;
       outputAst.innerText = ast.dumpString();
       mhl.highlight();
-      mam.resolveImageSources(outputPreview);
       mam.setTextMarkdown(text);
-      mam.setTextHtml(html);
+      mam.setTextHtml(outputPreview.innerHTML);
+      mam.resolveImageSources(outputPreview);
     }
 
     let isFirstFocus = true;
@@ -121,9 +121,9 @@
       outputHtml.innerText = html;
       outputAst.innerText = ast.dumpString();
       mhl.highlight();
-      mam.resolveImageSources(outputPreview);
       mam.setTextMarkdown(text);
-      mam.setTextHtml(html);
+      mam.setTextHtml(outputPreview.innerHTML);
+      mam.resolveImageSources(outputPreview);
     }, 200));
 
     init();
