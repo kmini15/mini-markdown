@@ -4,6 +4,7 @@
 }
 
 :root {
+  color-scheme: dark;
   --color-bg: #111111;
   --color-text: #dddddd;
   --color-text-secondary: #aaaaaa;

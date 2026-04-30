@@ -70,7 +70,7 @@ class Renderer {
         return `<td${style}>${text}</td>\n`;
       case "GRID_TABLE":
         var columns = node.fields.columns ?? 1;
-        return `<div class="grid-table" style="--columns:${columns};">\n${text}</div>\n`;
+        return `<div class="scroll-wrapper"><div class="grid-table" style="--columns:${columns};">\n${text}</div></div>\n`;
       case "GRID_TABLE_ROW":
         return text;
       case "GRID_TABLE_HEADER":

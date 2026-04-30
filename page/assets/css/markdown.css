@@ -1,6 +1,7 @@
 .markdown-body {
   all: unset;
   display: block;
+  color-scheme: dark;
 }
 
 .markdown-body {
@@ -33,6 +34,10 @@
   color: var(--color-fg-default);
   background-color: var(--color-bg-default);
   padding: 1em;
+}
+
+.markdown-body::-webkit-scrollbar-track {
+  background: var(--color-bg-muted);
 }
 
 /* Paragraph */
@@ -203,14 +208,17 @@
 /* Grid Table */
 .markdown-body .grid-table {
   display: grid;
+  min-width: max-content;
   grid-template-columns: repeat(var(--columns), 1fr);
   margin: 1em 0;
   font-size: 0.8em;
-  overflow: auto;
+  object-fit: contain;
+  overflow-x: auto;
 }
 
 .markdown-body .grid-table-cell {
   display: grid;
+  min-width: max-content;
   grid-column: var(--col) / span var(--col-span, 1);
   grid-row: var(--row) / span var(--row-span, 1);
   text-align: var(--align-text-h, left);
@@ -244,4 +252,10 @@
 .markdown-body .grid-table-cell.grid-table-data.row-even {
   background: var(--color-table-row-even-bg);
   color: var(--color-table-row-even-fg);
+}
+
+/* Scroll Wrapper (Horizontal Overflow) */
+.markdown-body .scroll-wrapper {
+  overflow-x: auto;
+  scrollbar-width: thin;
 }
