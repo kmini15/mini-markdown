@@ -1,3 +1,8 @@
+@font-face {
+  font-family: "D2Coding";
+  src: url('../fonts/D2Coding-Ver1.3.2-20180524-all.ttc') format('truetype');
+}
+
 :root {
   --color-bg: #111111;
   --color-text: #dddddd;
@@ -129,7 +134,7 @@ div .scroll-text {
 }
 
 #editor {
-  font-family: Roboto, "Noto Sans KR", monospace;
+  font-family: "D2Coding", monospace;
   font-size: 0.8em;
   white-space: pre;
   overflow-wrap: normal;
@@ -150,7 +155,7 @@ div .scroll-text {
 }
 
 #output-html {
-  font-family: Roboto, "Noto Sans KR", monospace;
+  font-family: "D2Coding", monospace;
   font-size: 0.8em;
   white-space: pre;
   overflow-wrap: normal;
@@ -158,7 +163,7 @@ div .scroll-text {
 }
 
 #output-ast {
-  font-family: Roboto, "Noto Sans KR", monospace;
+  font-family: "D2Coding", monospace;
   font-size: 0.8em;
   white-space: pre;
   overflow-wrap: normal;

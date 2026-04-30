@@ -597,38 +597,131 @@ class GridRule extends BlockRule {
     super("GRID");
     this.pattern_open = /^(\s*):{4}\[([^\]:]+)(:[^\]:]+)?\]\s*$/;
     this.pattern_close = /^(\s*)([:]{4})\s*$/;
+    this.pattern_item = /^\[[:.' ]{2}\](.*)/;
+    // [  ]: default
+    // [::]: middle center
+    // [: ]: middle left
+    // [ :]: middle right
+    // ['']: top center
+    // [' ]: top left
+    // [ ']: top right
+    // [..]: bottom center
+    // [. ]: bottom left
+    // [ .]: bottom right
   }
 
   start(parent, reader, context) {
     const line = context.remains();
     const match = line.match(this.pattern_open);
     if (!match) return null;
-    context.advance(line.length);
+    reader.capture();
     reader.advance();
     const columns = match[2].trim();
     const gap = match[3] ? match[3].slice(1).trim() : 0;
     const node = new Node(this.type);
     node.fields.columns = columns;
     node.fields.gap = gap;
-    let lines = [];
+    let isClosed = false;
     while (!reader.eof()) {
       const line = reader.current();
-      reader.advance();
       if (line.match(this.pattern_close)) {
+        reader.advance();
+        isClosed = true;
         break;
       }
-      lines.push(line);
-    }
-    for (let line of lines) {
-      const textNode = new Node("TEXT");
-      textNode.value = line;
-      textNode.fields = {
-        inline: true,
-      };
+      const matchItem = line.match(this.pattern_item);
+      if (!matchItem) {
+        break;
+      }
       const itemNode = new Node("GRID_ITEM");
-      itemNode.appendChild(textNode);
-      node.appendChild(itemNode);
+      switch (line.slice(1, 3)) {
+        case "::":
+          itemNode.fields.alignTextH = "center";
+          itemNode.fields.alignTextV = "middle";
+          itemNode.fields.alignItemH = "center";
+          itemNode.fields.alignItemV = "center";
+          break;
+        case ": ":
+          itemNode.fields.alignTextH = "left";
+          itemNode.fields.alignTextV = "middle";
+          itemNode.fields.alignItemH = "start";
+          itemNode.fields.alignItemV = "center";
+          break;
+        case " :":
+          itemNode.fields.alignTextH = "right";
+          itemNode.fields.alignTextV = "middle";
+          itemNode.fields.alignItemH = "end";
+          itemNode.fields.alignItemV = "center";
+          break;
+        case "''":
+          itemNode.fields.alignTextH = "center";
+          itemNode.fields.alignTextV = "top";
+          itemNode.fields.alignItemH = "center";
+          itemNode.fields.alignItemV = "start";
+          break;
+        case "' ":
+          itemNode.fields.alignTextH = "left";
+          itemNode.fields.alignTextV = "top";
+          itemNode.fields.alignItemH = "start";
+          itemNode.fields.alignItemV = "start";
+          break;
+        case " '":
+          itemNode.fields.alignTextH = "right";
+          itemNode.fields.alignTextV = "top";
+          itemNode.fields.alignItemH = "end";
+          itemNode.fields.alignItemV = "start";
+          break;
+        case "..":
+          itemNode.fields.alignTextH = "center";
+          itemNode.fields.alignTextV = "bottom";
+          itemNode.fields.alignItemH = "center";
+          itemNode.fields.alignItemV = "end";
+          break;
+        case ". ":
+          itemNode.fields.alignTextH = "left";
+          itemNode.fields.alignTextV = "bottom";
+          itemNode.fields.alignItemH = "start";
+          itemNode.fields.alignItemV = "end";
+          break;
+        case " .":
+          itemNode.fields.alignTextH = "right";
+          itemNode.fields.alignTextV = "bottom";
+          itemNode.fields.alignItemH = "end";
+          itemNode.fields.alignItemV = "end";
+          break;
+        default:
+          itemNode.fields.alignTextH = "";
+          itemNode.fields.alignTextV = "";
+          itemNode.fields.alignItemH = "";
+          itemNode.fields.alignItemV = "";
+      }
+      console.log(itemNode.fields);
+      reader.advance();
+      let lines = [];
+      lines.push(matchItem[1]);
+      while (!reader.eof()) {
+        const line = reader.current();
+        const matchItem = line.match(this.pattern_item);
+        const matchClose = line.match(this.pattern_close);
+        if (matchClose || matchItem) {
+          const textNode = new Node("TEXT");
+          textNode.value = lines.join("\n");
+          textNode.fields = {
+            inline: true,
+          };
+          itemNode.appendChild(textNode);
+          node.appendChild(itemNode);
+          break;
+        }
+        lines.push(line);
+        reader.advance();
+      }
     }
+    if (!isClosed) {
+      reader.restore();
+      return null;
+    }
+    context.advance(line.length);
     reader.retreat();
     return node;
   }
@@ -1090,14 +1183,46 @@ class GridTableRule extends BlockRule {
         const header = tableHeaders[row][col];
         if (colSpan === 0 || rowSpan === 0) continue;
         const cellType = (header) ? "GRID_TABLE_HEADER" : "GRID_TABLE_DATA";
+        const alignTextH = alignH;
+        const alignTextV = alignV;
+        let alignItemH;
+        let alignItemV;
+        switch (alignH) {
+          case "left":
+            alignItemH = "start";
+            break;
+          case "center":
+            alignItemH = "center";
+            break;
+          case "right":
+            alignItemH = "end";
+            break;
+          default:
+            alignItemH = "";
+        }
+        switch (alignV) {
+          case "top":
+            alignItemV = "start";
+            break;
+          case "middle":
+            alignItemV = "center";
+            break;
+          case "bottom":
+            alignItemV = "end";
+            break;
+          default:
+            alignItemV = "";
+        }
         const cellNode = new Node(cellType);
         cellNode.fields = {
           row: row + 1,
           col: col + 1,
           rowSpan: rowSpan,
           colSpan: colSpan,
-          alignH: alignH,
-          alignV: alignV,
+          alignTextH: alignTextH,
+          alignTextV: alignTextV,
+          alignItemH: alignItemH,
+          alignItemV: alignItemV,
         };
         const textNode = new Node("TEXT");
         textNode.value = divCell;

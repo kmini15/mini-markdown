@@ -38,7 +38,20 @@ class Renderer {
         style += `--gap: ${node.fields.gap};`;
         return `<div class="grid" style="${style}">\n${text}</div>\n`;
       case "GRID_ITEM":
-        return `<div class="grid-item">${text}</div>\n`;
+        var style = "";
+        if (node.fields.alignTextH) {
+          style += `--align-text-h: ${node.fields.alignTextH};`;
+        }
+        if (node.fields.alignTextV) {
+          style += `--align-text-v: ${node.fields.alignTextV};`;
+        }
+        if (node.fields.alignItemH) {
+          style += `--align-item-h: ${node.fields.alignItemH};`;
+        }
+        if (node.fields.alignItemV) {
+          style += `--align-item-v: ${node.fields.alignItemV};`;
+        }
+        return `<div class="grid-item" style="${style}">${text}</div>\n`;
       case "TABLE":
         return `<table>\n${text}</table>\n`;
       case "TABLE_ROW":
@@ -70,11 +83,17 @@ class Renderer {
         style += `--col:${col};`;
         style += `--row-span:${rowSpan};`;
         style += `--col-span:${colSpan};`;
-        if (node.fields.alignH) {
-          style += `--align-h: ${node.fields.alignH};`;
+        if (node.fields.alignTextH) {
+          style += `--align-text-h: ${node.fields.alignTextH};`;
         }
-        if (node.fields.alignV) {
-          style += `--align-v: ${node.fields.alignV};`;
+        if (node.fields.alignTextV) {
+          style += `--align-text-v: ${node.fields.alignTextV};`;
+        }
+        if (node.fields.alignItemH) {
+          style += `--align-item-h: ${node.fields.alignItemH};`;
+        }
+        if (node.fields.alignItemV) {
+          style += `--align-item-v: ${node.fields.alignItemV};`;
         }
         var row = "row-" + (row % 2 === 1 ? "odd" : "even");
         return `<div class="grid-table-cell grid-table-header ${row}" style="${style}">${text}</div>\n`;
@@ -88,11 +107,17 @@ class Renderer {
         style += `--col:${col};`;
         style += `--row-span:${rowSpan};`;
         style += `--col-span:${colSpan};`;
-        if (node.fields.alignH) {
-          style += `--align-h: ${node.fields.alignH};`;
+        if (node.fields.alignTextH) {
+          style += `--align-text-h: ${node.fields.alignTextH};`;
         }
-        if (node.fields.alignV) {
-          style += `--align-v: ${node.fields.alignV};`;
+        if (node.fields.alignTextV) {
+          style += `--align-text-v: ${node.fields.alignTextV};`;
+        }
+        if (node.fields.alignItemH) {
+          style += `--align-item-h: ${node.fields.alignItemH};`;
+        }
+        if (node.fields.alignItemV) {
+          style += `--align-item-v: ${node.fields.alignItemV};`;
         }
         var row = "row-" + (row % 2 === 1 ? "odd" : "even");
         return `<div class="grid-table-cell grid-table-data ${row}" style="${style}">${text}</div>\n`;

@@ -96,7 +96,7 @@
 
 /* Code */
 .markdown-body code {
-  font-family: "SF Mono", SF Mono, Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  font-family: D2Coding, Menlo, Monaco, "Courier New", monospace;
   font-size: 0.8em;
   font-weight: 500;
   background-color: var(--color-code-bg);
@@ -173,23 +173,61 @@
   color: var(--color-table-row-even-fg);
 }
 
+/* Grid */
+.markdown-body .grid {
+  display: grid;
+  gap: var(--gap, 8px);
+  grid-template-columns: repeat(var(--columns), 1fr);
+  margin: 1em 0;
+  overflow: auto;
+}
+
+.markdown-body .grid-item {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  object-fit: contain;
+  text-align: var(--align-text-h, left);
+  align-content: var(--align-text-v, center);
+  justify-items: var(--align-item-h, left);
+  align-items: var(--align-item-v, center);
+}
+
+.markdown-body .grid-item img,
+.markdown-body .grid-item video {
+  border-radius: 4px;
+  margin: 0;
+  padding: 0;
+}
+
 /* Grid Table */
 .markdown-body .grid-table {
   display: grid;
   grid-template-columns: repeat(var(--columns), 1fr);
   margin: 1em 0;
   font-size: 0.8em;
+  overflow: auto;
 }
 
 .markdown-body .grid-table-cell {
+  display: grid;
   grid-column: var(--col) / span var(--col-span, 1);
   grid-row: var(--row) / span var(--row-span, 1);
-  text-align: var(--align-h, left);
-  align-content: var(--align-v, center);
+  text-align: var(--align-text-h, left);
+  align-content: var(--align-text-v, center);
+  justify-items: var(--align-item-h, left);
+  align-items: var(--align-item-v, center);
   border: 1px solid var(--color-table-border);
   padding: 0.5em 1em;
   min-width: 1em;
   min-height: 1em;
+}
+
+.markdown-body .grid-table-cell img,
+.markdown-body .grid-table-cell video {
+  border-radius: 4px;
+  margin: 0;
+  padding: 0;
 }
 
 .markdown-body .grid-table-cell.grid-table-header {
@@ -206,21 +244,4 @@
 .markdown-body .grid-table-cell.grid-table-data.row-even {
   background: var(--color-table-row-even-bg);
   color: var(--color-table-row-even-fg);
-}
-
-/* Grid */
-.markdown-body .grid {
-  display: grid;
-  gap: var(--gap, 8px);
-  grid-template-columns: repeat(var(--columns), 1fr);
-}
-
-.markdown-body .grid-item img,
-.markdown-body .grid-item video {
-  width: 100%;
-  height: auto;
-  display: block;
-  object-fit: cover;
-  margin: 0;
-  padding: 0;
 }

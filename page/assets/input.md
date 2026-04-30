@@ -176,7 +176,88 @@
 
 ---
 
+### Fenced Code Block (Code Highlighting)
+
+```cpp
+#include <iostream>
+
+int main() {
+    std::cout << "Hello, World!" << std::endl;
+    return 0;
+}
+```
+
+---
+
 ## Custom Syntax
+
+### Grid
+
+::::[10:8px]
+[::]![KEI](assets/test.jpg)
+[::]
+[::]
+[::]
+[::]![케이](assets/test.gif)
+[::]
+[::]![KEI](assets/test.jpg)
+[::]![케이](assets/test.gif)
+[::]![KEI](assets/test.jpg)
+[::]
+
+[::]![케이](assets/test.gif)
+[::]![KEI](assets/test.jpg)
+[::]
+[::]![케이](assets/test.gif)
+[::]![KEI](assets/test.jpg)
+[::]
+[::]![케이](assets/test.gif)
+[::]
+[::]
+[::]![KEI](assets/test.jpg)
+
+[::]![케이](assets/test.gif)
+[::]
+[::]![KEI](assets/test.jpg)
+[::]
+[::]![케이](assets/test.gif)
+[::]
+[::]![KEI](assets/test.jpg)
+[::]![케이](assets/test.gif)
+[::]![KEI](assets/test.jpg)
+[::]
+
+[::]![케이](assets/test.gif)
+[::]
+[::]![KEI](assets/test.jpg)
+[::]
+[::]![케이](assets/test.gif)
+[::]
+[::]![KEI](assets/test.jpg)
+[::]
+[::]
+[::]![케이](assets/test.gif)
+
+[::]![KEI](assets/test.jpg)
+[::]
+[::]![케이](assets/test.gif)
+[::]
+[::]![KEI](assets/test.jpg)
+[::]
+[::]![케이](assets/test.gif)
+[::]
+[::]
+[::]![KEI](assets/test.jpg)
+::::
+
+::::[2:8px]
+[::]![KEI](assets/test.jpg)
+[::]![케이](assets/test.gif)
+[::]그저 누워있는 케이
+[::]케이는 충전중
+::::
+
+---
 
 ### Grid Table
 
@@ -198,84 +279,12 @@
 |       |       |       |       |       |       |        |
 |-------+-------+-------+-------+-------+-------|        |
 |  Merged Cell  |       |         Merged\       |        |
-|:------+------:+-------|   Header              |--------|
+|-------+-------+-------|   Header              |--------|
 |       |  Merged Cell  |       Cell            |        |
-+-------+:-------------:+:=====================:+--------+
++-------+---------------+:=====================:+--------+
 
----
-
-### Grid
-
-::::[12:8px]
-![KEI](assets/test.jpg)
-
-
-
-![케이](assets/test.gif)
-
-![KEI](assets/test.jpg)
-![케이](assets/test.gif)
-![KEI](assets/test.jpg)
-
-
-
-![케이](assets/test.gif)
-![KEI](assets/test.jpg)
-
-![케이](assets/test.gif)
-![KEI](assets/test.jpg)
-
-![케이](assets/test.gif)
-
-
-![KEI](assets/test.jpg)
-
-
-![케이](assets/test.gif)
-
-![KEI](assets/test.jpg)
-
-![케이](assets/test.gif)
-
-![KEI](assets/test.jpg)
-![케이](assets/test.gif)
-![KEI](assets/test.jpg)
-
-
-
-![케이](assets/test.gif)
-
-![KEI](assets/test.jpg)
-
-![케이](assets/test.gif)
-
-![KEI](assets/test.jpg)
-
-
-![케이](assets/test.gif)
-
-
-![KEI](assets/test.jpg)
-
-![케이](assets/test.gif)
-
-![KEI](assets/test.jpg)
-
-![케이](assets/test.gif)
-
-
-![KEI](assets/test.jpg)
-::::
-
----
-
-### Fenced Code Block (Code Highlighting)
-
-```cpp
-#include <iostream>
-
-int main() {
-    std::cout << "Hello, World!" << std::endl;
-    return 0;
-}
-```
++-------------+++---------------+
+| ![KEI](assets/test.jpg)       |
++:------------+----------------:+
+| KEI         | So cute!!       |
++:-----------:+:---------------:+
