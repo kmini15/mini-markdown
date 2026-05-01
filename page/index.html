@@ -117,10 +117,11 @@
     editor.addEventListener("input", debounce((e) => {
       const text = e.target.value;
       const ast = mmd.parse(text);
-      const html = mmd.render(ast);
-      outputPreview.innerHTML = html;
-      outputHtml.innerText = html;
-      outputAst.innerText = ast.dumpString();
+      const astText = mmd.renderAst(ast);
+      const htmlText = mmd.renderHtml(ast);
+      outputPreview.innerHTML = htmlText;
+      outputHtml.innerText = htmlText;
+      outputAst.innerText = astText;
       mhl.highlight();
       mam.setTextMarkdown(text);
       mam.setTextHtml(outputPreview.innerHTML);
