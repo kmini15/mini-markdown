@@ -130,25 +130,41 @@ class ParserBlock {
       for (let rule of this.rules) {
         const child = rule.start(parent, reader, context);
         if (!child) continue;
+        this.innerBlocks(child);
         parent.appendChild(child);
         stack.push(child);
         started = true;
-        // If the block has an innerBlock field, parse it as a nested block.
-        if (child.fields.innerBlock) {
-          const innerBlock = this.parse(child.fields.innerBlock);
-          for (let elem = innerBlock.firstChild; elem;) {
-            const granchild = elem;
-            elem = elem.next;
-            child.appendChild(granchild);
-          }
-          child.fields.innerBlock = "parsed";
-        }
+        // if (child.fields.innerBlock) {
+        //   const innerBlock = this.parse(child.fields.innerBlock);
+        //   for (let elem = innerBlock.firstChild; elem;) {
+        //     const granchild = elem;
+        //     elem = elem.next;
+        //     child.appendChild(granchild);
+        //   }
+        //   child.fields.innerBlock = "parsed";
+        // }
         break;
       }
       if (!started) break;
     }
     stackIndex = stack.length - 1;
     return stackIndex;
+  }
+
+  innerBlocks(node) {
+    for (let child = node.firstChild; child; child = child.next) {
+      this.innerBlocks(child);
+    }
+    // If node has an innerBlock field, parse it as a nested block.
+    if (node.fields.innerBlock) {
+      const innerBlock = this.parse(node.fields.innerBlock);
+      for (let elem = innerBlock.firstChild; elem;) {
+        const child = elem;
+        elem = elem.next;
+        node.appendChild(child);
+      }
+      node.fields.innerBlock = "parsed";
+    }
   }
 }
 
@@ -718,12 +734,7 @@ class GridRule extends BlockRule {
         const matchItem = line.match(this.pattern_item);
         const matchClose = line.match(this.pattern_close);
         if (matchClose || matchItem) {
-          const textNode = new Node("TEXT");
-          textNode.value = lines.join("\n");
-          textNode.fields = {
-            inline: true,
-          };
-          itemNode.appendChild(textNode);
+          itemNode.fields.innerBlock = lines.join("\n");
           node.appendChild(itemNode);
           break;
         }

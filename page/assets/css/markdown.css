@@ -112,10 +112,10 @@
 
 /* Code Block */
 .markdown-body pre {
+  flex: 1 1 0;
   background-color: var(--color-code-bg);
   padding: 0.8em 1.2em;
   border-radius: 4px;
-  overflow: auto;
   line-height: 1.2;
 }
 
@@ -198,6 +198,11 @@
   align-items: var(--align-item-v, center);
 }
 
+.markdown-body .grid-item * {
+  margin: 0;
+}
+
+.markdown-body .grid-item p,
 .markdown-body .grid-item img,
 .markdown-body .grid-item video {
   border-radius: 4px;
@@ -210,7 +215,6 @@
   display: grid;
   min-width: max-content;
   grid-template-columns: repeat(var(--columns), 1fr);
-  margin: 1em 0;
   font-size: 0.8em;
   object-fit: contain;
   overflow-x: auto;
@@ -258,4 +262,5 @@
 .markdown-body .scroll {
   overflow-x: auto;
   scrollbar-width: thin;
+  border-radius: 4px;
 }
