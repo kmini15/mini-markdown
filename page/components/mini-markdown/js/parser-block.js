@@ -1267,39 +1267,29 @@ class GridTableRule extends BlockRule {
 class ScrollRule extends BlockRule {
   constructor() {
     super("SCROLL");
-    this.pattern_open = /^(\s*)<::>\s*$/;
-    this.pattern_close = /^(\s*)<::>\s*$/;
+    this.pattern = /^((\s*)<::>)/;
+  }
+
+  match(node, reader, context) {
+    const indent = context.remains().match(/^(\s*)/)[1];
+    const contentColumn = dispWidthCalc.measure(indent) + context.column;
+    if (contentColumn < node.fields.contentColumn) return false;
+    context.advance(node.fields.contentColumn - context.column);
+    return true;
   }
   
   start(parent, reader, context) {
-    const line = context.remains();
-    const matchOpen = line.match(this.pattern_open);
-    if (!matchOpen) return null;
-    reader.capture();
-    reader.advance();
-    let isClosed = false;
-    const lines = [];
-    while (!reader.eof()) {
-      const line = reader.current();
-      if (line.match(this.pattern_close)) {
-        isClosed = true;
-        reader.advance();
-        break;
-      }
-      lines.push(line);
-      reader.advance();
-    }
-    if (lines.length === 0 || !isClosed) {
-      reader.restore();
-      return null;
-    }
-    const scrollNode = new Node(this.type);
-    scrollNode.fields = {
-      innerBlock: lines.join("\n"),
+    const parsed = context.remains().match(this.pattern);
+    if (!parsed) return null;
+    const markerColumn = dispWidthCalc.measure(parsed[2]) + context.column;
+    const contentColumn = dispWidthCalc.measure(parsed[1]) + context.column;
+    const child = new Node(this.type);
+    child.fields = {
+      markerColumn: markerColumn,
+      contentColumn: contentColumn
     };
-    context.advance(line.length);
-    reader.retreat();
-    return scrollNode;
+    context.advance(parsed[1].length);
+    return child;
   }
 }
 
