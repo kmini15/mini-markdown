@@ -192,6 +192,7 @@ int main() {
 ## Custom Syntax
 
 ### Grid
+
 ::::[2:8px]
 [::]::::[10:8px]
     [::]![KEI](assets/test.jpg)
@@ -246,9 +247,9 @@ int main() {
     [::]![KEI](assets/test.jpg)
 [::]::::[2:8px]
     [::]![KEI](assets/test.jpg)
-        그저 누워있는 케이
     [::]![케이](assets/test.gif)
-        케이는 충전중
+    [::]그저 누워있는 케이
+    [::]케이는 충전중
 
 ---
 

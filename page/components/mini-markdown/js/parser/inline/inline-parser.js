@@ -1,6 +1,6 @@
-import Node from "./node.js";
+import Node from "../../core/node.js";
 
-class ParserInline {
+class InlineParser {
   constructor() {
     this.node = null;
     this.text = "";
@@ -435,4 +435,4 @@ class ParserInline {
   }
 }
 
-export default ParserInline;
+export default InlineParser;

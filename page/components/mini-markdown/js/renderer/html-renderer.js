@@ -1,6 +1,6 @@
-import Node from "./node.js";
+import Node from "../core/node.js";
 
-class Renderer {
+class HtmlRenderer {
   constructor() { }
   render(node) {
     let text = "";
@@ -165,4 +165,4 @@ class Renderer {
 }
 
 
-export default Renderer;
+export default HtmlRenderer;

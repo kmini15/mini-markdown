@@ -80,28 +80,6 @@ class Node {
     node.prev = this;
     this.next = node;
   }
-
-  dumpString(indent = "") {
-    let result = "[" + this.type + "]";
-    if (this.value.length > 0) {
-      const text_value = this.value.replace(/(\r\n)|(\n)/g, "<br>");
-      result += `("${text_value}")`;
-    }
-    const field_keys = Object.keys(this.fields);
-    if (field_keys.length > 0) {
-      const field_strings = field_keys.map(key => `${key}="${this.fields[key]}"`);
-      result += `{${field_strings.join(", ")}}`;
-    }
-    result += "\n";
-    for (let child = this.firstChild; child; child = child.next) {
-      if (child === this.lastChild) {
-        result += indent + "└──" + child.dumpString(indent + "   ");
-      } else {
-        result += indent + "├──" + child.dumpString(indent + "│  ");
-      }
-    }
-    return result;
-  }
 }
 
 export default Node;

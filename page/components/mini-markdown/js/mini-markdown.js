@@ -1,12 +1,14 @@
-import ParserBlock from "./parser-block.js";
-import ParserInline from "./parser-inline.js";
-import Renderer from "./renderer.js";
+import BlockParser from "./parser/block/block-parser.js";
+import InlineParser from "./parser/inline/inline-parser.js";
+import HtmlRenderer from "./renderer/html-renderer.js";
+import AstRenderer from "./renderer/ast-renderer.js";
 
 class MiniMarkdown {
   constructor() {
-    this.parserBlock = new ParserBlock();
-    this.parserInline = new ParserInline();
-    this.renderer = new Renderer();
+    this.blockParser = new BlockParser();
+    this.inlineParser = new InlineParser();
+    this.htmlRenderer = new HtmlRenderer();
+    this.astRenderer = new AstRenderer();
   }
 
   async mount(container) {
@@ -16,23 +18,30 @@ class MiniMarkdown {
   }
 
   parse(text) {
-    var node = this.parserBlock.parse(text);
+    var node = this.blockParser.parse(text);
     node = this.parseInline(node, node.fields.references);
     return node;
   }
+  
   parseInline(node, references = {}) {
     for (let child = node.firstChild; child; child = child.next) {
       child = this.parseInline(child, references);
     }
     if (node.type === "TEXT" && node.fields.inline) {
-      const inlineNode = this.parserInline.parse(node.value, references);
+      const inlineNode = this.inlineParser.parse(node.value, references);
       node.insertAfter(inlineNode);
       node.unlink();
     }
     return node;
   }
-  render(node) {
-    var text = this.renderer.render(node);
+  
+  renderHtml(node) {
+    var text = this.htmlRenderer.render(node);
+    return text;
+  }
+
+  renderAst(node) {
+    var text = this.astRenderer.render(node);
     return text;
   }
 

@@ -1,5 +1,5 @@
-class DisplayWidthCalculator {
-  constructor(rules = DisplayWidthCalculator.defaultRules()) {
+class TextWidth {
+  constructor(rules = TextWidth.defaultRules()) {
     this.rules = rules;
   }
 
@@ -16,14 +16,6 @@ class DisplayWidthCalculator {
     ];
   }
 
-  measure(text) {
-    let width = 0;
-    for (const char of text) {
-      width += this.getCharWidth(char);
-    }
-    return width;
-  }
-
   getCharWidth(char) {
     for (const rule of this.rules) {
       if (rule.pattern.test(char)) {
@@ -33,16 +25,12 @@ class DisplayWidthCalculator {
     return 1;
   }
 
-  padEnd(text, targetWidth, fill = " ") {
-    const width = this.measure(text);
-    const padding = Math.max(0, targetWidth - width);
-    return text + fill.repeat(padding);
-  }
-
-  padStart(text, targetWidth, fill = " ") {
-    const width = this.measure(text);
-    const padding = Math.max(0, targetWidth - width);
-    return fill.repeat(padding) + text;
+  measure(text) {
+    let width = 0;
+    for (const char of text) {
+      width += this.getCharWidth(char);
+    }
+    return width;
   }
 
   indexAtColumn(text, targetColumn) {
@@ -64,6 +52,18 @@ class DisplayWidthCalculator {
     }
     return column;
   }
+
+  padEnd(text, targetWidth, fill = " ") {
+    const width = this.measure(text);
+    const padding = Math.max(0, targetWidth - width);
+    return text + fill.repeat(padding);
+  }
+
+  padStart(text, targetWidth, fill = " ") {
+    const width = this.measure(text);
+    const padding = Math.max(0, targetWidth - width);
+    return fill.repeat(padding) + text;
+  }
 }
 
-export default DisplayWidthCalculator;
+export default TextWidth;
