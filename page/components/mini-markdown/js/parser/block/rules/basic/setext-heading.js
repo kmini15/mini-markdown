@@ -3,23 +3,28 @@ import { Node, BlockRule } from "../block-rule.js";
 class SetextHeadingRule extends BlockRule {
   constructor() {
     super("SETEXT_HEADING");
-    this.pattern = /^([\s\S]+)\n\s*(=+|-+)\s*$/;
+    this.pattern = /^\s*(=+|-+)\s*$/;
   }
 
-  resolve(node, reader, context) {
-    if (node.type !== "PARAGRAPH") return null;
-    const textNode = node.firstChild;
-    const parsed = textNode.value.match(this.pattern);
+  start(parent, reader, context) {
+    const parsed = context.remains().match(this.pattern);
     if (!parsed) return null;
-    textNode.value = parsed[1];
-    const headingNode = new Node("HEADING");
-    headingNode.appendChild(textNode);
-    headingNode.fields = {
-      level: parsed[2][0] === "=" ? 1 : 2,
-    };
-    node.insertAfter(headingNode);
-    node.unlink();
-    return headingNode;
+    if (parent.type === "PARAGRAPH") {
+      const child = new Node(this.type);
+      child.fields = {
+        level: parsed[1][0] === "=" ? 1 : 2,
+      };
+      context.advance(parsed[0].length);
+      return child;
+    } else if (parent.lastChild && parent.lastChild.type === "PARAGRAPH") {
+      parent.lastChild.type = "HEADING";
+      parent.lastChild.fields = {
+        level: parsed[1][0] === "=" ? 1 : 2,
+      };
+      context.advance(parsed[0].length);
+      return parent.lastChild;
+    }
+    return null;
   }
 }
 

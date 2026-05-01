@@ -44,13 +44,12 @@ class BlockParser {
     ];
     this.rules.at(-1).setRules(this.rules);
     this.maxDepth = 20;
-    this.DEBUG_MODE = false;
+    this.DEBUG_MODE = true;
   }
 
   printStackInfo(message, stack, stackIndex) {
-    console.log(message);
-    console.log("    >> " + stack.map(node => node.type).join(" > "));
-    console.log("    >> stackIndex: " + stackIndex);
+    console.log("        [" + message + "] stackIndex = " + stackIndex);
+    console.log("        >> " + stack.map(node => node.type).join(" > "));
   }
 
   parse(text) {
@@ -66,16 +65,15 @@ class BlockParser {
       const line = reader.current();
       const context = new LineContext(line);
       let stackIndex = 0;
+      if (this.DEBUG_MODE) this.printStackInfo("Start Line", stack, stackIndex);
       stackIndex = this.match(stack, stackIndex, reader, context);
-      if (this.DEBUG_MODE) this.printStackInfo("after match:", stack, stackIndex);
+      if (this.DEBUG_MODE) this.printStackInfo("After Match", stack, stackIndex);
       stackIndex = this.carry(stack, stackIndex, reader, context);
-      if (this.DEBUG_MODE) this.printStackInfo("after carry:", stack, stackIndex);
+      if (this.DEBUG_MODE) this.printStackInfo("After Carry", stack, stackIndex);
       stackIndex = this.close(stack, stackIndex, reader, context);
-      if (this.DEBUG_MODE) this.printStackInfo("after close:", stack, stackIndex);
-      stackIndex = this.resolve(stack, stackIndex, reader, context);
-      if (this.DEBUG_MODE) this.printStackInfo("after resolve:", stack, stackIndex);
+      if (this.DEBUG_MODE) this.printStackInfo("After Close", stack, stackIndex);
       stackIndex = this.start(stack, stackIndex, reader, context);
-      if (this.DEBUG_MODE) this.printStackInfo("after start:", stack, stackIndex);
+      if (this.DEBUG_MODE) this.printStackInfo("After Start", stack, stackIndex);
       reader.advance();
     }
     const documentNode = stack[0];
@@ -137,20 +135,8 @@ class BlockParser {
     return stackIndex;
   }
 
-  resolve(stack, stackIndex, reader, context) {
-    for (let rule of this.rules) {
-      const node = stack[stackIndex];
-      const resolvedNode = rule.resolve(node, reader, context);
-      if (!resolvedNode) continue;
-      if (this.DEBUG_MODE) console.log("resolve", node.type, context.remains());
-      stack[stackIndex] = resolvedNode;
-    }
-    return stackIndex;
-  }
-
   start(stack, stackIndex, reader, context) {
     for (let i = 0; i < this.maxDepth; i++) {
-      if (context.eof()) break;
       const parent = stack[stack.length - 1];
       let started = false;
       for (let rule of this.rules) {

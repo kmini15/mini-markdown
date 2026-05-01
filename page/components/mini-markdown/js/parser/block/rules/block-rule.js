@@ -18,10 +18,6 @@ class BlockRule {
     return false;
   }
 
-  resolve(node, reader, context) {
-    return null;
-  }
-
   start(parent, reader, context) {
     return null;
   }
