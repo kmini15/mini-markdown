@@ -1,4 +1,4 @@
-.markdown-body {
+.mini-highlighter {
   --color-highlight-midori-0: rgb(200, 220, 180);
   --color-highlight-midori-1: rgb(180, 240, 120);
   --color-highlight-midori-2: rgb(150, 240, 120);
@@ -19,34 +19,34 @@
   --color-highlight-muted: rgb(120, 120, 120);
 }
 
-.markdown-body pre code .mini-highlighter-keyword {
+.mini-highlighter pre code .mini-highlighter-keyword {
   color: var(--color-highlight-aris-1);
 }
 
-.markdown-body pre code .mini-highlighter-type {
+.mini-highlighter pre code .mini-highlighter-type {
   color: var(--color-highlight-aris-1);
 }
 
-.markdown-body pre code .mini-highlighter-number {
+.mini-highlighter pre code .mini-highlighter-number {
   color: var(--color-highlight-yuzu-1);
 }
 
-.markdown-body pre code .mini-highlighter-string {
+.mini-highlighter pre code .mini-highlighter-string {
   color: var(--color-highlight-yuzu-2);
 }
 
-.markdown-body pre code .mini-highlighter-operator {
+.mini-highlighter pre code .mini-highlighter-operator {
   color: var(--color-highlight-midori-1);
 }
 
-.markdown-body pre code .mini-highlighter-punctuation {
+.mini-highlighter pre code .mini-highlighter-punctuation {
   color: var(--color-highlight-momoi-1);
 }
 
-.markdown-body pre code .mini-highlighter-preprocessor {
+.mini-highlighter pre code .mini-highlighter-preprocessor {
   color: var(--color-highlight-kei-2);
 }
 
-.markdown-body pre code .mini-highlighter-comment {
+.mini-highlighter pre code .mini-highlighter-comment {
   color: var(--color-highlight-muted);
 }

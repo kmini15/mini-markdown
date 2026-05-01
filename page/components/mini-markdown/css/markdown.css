@@ -1,10 +1,10 @@
-.markdown-body {
+.mini-markdown {
   all: unset;
   display: block;
   color-scheme: dark;
 }
 
-.markdown-body {
+.mini-markdown {
   --color-border-default: rgb(40, 40, 40);
   --color-bg-default: rgb(30, 30, 30);
   --color-fg-default: rgb(180, 180, 180);
@@ -24,7 +24,7 @@
   --color-table-row-even-fg: rgb(180, 180, 180);
 }
 
-.markdown-body {
+.mini-markdown {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
   font-size: 16px;
   font-weight: 400;
@@ -36,55 +36,55 @@
   padding: 1em;
 }
 
-.markdown-body::-webkit-scrollbar-track {
+.mini-markdown::-webkit-scrollbar-track {
   background: var(--color-bg-muted);
 }
 
 /* Paragraph */
-.markdown-body p {
+.mini-markdown p {
   margin-bottom: 1.0em;
 }
 
 /* Heading */
-.markdown-body h1 {
+.mini-markdown h1 {
   font-size: 1.8em;
   font-weight: var(--base-text-weight-bold, 700);
   margin-bottom: 0.8em;
   border-bottom: 3px solid var(--color-border-default);
 }
 
-.markdown-body h2 {
+.mini-markdown h2 {
   font-size: 1.6em;
   font-weight: var(--base-text-weight-bold, 700);
   margin-bottom: 0.6em;
 }
 
-.markdown-body h3 {
+.mini-markdown h3 {
   font-size: 1.4em;
   font-weight: var(--base-text-weight-bold, 700);
   margin-bottom: 0.4em;
 }
 
-.markdown-body h4 {
+.mini-markdown h4 {
   font-size: 1.2em;
   font-weight: var(--base-text-weight-bold, 700);
   margin-bottom: 0.3em;
 }
 
-.markdown-body h5 {
+.mini-markdown h5 {
   font-size: 1.0em;
   font-weight: var(--base-text-weight-bold, 700);
   margin-bottom: 0.2em;
 }
 
-.markdown-body h6 {
+.mini-markdown h6 {
   font-size: 0.8em;
   font-weight: var(--base-text-weight-bold, 700);
   margin-bottom: 0.1em;
 }
 
 /* Blockquote */
-.markdown-body blockquote {
+.mini-markdown blockquote {
   background-color: var(--color-blockquote-bg);
   color: var(--color-blockquote-fg);
   border-left: 6px solid var(--color-blockquote-border);
@@ -93,14 +93,14 @@
 }
 
 /* Lists */
-.markdown-body ul,
-.markdown-body ol {
+.mini-markdown ul,
+.mini-markdown ol {
   margin: 0.4em 0;
   padding-left: 2em;
 }
 
 /* Code */
-.markdown-body code {
+.mini-markdown code {
   font-family: D2Coding, Menlo, Monaco, "Courier New", monospace;
   font-size: 0.8em;
   font-weight: 500;
@@ -111,7 +111,7 @@
 }
 
 /* Code Block */
-.markdown-body pre {
+.mini-markdown pre {
   flex: 1 1 0;
   background-color: var(--color-code-bg);
   padding: 0.8em 1.2em;
@@ -119,27 +119,27 @@
   line-height: 1.2;
 }
 
-.markdown-body pre code {
+.mini-markdown pre code {
   color: var(--color-code-fg);
   padding: 0;
   background: none;
 }
 
 /* Horizontal Rule */
-.markdown-body hr {
+.mini-markdown hr {
   border: none;
   border-top: 3px solid var(--color-border-default);
   margin: 1em 0;
 }
 
 /* Links */
-.markdown-body a {
+.mini-markdown a {
   color: var(--color-highlight-aris-1);
   text-decoration: none;
 }
 
 /* Images */
-.markdown-body img {
+.mini-markdown img {
   max-width: 100%;
   height: auto;
   display: block;
@@ -149,37 +149,37 @@
 }
 
 /* Tables */
-.markdown-body table {
+.mini-markdown table {
   width: 100%;
   border-collapse: collapse;
   margin: 1em 0;
   font-size: 0.8em;
 }
 
-.markdown-body table th,
-.markdown-body table td {
+.mini-markdown table th,
+.mini-markdown table td {
   border: 2px solid var(--color-table-border);
   padding: 0.5em 1em;
 }
 
-.markdown-body table th {
+.mini-markdown table th {
   background-color: var(--color-table-header-bg);
   color: var(--color-table-header-fg);
   font-weight: var(--base-text-weight-semibold, 800);
 }
 
-.markdown-body table tr:nth-child(odd) td {
+.mini-markdown table tr:nth-child(odd) td {
   background-color: var(--color-table-row-odd-bg);
   color: var(--color-table-row-odd-fg);
 }
 
-.markdown-body table tr:nth-child(even) td {
+.mini-markdown table tr:nth-child(even) td {
   background-color: var(--color-table-row-even-bg);
   color: var(--color-table-row-even-fg);
 }
 
 /* Grid */
-.markdown-body .grid {
+.mini-markdown .grid {
   display: grid;
   gap: var(--gap, 8px);
   grid-template-columns: repeat(var(--columns), 1fr);
@@ -187,7 +187,7 @@
   overflow: auto;
 }
 
-.markdown-body .grid-item {
+.mini-markdown .grid-item {
   display: grid;
   margin: 0;
   padding: 0;
@@ -198,20 +198,20 @@
   align-items: var(--align-item-v, center);
 }
 
-.markdown-body .grid-item * {
+.mini-markdown .grid-item * {
   margin: 0;
 }
 
-.markdown-body .grid-item p,
-.markdown-body .grid-item img,
-.markdown-body .grid-item video {
+.mini-markdown .grid-item p,
+.mini-markdown .grid-item img,
+.mini-markdown .grid-item video {
   border-radius: 4px;
   margin: 0;
   padding: 0;
 }
 
 /* Grid Table */
-.markdown-body .grid-table {
+.mini-markdown .grid-table {
   display: grid;
   min-width: max-content;
   grid-template-columns: repeat(var(--columns), 1fr);
@@ -220,7 +220,7 @@
   overflow-x: auto;
 }
 
-.markdown-body .grid-table-cell {
+.mini-markdown .grid-table-cell {
   display: grid;
   min-width: max-content;
   grid-column: var(--col) / span var(--col-span, 1);
@@ -235,31 +235,31 @@
   min-height: 1em;
 }
 
-.markdown-body .grid-table-cell img,
-.markdown-body .grid-table-cell video {
+.mini-markdown .grid-table-cell img,
+.mini-markdown .grid-table-cell video {
   border-radius: 4px;
   margin: 0;
   padding: 0;
 }
 
-.markdown-body .grid-table-cell.grid-table-header {
+.mini-markdown .grid-table-cell.grid-table-header {
   background-color: var(--color-table-header-bg);
   color: var(--color-table-header-fg);
   font-weight: var(--base-text-weight-bold, 800);
 }
 
-.markdown-body .grid-table-cell.grid-table-data.row-odd {
+.mini-markdown .grid-table-cell.grid-table-data.row-odd {
   background: var(--color-table-row-odd-bg);
   color: var(--color-table-row-odd-fg);
 }
 
-.markdown-body .grid-table-cell.grid-table-data.row-even {
+.mini-markdown .grid-table-cell.grid-table-data.row-even {
   background: var(--color-table-row-even-bg);
   color: var(--color-table-row-even-fg);
 }
 
 /* Scroll (Horizontal Overflow) */
-.markdown-body .scroll {
+.mini-markdown .scroll {
   overflow-x: auto;
   scrollbar-width: thin;
   border-radius: 4px;

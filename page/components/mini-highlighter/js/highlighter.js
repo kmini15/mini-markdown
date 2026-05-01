@@ -10,6 +10,7 @@ class MiniHighlighter {
 
   async mount(rootElement) {
     this.rootElement = rootElement;
+    this.rootElement.classList.add("mini-highlighter");
     try {
       await this.loadCSS();
     } catch (error) {

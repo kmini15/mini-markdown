@@ -6,7 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="robots" content="noindex, nofollow" />
   <link rel="stylesheet" href="./assets/css/layout.css" />
-  <link rel="stylesheet" href="./assets/css/markdown.css" />
   <title>Mini Markdown Editor</title>
 </head>
 
@@ -36,7 +35,7 @@
           <div class="tab-button" data-tab="output-tab3">AST</div>
         </div>
         <div id="output-tab1" class="tab-panel">
-          <div id="output-preview" class="scroll-text markdown-body"></div>
+          <div id="output-preview" class="scroll-text"></div>
         </div>
         <div id="output-tab2" class="tab-panel">
           <div id="output-html" class="scroll-text"></div>
@@ -49,24 +48,25 @@
   </div>
   <!-- Mini Markdown Editor Scripts -->
   <script type="module">
-    import MiniMarkdown from "./assets/js/mini-markdown.js";
+    // Import components
+    import MiniMarkdown from "./components/mini-markdown/mmd.js";
     import MiniHighlighter from "./components/mini-highlighter/mhl.js";
     import MiniAssetManager from "./components/mini-asset-manager/mam.js";
-
+    // Initialize components
+    const mmd = new MiniMarkdown();
+    const mhl = new MiniHighlighter();
+    const mam = new MiniAssetManager();
+    const mmdElem = document.getElementById("output-preview");
+    await mmd.mount(mmdElem);
+    const mhlElem = document.getElementById("output-preview");
+    await mhl.mount(mhlElem);
+    const mamElem = document.getElementById("mini-asset-manager");
+    await mam.mount(mamElem);
+    // Get DOM elements
     const editor = document.getElementById("editor");
     const outputPreview = document.getElementById("output-preview");
     const outputHtml = document.getElementById("output-html");
     const outputAst = document.getElementById("output-ast");
-
-    const mmd = new MiniMarkdown();
-    const mhl = new MiniHighlighter();
-    const mam = new MiniAssetManager();
-
-    const mhlElem = document.getElementById("output-preview");
-    await mhl.mount(mhlElem);
-
-    const mamElem = document.getElementById("mini-asset-manager");
-    await mam.mount(mamElem);
 
     async function readFile(path) {
       const res = await fetch(path);

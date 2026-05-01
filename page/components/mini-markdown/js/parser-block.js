@@ -134,15 +134,6 @@ class ParserBlock {
         parent.appendChild(child);
         stack.push(child);
         started = true;
-        // if (child.fields.innerBlock) {
-        //   const innerBlock = this.parse(child.fields.innerBlock);
-        //   for (let elem = innerBlock.firstChild; elem;) {
-        //     const granchild = elem;
-        //     elem = elem.next;
-        //     child.appendChild(granchild);
-        //   }
-        //   child.fields.innerBlock = "parsed";
-        // }
         break;
       }
       if (!started) break;
@@ -1279,7 +1270,7 @@ class ScrollRule extends BlockRule {
     this.pattern_open = /^(\s*)<::>\s*$/;
     this.pattern_close = /^(\s*)<::>\s*$/;
   }
-
+  
   start(parent, reader, context) {
     const line = context.remains();
     const matchOpen = line.match(this.pattern_open);

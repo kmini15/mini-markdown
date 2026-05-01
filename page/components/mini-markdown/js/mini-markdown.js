@@ -8,6 +8,13 @@ class MiniMarkdown {
     this.parserInline = new ParserInline();
     this.renderer = new Renderer();
   }
+
+  async mount(container) {
+    this.container = container;
+    this.container.classList.add("mini-markdown");
+    await this.loadCSS();
+  }
+
   parse(text) {
     var node = this.parserBlock.parse(text);
     node = this.parseInline(node, node.fields.references);
@@ -27,6 +34,21 @@ class MiniMarkdown {
   render(node) {
     var text = this.renderer.render(node);
     return text;
+  }
+
+  async loadCSS() {
+    const url = new URL("../css/markdown.css", import.meta.url).href;
+    if (document.querySelector(`link[href="${url}"]`)) return;
+    return new Promise((resolve, reject) => {
+      const link = document.createElement("link");
+      link.rel = "stylesheet";
+      link.href = url;
+      link.onload = () => resolve();
+      link.onerror = () => {
+        reject(new Error(`Failed to load CSS: ${url}`));
+      };
+      document.head.appendChild(link);
+    });
   }
 }
 
