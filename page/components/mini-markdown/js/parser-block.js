@@ -20,12 +20,19 @@ class ParserBlock {
       new HorizontalRuleRule(),
       new TableRule(),
       new GridRule(),
+      new GridItemRule(),
       new GridTableRule(),
       new ScrollRule(),
       new ParagraphRule(),
     ];
     this.rules.at(-1).setRules(this.rules);
     this.maxDepth = 20;
+    this.DEBUG_MODE = false;
+  }
+
+  printStackInfo(stack, stackIndex) {
+    console.log("    >> " + stack.map(node => node.type).join(" > "));
+    console.log("    >> stackIndex: " + stackIndex);
   }
 
   parse(text) {
@@ -42,10 +49,30 @@ class ParserBlock {
       const context = new LineContext(line);
       let stackIndex = 0;
       stackIndex = this.matchBlocks(stack, stackIndex, reader, context);
+      if (this.DEBUG_MODE) {
+        console.log("after match:");
+        this.printStackInfo(stack, stackIndex);
+      }
       stackIndex = this.carryBlocks(stack, stackIndex, reader, context);
+      if (this.DEBUG_MODE) {
+        console.log("after carry:");
+        this.printStackInfo(stack, stackIndex);
+      }
       stackIndex = this.closeBlocks(stack, stackIndex, reader, context);
+      if (this.DEBUG_MODE) {
+        console.log("after close:");
+        this.printStackInfo(stack, stackIndex);
+      }
       stackIndex = this.resolveBlocks(stack, stackIndex, reader, context);
+      if (this.DEBUG_MODE) {
+        console.log("after resolve:");
+        this.printStackInfo(stack, stackIndex);
+      }
       stackIndex = this.startBlocks(stack, stackIndex, reader, context);
+      if (this.DEBUG_MODE) {
+        console.log("after start:");
+        this.printStackInfo(stack, stackIndex);
+      }
       reader.advance();
     }
     const documentNode = stack[0];
@@ -72,6 +99,7 @@ class ParserBlock {
       const rule = this.getRule(node);
       if (!rule) break; // No rule for this node type
       if (rule.match(node, reader, context)) {
+        if (this.DEBUG_MODE) console.log("match", node.type, context.remains());
         stackIndex = i;
       } else {
         break;
@@ -86,18 +114,11 @@ class ParserBlock {
       const rule = this.getRule(node);
       if (!rule) break; // No rule for this node type
       if (rule.carry(node, reader, context)) {
+        if (this.DEBUG_MODE) console.log("carry", node.type, context.remains());
         stackIndex = i;
       } else {
         break;
       }
-    }
-    const lastNode = stack[stack.length - 1];
-    if (!lastNode) return stackIndex;
-    if (lastNode.type !== "PARAGRAPH") return stackIndex;
-    const rule = this.getRule(lastNode);
-    if (!rule) return stackIndex; // No rule for this node type
-    if (rule.carry(lastNode, reader, context)) {
-      stackIndex = stack.length - 1;
     }
     return stackIndex;
   }
@@ -107,6 +128,7 @@ class ParserBlock {
       const node = stack.pop();
       const rule = this.getRule(node);
       if (!rule) continue; // No rule for this node type
+      if (this.DEBUG_MODE) console.log("close", node.type, context.remains());
       rule.close(node, reader, context);
     }
     return stackIndex;
@@ -117,6 +139,7 @@ class ParserBlock {
       const node = stack[stackIndex];
       const resolvedNode = rule.resolve(node, reader, context);
       if (!resolvedNode) continue;
+      if (this.DEBUG_MODE) console.log("resolve", node.type, context.remains());
       stack[stackIndex] = resolvedNode;
     }
     return stackIndex;
@@ -130,7 +153,7 @@ class ParserBlock {
       for (let rule of this.rules) {
         const child = rule.start(parent, reader, context);
         if (!child) continue;
-        this.innerBlocks(child);
+        if (this.DEBUG_MODE) console.log("start", child.type, context.remains());
         parent.appendChild(child);
         stack.push(child);
         started = true;
@@ -140,22 +163,6 @@ class ParserBlock {
     }
     stackIndex = stack.length - 1;
     return stackIndex;
-  }
-
-  innerBlocks(node) {
-    for (let child = node.firstChild; child; child = child.next) {
-      this.innerBlocks(child);
-    }
-    // If node has an innerBlock field, parse it as a nested block.
-    if (node.fields.innerBlock) {
-      const innerBlock = this.parse(node.fields.innerBlock);
-      for (let elem = innerBlock.firstChild; elem;) {
-        const child = elem;
-        elem = elem.next;
-        node.appendChild(child);
-      }
-      node.fields.innerBlock = "parsed";
-    }
   }
 }
 
@@ -616,9 +623,58 @@ class HorizontalRuleRule extends BlockRule {
 class GridRule extends BlockRule {
   constructor() {
     super("GRID");
-    this.pattern_open = /^(\s*):{4}\[([^\]:]+)(:[^\]:]+)?\]\s*$/;
-    this.pattern_close = /^(\s*)([:]{4})\s*$/;
-    this.pattern_item = /^\[[:.' ]{2}\](.*)/;
+    this.pattern = /^((\s*):{4})\[([^\]:]+)(:[^\]:]+)?\](.*)$/;
+    this.pattern_item = /^((\s*)(\[[:.' ]{2}\]))(.*)/;
+  }
+
+  match(node, reader, context) {
+    const parsed = context.remains().match(this.pattern);
+    if (!parsed) return false;
+    const markerColumn = dispWidthCalc.measure(parsed[2]) + context.column;
+    if (markerColumn < node.fields.markerColumn) return false;
+    context.advance(node.fields.markerColumn - context.column); // until marker
+    return true;
+  }
+
+  start(parent, reader, context) {
+    if (parent.type === this.type) return null;
+    const parsed = context.remains().match(this.pattern);
+    if (!parsed) return null;
+    const markerColumn = dispWidthCalc.measure(parsed[2]) + context.column;
+    const contentColumn = dispWidthCalc.measure(parsed[1]) + context.column;
+    const columns = parsed[3].trim();
+    const gap = parsed[4] ? parsed[4].slice(1).trim() : 0;
+    const child = new Node(this.type);
+    child.fields = {
+      markerColumn: markerColumn,
+      contentColumn: contentColumn,
+      columns: columns,
+      gap: gap,
+    };
+    context.advance(context.remains().length);
+    return child;
+  }
+
+  carry(node, reader, context) {
+    const parsed = context.remains().match(this.pattern_item);
+    if (parsed) {
+      const markerColumn = dispWidthCalc.measure(parsed[2]) + context.column;
+      if (markerColumn < node.fields.markerColumn) return false;
+      return true; // new item starts, so current grid can carry
+    } else {
+      const indent = context.remains().match(/^(\s*)/)[1];
+      const contentColumn = dispWidthCalc.measure(indent) + context.column;
+      if (contentColumn < node.fields.contentColumn) return false;
+      context.advance(node.fields.contentColumn - context.column);
+      return true;
+    }
+  }
+}
+
+class GridItemRule extends BlockRule {
+  constructor() {
+    super("GRID_ITEM");
+    this.pattern = /^((\s*)(\[[:.' ]{2}\]))(.*)/;
     // [  ]: default
     // [::]: middle center
     // [: ]: middle left
@@ -631,117 +687,106 @@ class GridRule extends BlockRule {
     // [ .]: bottom right
   }
 
+  match(node, reader, context) {
+    const parsed = context.remains().match(this.pattern);
+    if (!parsed) return false;
+    const markerColumn = dispWidthCalc.measure(parsed[2]) + context.column;
+    if (markerColumn < node.fields.contentColumn) return false;
+    context.advance(node.fields.contentColumn - context.column);
+    return true;
+  }
+
   start(parent, reader, context) {
-    const line = context.remains();
-    const match = line.match(this.pattern_open);
-    if (!match) return null;
-    reader.capture();
-    reader.advance();
-    const columns = match[2].trim();
-    const gap = match[3] ? match[3].slice(1).trim() : 0;
-    const node = new Node(this.type);
-    node.fields.columns = columns;
-    node.fields.gap = gap;
-    let isClosed = false;
-    while (!reader.eof()) {
-      const line = reader.current();
-      if (line.match(this.pattern_close)) {
-        reader.advance();
-        isClosed = true;
+    if (parent.type !== "GRID") return null;
+    if (parent.type === this.type) return null;
+    const parsed = context.remains().match(this.pattern);
+    if (!parsed) return null;
+    const markerColumn = dispWidthCalc.measure(parsed[2]) + context.column;
+    const contentColumn = dispWidthCalc.measure(parsed[1]) + context.column;
+    let alignTextH, alignTextV, alignItemH, alignItemV;
+    switch (parsed[3].slice(1, 3)) {
+      case "::":
+        alignTextH = "center";
+        alignTextV = "middle";
+        alignItemH = "center";
+        alignItemV = "center";
         break;
-      }
-      const matchItem = line.match(this.pattern_item);
-      if (!matchItem) {
+      case ": ":
+        alignTextH = "left";
+        alignTextV = "middle";
+        alignItemH = "start";
+        alignItemV = "center";
         break;
-      }
-      const itemNode = new Node("GRID_ITEM");
-      switch (line.slice(1, 3)) {
-        case "::":
-          itemNode.fields.alignTextH = "center";
-          itemNode.fields.alignTextV = "middle";
-          itemNode.fields.alignItemH = "center";
-          itemNode.fields.alignItemV = "center";
-          break;
-        case ": ":
-          itemNode.fields.alignTextH = "left";
-          itemNode.fields.alignTextV = "middle";
-          itemNode.fields.alignItemH = "start";
-          itemNode.fields.alignItemV = "center";
-          break;
-        case " :":
-          itemNode.fields.alignTextH = "right";
-          itemNode.fields.alignTextV = "middle";
-          itemNode.fields.alignItemH = "end";
-          itemNode.fields.alignItemV = "center";
-          break;
-        case "''":
-          itemNode.fields.alignTextH = "center";
-          itemNode.fields.alignTextV = "top";
-          itemNode.fields.alignItemH = "center";
-          itemNode.fields.alignItemV = "start";
-          break;
-        case "' ":
-          itemNode.fields.alignTextH = "left";
-          itemNode.fields.alignTextV = "top";
-          itemNode.fields.alignItemH = "start";
-          itemNode.fields.alignItemV = "start";
-          break;
-        case " '":
-          itemNode.fields.alignTextH = "right";
-          itemNode.fields.alignTextV = "top";
-          itemNode.fields.alignItemH = "end";
-          itemNode.fields.alignItemV = "start";
-          break;
-        case "..":
-          itemNode.fields.alignTextH = "center";
-          itemNode.fields.alignTextV = "bottom";
-          itemNode.fields.alignItemH = "center";
-          itemNode.fields.alignItemV = "end";
-          break;
-        case ". ":
-          itemNode.fields.alignTextH = "left";
-          itemNode.fields.alignTextV = "bottom";
-          itemNode.fields.alignItemH = "start";
-          itemNode.fields.alignItemV = "end";
-          break;
-        case " .":
-          itemNode.fields.alignTextH = "right";
-          itemNode.fields.alignTextV = "bottom";
-          itemNode.fields.alignItemH = "end";
-          itemNode.fields.alignItemV = "end";
-          break;
-        default:
-          itemNode.fields.alignTextH = "";
-          itemNode.fields.alignTextV = "";
-          itemNode.fields.alignItemH = "";
-          itemNode.fields.alignItemV = "";
-      }
-      console.log(itemNode.fields);
-      reader.advance();
-      let lines = [];
-      lines.push(matchItem[1]);
-      while (!reader.eof()) {
-        const line = reader.current();
-        const matchItem = line.match(this.pattern_item);
-        const matchClose = line.match(this.pattern_close);
-        if (matchClose || matchItem) {
-          itemNode.fields.innerBlock = lines.join("\n");
-          node.appendChild(itemNode);
-          break;
-        }
-        lines.push(line);
-        reader.advance();
-      }
+      case " :":
+        alignTextH = "right";
+        alignTextV = "middle";
+        alignItemH = "end";
+        alignItemV = "center";
+        break;
+      case "''":
+        alignTextH = "center";
+        alignTextV = "top";
+        alignItemH = "center";
+        alignItemV = "start";
+        break;
+      case "' ":
+        alignTextH = "left";
+        alignTextV = "top";
+        alignItemH = "start";
+        alignItemV = "start";
+        break;
+      case " '":
+        alignTextH = "right";
+        alignTextV = "top";
+        alignItemH = "end";
+        alignItemV = "start";
+        break;
+      case "..":
+        alignTextH = "center";
+        alignTextV = "bottom";
+        alignItemH = "center";
+        alignItemV = "end";
+        break;
+      case ". ":
+        alignTextH = "left";
+        alignTextV = "bottom";
+        alignItemH = "start";
+        alignItemV = "end";
+        break;
+      case " .":
+        alignTextH = "right";
+        alignTextV = "bottom";
+        alignItemH = "end";
+        alignItemV = "end";
+        break;
+      default:
+        alignTextH = "";
+        alignTextV = "";
+        alignItemH = "";
+        alignItemV = "";
     }
-    if (!isClosed) {
-      reader.restore();
-      return null;
-    }
-    context.advance(line.length);
-    reader.retreat();
-    return node;
+    const child = new Node(this.type);
+    child.fields = {
+      markerColumn: markerColumn,
+      contentColumn: contentColumn,
+      alignTextH: alignTextH,
+      alignTextV: alignTextV,
+      alignItemH: alignItemH,
+      alignItemV: alignItemV,
+    };
+    context.advance(parsed[1].length);
+    return child;
+  }
+
+  carry(node, reader, context) {
+    const indent = context.remains().match(/^(\s*)/)[1];
+    const contentColumn = dispWidthCalc.measure(indent) + context.column;
+    if (contentColumn < node.fields.contentColumn) return false;
+    context.advance(node.fields.contentColumn - context.column);
+    return true;
   }
 }
+
 
 class ParagraphRule extends BlockRule {
   constructor(rules) {
@@ -985,12 +1030,10 @@ class GridTableRule extends BlockRule {
     const normalizedLine = rowLine.trim();
     const alignments = [];
     let currIndex = 0;
-    console.log({ normalizedLine, columns });
     for (const column of columns) {
       const index = dispWidthCalc.indexAtColumn(normalizedLine, column);
       let markL = normalizedLine[currIndex + 1];
       let markR = normalizedLine[index - 1];
-      console.log({ markL, markR });
       if (/[:'.]/.test(markL) && /[:'.]/.test(markR) && markL !== markR) {
         alignments.push("");
         currIndex = index + 1;
@@ -1277,7 +1320,7 @@ class ScrollRule extends BlockRule {
     context.advance(node.fields.contentColumn - context.column);
     return true;
   }
-  
+
   start(parent, reader, context) {
     const parsed = context.remains().match(this.pattern);
     if (!parsed) return null;

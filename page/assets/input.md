@@ -192,70 +192,63 @@ int main() {
 ## Custom Syntax
 
 ### Grid
-
-::::[10:8px]
-[::]![KEI](assets/test.jpg)
-[::]
-[::]
-[::]
-[::]![케이](assets/test.gif)
-[::]
-[::]![KEI](assets/test.jpg)
-[::]![케이](assets/test.gif)
-[::]![KEI](assets/test.jpg)
-[::]
-
-[::]![케이](assets/test.gif)
-[::]![KEI](assets/test.jpg)
-[::]
-[::]![케이](assets/test.gif)
-[::]![KEI](assets/test.jpg)
-[::]
-[::]![케이](assets/test.gif)
-[::]
-[::]
-[::]![KEI](assets/test.jpg)
-
-[::]![케이](assets/test.gif)
-[::]
-[::]![KEI](assets/test.jpg)
-[::]
-[::]![케이](assets/test.gif)
-[::]
-[::]![KEI](assets/test.jpg)
-[::]![케이](assets/test.gif)
-[::]![KEI](assets/test.jpg)
-[::]
-
-[::]![케이](assets/test.gif)
-[::]
-[::]![KEI](assets/test.jpg)
-[::]
-[::]![케이](assets/test.gif)
-[::]
-[::]![KEI](assets/test.jpg)
-[::]
-[::]
-[::]![케이](assets/test.gif)
-
-[::]![KEI](assets/test.jpg)
-[::]
-[::]![케이](assets/test.gif)
-[::]
-[::]![KEI](assets/test.jpg)
-[::]
-[::]![케이](assets/test.gif)
-[::]
-[::]
-[::]![KEI](assets/test.jpg)
-::::
-
 ::::[2:8px]
-[::]![KEI](assets/test.jpg)
-[::]![케이](assets/test.gif)
-[::]그저 누워있는 케이
-[::]케이는 충전중
-::::
+[::]::::[10:8px]
+    [::]![KEI](assets/test.jpg)
+    [::]
+    [::]
+    [::]
+    [::]![케이](assets/test.gif)
+    [::]
+    [::]![KEI](assets/test.jpg)
+    [::]![케이](assets/test.gif)
+    [::]![KEI](assets/test.jpg)
+    [::]
+    [::]![케이](assets/test.gif)
+    [::]![KEI](assets/test.jpg)
+    [::]
+    [::]![케이](assets/test.gif)
+    [::]![KEI](assets/test.jpg)
+    [::]
+    [::]![케이](assets/test.gif)
+    [::]
+    [::]
+    [::]![KEI](assets/test.jpg)
+    [::]![케이](assets/test.gif)
+    [::]
+    [::]![KEI](assets/test.jpg)
+    [::]
+    [::]![케이](assets/test.gif)
+    [::]
+    [::]![KEI](assets/test.jpg)
+    [::]![케이](assets/test.gif)
+    [::]![KEI](assets/test.jpg)
+    [::]
+    [::]![케이](assets/test.gif)
+    [::]
+    [::]![KEI](assets/test.jpg)
+    [::]
+    [::]![케이](assets/test.gif)
+    [::]
+    [::]![KEI](assets/test.jpg)
+    [::]
+    [::]
+    [::]![케이](assets/test.gif)
+    [::]![KEI](assets/test.jpg)
+    [::]
+    [::]![케이](assets/test.gif)
+    [::]
+    [::]![KEI](assets/test.jpg)
+    [::]
+    [::]![케이](assets/test.gif)
+    [::]
+    [::]
+    [::]![KEI](assets/test.jpg)
+[::]::::[2:8px]
+    [::]![KEI](assets/test.jpg)
+        그저 누워있는 케이
+    [::]![케이](assets/test.gif)
+        케이는 충전중
 
 ---
 
