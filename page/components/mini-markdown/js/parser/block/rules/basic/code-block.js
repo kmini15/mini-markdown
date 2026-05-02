@@ -14,7 +14,6 @@ class CodeBlockRule extends BlockRule {
     if (contentColumn < node.fields.contentColumn) return false;
     context.advance(parsed[1].length); // until content
     const textNode = node.firstChild;
-    if (context.eof()) return;
     textNode.value += "\n" + context.remains();
     context.advance(context.remains().length);
     return true;
