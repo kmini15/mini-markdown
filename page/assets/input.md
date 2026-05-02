@@ -245,8 +245,6 @@ int main() {
 [::]
 [::]![KEI](assets/test.jpg)
 
----
-
 ::::[2:8px]
 ['']::::[10:8px]
     [::]![KEI](assets/test.jpg)

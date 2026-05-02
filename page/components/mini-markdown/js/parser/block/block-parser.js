@@ -64,6 +64,7 @@ class BlockParser {
       stackIndex = this.start(stack, stackIndex, reader, context);
       stackIndex = this.fallback(stack, stackIndex, reader, context);
       reader.advance();
+      if (this.DEBUG_MODE) console.log("stack", stack.map(node => node.type).join(" > "));
     }
     const documentNode = stack[0];
     const references = {};
@@ -116,9 +117,9 @@ class BlockParser {
   close(stack, stackIndex, reader, context) {
     while (stack.length > stackIndex + 1) {
       const node = stack.pop();
+      if (this.DEBUG_MODE) console.log("close", node.type, context.remains());
       const rule = this.getRule(node);
       if (!rule) continue; // No rule for this node type
-      if (this.DEBUG_MODE) console.log("close", node.type, context.remains());
       rule.close(node, reader, context);
     }
     return stackIndex;
@@ -158,6 +159,7 @@ class BlockParser {
   continue(stack, stackIndex, reader, context) {
     const lastNode = stack[stack.length - 1];
     if (lastNode.type !== "PARAGRAPH") return stackIndex;
+    if (context.remains().trim() === "") return stackIndex;
     const currNode = stack[stackIndex];
     for (let rule of this.rules) {
       reader.capture();

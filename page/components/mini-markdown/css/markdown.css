@@ -225,6 +225,7 @@
   flex: 1 1 0;
   width: 100%;
   display: grid;
+  margin: 1em 0;
   gap: var(--gap, 8px);
   grid-template-columns: repeat(var(--columns), 1fr);
 }
@@ -248,6 +249,7 @@
 
 .mini-markdown .grid-item .grid {
   flex: 0 0 0;
+  margin: 0;
 }
 
 /* Grid Table */
