@@ -6,25 +6,16 @@ class SetextHeadingRule extends BlockRule {
     this.pattern = /^\s*(=+|-+)\s*$/;
   }
 
-  start(parent, reader, context) {
-    const parsed = context.remains().match(this.pattern);
-    if (!parsed) return null;
-    if (parent.type === "PARAGRAPH") {
-      const child = new Node(this.type);
-      child.fields = {
-        level: parsed[1][0] === "=" ? 1 : 2,
-      };
-      context.advance(parsed[0].length);
-      return child;
-    } else if (parent.lastChild && parent.lastChild.type === "PARAGRAPH") {
-      parent.lastChild.type = "HEADING";
-      parent.lastChild.fields = {
-        level: parsed[1][0] === "=" ? 1 : 2,
-      };
-      context.advance(parsed[0].length);
-      return parent.lastChild;
-    }
-    return null;
+  apply(paragraph, reader, context) {
+    if (paragraph.type !== "PARAGRAPH") return false;
+    const match = context.remains().match(this.pattern);
+    if (!match) return false;
+    paragraph.type = "HEADING";
+    paragraph.fields = {
+      level: match[1][0] === "=" ? 1 : 2
+    };
+    context.advance(match[0].length);
+    return true;
   }
 }
 

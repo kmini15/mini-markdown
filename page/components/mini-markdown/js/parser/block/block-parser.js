@@ -3,7 +3,6 @@ import TextWidth from "../../core/text-width.js";
 import LineReader from "../../core/line-reader.js";
 import LineContext from "../../core/line-context.js";
 import { DocumentRule } from "./rules/basic/document.js";
-import { ParagraphRule } from "./rules/basic/paragraph.js";
 import { HtmlRule } from "./rules/basic/html.js";
 import { LinkReferenceDefinitionRule } from "./rules/basic/link-reference-definition.js";
 import { CodeBlockRule } from "./rules/basic/code-block.js";
@@ -22,7 +21,6 @@ const textWidth = new TextWidth();
 
 class BlockParser {
   constructor() {
-    const paragraphRule = new ParagraphRule();
     this.rules = [
       new DocumentRule(),
       new LinkReferenceDefinitionRule(),
@@ -40,20 +38,13 @@ class BlockParser {
       new GridItemRule(),
       new GridTableRule(),
       new ScrollRule(),
-      new ParagraphRule(),
     ];
-    this.rules.at(-1).setRules(this.rules);
     this.maxDepth = 20;
-    this.DEBUG_MODE = true;
-  }
-
-  printStackInfo(message, stack, stackIndex) {
-    console.log("        [" + message + "] stackIndex = " + stackIndex);
-    console.log("        >> " + stack.map(node => node.type).join(" > "));
+    this.DEBUG_MODE = false;
   }
 
   parse(text) {
-    const reader = new LineReader(text);
+    const reader = new LineReader(text + "\n");
     const stack = [];
     const node = new Node("DOCUMENT");
     node.fields = {
@@ -65,15 +56,13 @@ class BlockParser {
       const line = reader.current();
       const context = new LineContext(line);
       let stackIndex = 0;
-      if (this.DEBUG_MODE) this.printStackInfo("Start Line", stack, stackIndex);
       stackIndex = this.match(stack, stackIndex, reader, context);
-      if (this.DEBUG_MODE) this.printStackInfo("After Match", stack, stackIndex);
       stackIndex = this.carry(stack, stackIndex, reader, context);
-      if (this.DEBUG_MODE) this.printStackInfo("After Carry", stack, stackIndex);
+      stackIndex = this.apply(stack, stackIndex, reader, context);
+      stackIndex = this.continue(stack, stackIndex, reader, context);
       stackIndex = this.close(stack, stackIndex, reader, context);
-      if (this.DEBUG_MODE) this.printStackInfo("After Close", stack, stackIndex);
       stackIndex = this.start(stack, stackIndex, reader, context);
-      if (this.DEBUG_MODE) this.printStackInfo("After Start", stack, stackIndex);
+      stackIndex = this.fallback(stack, stackIndex, reader, context);
       reader.advance();
     }
     const documentNode = stack[0];
@@ -141,7 +130,7 @@ class BlockParser {
       let started = false;
       for (let rule of this.rules) {
         const child = rule.start(parent, reader, context);
-        if (!child) continue;
+        if (!child) continue; // This rule does not start a new node
         if (this.DEBUG_MODE) console.log("start", child.type, context.remains());
         parent.appendChild(child);
         stack.push(child);
@@ -153,8 +142,64 @@ class BlockParser {
     stackIndex = stack.length - 1;
     return stackIndex;
   }
+
+  apply(stack, stackIndex, reader, context) {
+    const lastNode = stack[stack.length - 1];
+    if (lastNode.type !== "PARAGRAPH") return stackIndex;
+    for (let rule of this.rules) {
+      if (rule.apply(lastNode, reader, context)) {
+        if (this.DEBUG_MODE) console.log("apply", lastNode.type, context.remains());
+        break;
+      }
+    }
+    return stackIndex;
+  }
+
+  continue(stack, stackIndex, reader, context) {
+    const lastNode = stack[stack.length - 1];
+    if (lastNode.type !== "PARAGRAPH") return stackIndex;
+    const currNode = stack[stackIndex];
+    for (let rule of this.rules) {
+      reader.capture();
+      context.capture();
+      const newNode = rule.start(currNode, reader, context);
+      context.restore();
+      reader.restore();
+      if (newNode) return stackIndex;
+    }
+    return stack.length - 1;
+  }
+
+  fallback(stack, stackIndex, reader, context) {
+    if (context.remains().trim() === "") {
+      if (stack[stackIndex].type !== "PARAGRAPH") {
+        return stackIndex;
+      }
+      stack.pop();
+      stackIndex = stack.length - 1;
+      return stackIndex;
+    }
+    if (stack[stackIndex].type === "PARAGRAPH") {
+      const textNode = stack[stackIndex].firstChild;
+      textNode.value += "\n" + context.remains();
+      context.advance(context.remains().length);
+      return stackIndex;
+    } else {
+      const parent = stack[stackIndex];
+      const textNode = new Node("TEXT");
+      textNode.value = context.remains();
+      textNode.fields = {
+        inline: true,
+      };
+      const paragraphNode = new Node("PARAGRAPH");
+      paragraphNode.appendChild(textNode);
+      parent.appendChild(paragraphNode);
+      context.advance(context.remains().length);
+      stack.push(paragraphNode);
+      stackIndex = stack.length - 1;
+      return stackIndex;
+    }
+  }
 }
-
-
 
 export default BlockParser;

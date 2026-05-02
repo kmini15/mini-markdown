@@ -14,13 +14,18 @@ class BlockRule {
     return this.match(node, reader, context);
   }
 
+  start(parent, reader, context) {
+    return null;
+  }
+
   close(node, reader, context) {
     return false;
   }
 
-  start(parent, reader, context) {
-    return null;
+  apply(paragraph, reader, context) {
+    return false;
   }
+
 }
 
 export { Node, TextWidth, BlockRule };
