@@ -1,3 +1,7 @@
+/* .mini-markdown * {
+  box-shadow: 0 0 0 1px #ff0000;
+} */
+
 .mini-markdown {
   all: unset;
   display: block;
@@ -5,7 +9,7 @@
 }
 
 .mini-markdown {
-  --color-border-default: rgb(40, 40, 40);
+  --color-border-default: rgb(50, 50, 50);
   --color-bg-default: rgb(30, 30, 30);
   --color-fg-default: rgb(180, 180, 180);
   --color-bg-muted: rgb(30, 30, 30);
@@ -36,48 +40,51 @@
   padding: 1em;
 }
 
-.mini-markdown::-webkit-scrollbar-track {
-  background: var(--color-bg-muted);
-}
-
 /* Paragraph */
 .mini-markdown p {
+  flex: 1 1 0;
   margin-bottom: 1.0em;
 }
 
 /* Heading */
 .mini-markdown h1 {
-  font-size: 1.8em;
+  flex: 1 1 0;
+  font-size: 2.0em;
   font-weight: var(--base-text-weight-bold, 700);
   margin-bottom: 0.8em;
   border-bottom: 3px solid var(--color-border-default);
 }
 
 .mini-markdown h2 {
+  flex: 1 1 0;
   font-size: 1.6em;
   font-weight: var(--base-text-weight-bold, 700);
   margin-bottom: 0.6em;
 }
 
 .mini-markdown h3 {
+  flex: 1 1 0;
   font-size: 1.4em;
   font-weight: var(--base-text-weight-bold, 700);
   margin-bottom: 0.4em;
 }
 
 .mini-markdown h4 {
+  flex: 1 1 0;
   font-size: 1.2em;
   font-weight: var(--base-text-weight-bold, 700);
   margin-bottom: 0.3em;
 }
 
 .mini-markdown h5 {
+  flex: 1 1 0;
   font-size: 1.0em;
   font-weight: var(--base-text-weight-bold, 700);
   margin-bottom: 0.2em;
 }
 
 .mini-markdown h6 {
+  flex: 1 1 0;
   font-size: 0.8em;
   font-weight: var(--base-text-weight-bold, 700);
   margin-bottom: 0.1em;
@@ -85,22 +92,31 @@
 
 /* Blockquote */
 .mini-markdown blockquote {
+  flex: 1 1 0;
   background-color: var(--color-blockquote-bg);
   color: var(--color-blockquote-fg);
   border-left: 6px solid var(--color-blockquote-border);
   padding-left: 1em;
   margin: 1em 0;
+  text-align: left;
 }
 
 /* Lists */
 .mini-markdown ul,
 .mini-markdown ol {
+  flex: 1 1 0;
   margin: 0.4em 0;
   padding-left: 2em;
 }
 
+.mini-markdown li {
+  flex: 1 1 0;
+  margin: 0.2em 0;
+}
+
 /* Code */
 .mini-markdown code {
+  flex: 1 1 0;
   font-family: D2Coding, Menlo, Monaco, "Courier New", monospace;
   font-size: 0.8em;
   font-weight: 500;
@@ -120,13 +136,16 @@
 }
 
 .mini-markdown pre code {
+  flex: 1 1 0;
   color: var(--color-code-fg);
   padding: 0;
   background: none;
+  text-align: left;
 }
 
 /* Horizontal Rule */
 .mini-markdown hr {
+  flex: 1 1 0;
   border: none;
   border-top: 3px solid var(--color-border-default);
   margin: 1em 0;
@@ -134,12 +153,14 @@
 
 /* Links */
 .mini-markdown a {
+  flex: 1 1 0;
   color: var(--color-highlight-aris-1);
   text-decoration: none;
 }
 
 /* Images */
 .mini-markdown img {
+  flex: 1 1 0;
   max-width: 100%;
   height: auto;
   display: block;
@@ -150,6 +171,7 @@
 
 /* Tables */
 .mini-markdown table {
+  flex: 1 1 0;
   width: 100%;
   border-collapse: collapse;
   margin: 1em 0;
@@ -158,108 +180,134 @@
 
 .mini-markdown table th,
 .mini-markdown table td {
+  flex: 1 1 0;
+  text-align: var(--align-text-h, left);
+  justify-items: var(--align-item-h, left);
   border: 2px solid var(--color-table-border);
   padding: 0.5em 1em;
 }
 
+.mini-markdown table th img,
+.mini-markdown table td img {
+  flex: 1 1 0;
+  display: inline-block;
+  margin: 0;
+}
+
+.mini-markdown table th video,
+.mini-markdown table td video {
+  flex: 1 1 0;
+  display: inline-block;
+  margin: 0;
+}
+
 .mini-markdown table th {
+  flex: 1 1 0;
   background-color: var(--color-table-header-bg);
   color: var(--color-table-header-fg);
   font-weight: var(--base-text-weight-semibold, 800);
 }
 
 .mini-markdown table tr:nth-child(odd) td {
+  flex: 1 1 0;
   background-color: var(--color-table-row-odd-bg);
   color: var(--color-table-row-odd-fg);
 }
 
 .mini-markdown table tr:nth-child(even) td {
+  flex: 1 1 0;
   background-color: var(--color-table-row-even-bg);
   color: var(--color-table-row-even-fg);
 }
 
 /* Grid */
 .mini-markdown .grid {
+  flex: 1 1 0;
+  width: 100%;
   display: grid;
   gap: var(--gap, 8px);
   grid-template-columns: repeat(var(--columns), 1fr);
-  margin: 1em 0;
-  overflow: auto;
 }
 
 .mini-markdown .grid-item {
-  display: grid;
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
   margin: 0;
   padding: 0;
-  object-fit: contain;
   text-align: var(--align-text-h, left);
   align-content: var(--align-text-v, center);
-  justify-items: var(--align-item-h, left);
-  align-items: var(--align-item-v, center);
+  align-items: var(--align-item-h, stretch);
+  justify-content: var(--align-item-v, space-between);
 }
 
 .mini-markdown .grid-item * {
+  flex: 1 1 0;
   margin: 0;
 }
 
-.mini-markdown .grid-item p,
-.mini-markdown .grid-item img,
-.mini-markdown .grid-item video {
-  border-radius: 4px;
-  margin: 0;
-  padding: 0;
+.mini-markdown .grid-item .grid {
+  flex: 0 0 0;
 }
 
 /* Grid Table */
 .mini-markdown .grid-table {
+  flex: 1 1 0;
   display: grid;
-  min-width: max-content;
   grid-template-columns: repeat(var(--columns), 1fr);
+  /* object-fit: contain; */
+  min-width: max-content;
   font-size: 0.8em;
-  object-fit: contain;
-  overflow-x: auto;
 }
 
 .mini-markdown .grid-table-cell {
-  display: grid;
-  min-width: max-content;
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
   grid-column: var(--col) / span var(--col-span, 1);
   grid-row: var(--row) / span var(--row-span, 1);
-  text-align: var(--align-text-h, left);
-  align-content: var(--align-text-v, center);
-  justify-items: var(--align-item-h, left);
-  align-items: var(--align-item-v, center);
   border: 1px solid var(--color-table-border);
   padding: 0.5em 1em;
   min-width: 1em;
   min-height: 1em;
+  text-align: var(--align-text-h, left);
+  align-content: var(--align-text-v, center);
+  align-items: var(--align-item-h, stretch);
+  justify-content: var(--align-item-v, space-between);
+  min-width: max-content;
 }
 
 .mini-markdown .grid-table-cell img,
 .mini-markdown .grid-table-cell video {
+  flex: 1 1 0;
   border-radius: 4px;
   margin: 0;
   padding: 0;
 }
 
 .mini-markdown .grid-table-cell.grid-table-header {
+  flex: 1 1 0;
   background-color: var(--color-table-header-bg);
   color: var(--color-table-header-fg);
   font-weight: var(--base-text-weight-bold, 800);
 }
 
 .mini-markdown .grid-table-cell.grid-table-data.row-odd {
+  flex: 1 1 0;
   background: var(--color-table-row-odd-bg);
   color: var(--color-table-row-odd-fg);
 }
 
 .mini-markdown .grid-table-cell.grid-table-data.row-even {
+  flex: 1 1 0;
   background: var(--color-table-row-even-bg);
   color: var(--color-table-row-even-fg);
 }
 
 /* Scroll (Horizontal Overflow) */
 .mini-markdown .scroll {
+  flex: 1 1 0;
+  display: flex;
   overflow-x: auto;
   scrollbar-width: thin;
   border-radius: 4px;

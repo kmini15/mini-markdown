@@ -39,18 +39,7 @@ class HtmlRenderer {
         return `<div class="grid" style="${style}">\n${text}</div>\n`;
       case "GRID_ITEM":
         var style = "";
-        if (node.fields.alignTextH) {
-          style += `--align-text-h: ${node.fields.alignTextH};`;
-        }
-        if (node.fields.alignTextV) {
-          style += `--align-text-v: ${node.fields.alignTextV};`;
-        }
-        if (node.fields.alignItemH) {
-          style += `--align-item-h: ${node.fields.alignItemH};`;
-        }
-        if (node.fields.alignItemV) {
-          style += `--align-item-v: ${node.fields.alignItemV};`;
-        }
+        style += this.alignFieldsToFlexAlign(node);
         return `<div class="grid-item" style="${style}">${text}</div>\n`;
       case "TABLE":
         return `<table>\n${text}</table>\n`;
@@ -58,16 +47,12 @@ class HtmlRenderer {
         return `<tr>\n${text}</tr>\n`;
       case "TABLE_HEADER":
         var style = "";
-        if (node.fields.align) {
-          style = ` style="text-align: ${node.fields.align};"`;
-        }
-        return `<th${style}>${text}</th>\n`;
+        style += this.alignFieldsToFlexAlign(node);
+        return `<th style="${style}">${text}</th>\n`;
       case "TABLE_DATA":
         var style = "";
-        if (node.fields.align) {
-          style = ` style="text-align: ${node.fields.align};"`;
-        }
-        return `<td${style}>${text}</td>\n`;
+        style += this.alignFieldsToFlexAlign(node);
+        return `<td style="${style}">${text}</td>\n`;
       case "GRID_TABLE":
         var columns = node.fields.columns ?? 1;
         return `<div class="grid-table" style="--columns:${columns};">\n${text}</div>\n`;
@@ -83,18 +68,7 @@ class HtmlRenderer {
         style += `--col:${col};`;
         style += `--row-span:${rowSpan};`;
         style += `--col-span:${colSpan};`;
-        if (node.fields.alignTextH) {
-          style += `--align-text-h: ${node.fields.alignTextH};`;
-        }
-        if (node.fields.alignTextV) {
-          style += `--align-text-v: ${node.fields.alignTextV};`;
-        }
-        if (node.fields.alignItemH) {
-          style += `--align-item-h: ${node.fields.alignItemH};`;
-        }
-        if (node.fields.alignItemV) {
-          style += `--align-item-v: ${node.fields.alignItemV};`;
-        }
+        style += this.alignFieldsToFlexAlign(node);
         var row = "row-" + (row % 2 === 1 ? "odd" : "even");
         return `<div class="grid-table-cell grid-table-header ${row}" style="${style}">${text}</div>\n`;
       case "GRID_TABLE_DATA":
@@ -107,18 +81,7 @@ class HtmlRenderer {
         style += `--col:${col};`;
         style += `--row-span:${rowSpan};`;
         style += `--col-span:${colSpan};`;
-        if (node.fields.alignTextH) {
-          style += `--align-text-h: ${node.fields.alignTextH};`;
-        }
-        if (node.fields.alignTextV) {
-          style += `--align-text-v: ${node.fields.alignTextV};`;
-        }
-        if (node.fields.alignItemH) {
-          style += `--align-item-h: ${node.fields.alignItemH};`;
-        }
-        if (node.fields.alignItemV) {
-          style += `--align-item-v: ${node.fields.alignItemV};`;
-        }
+        style += this.alignFieldsToFlexAlign(node);
         var row = "row-" + (row % 2 === 1 ? "odd" : "even");
         return `<div class="grid-table-cell grid-table-data ${row}" style="${style}">${text}</div>\n`;
       case "SCROLL":
@@ -161,6 +124,75 @@ class HtmlRenderer {
       .replaceAll(">", "&gt;")
       .replaceAll('"', "&quot;")
       .replaceAll("'", "&#39;");
+  }
+
+  alignTextHToFlexAlign(align) {
+    switch (align) {
+      case "left":
+        return "left";
+      case "center":
+        return "center";
+      case "right":
+        return "right";
+      default:
+        return null;
+    }
+  }
+
+  alignTextVToFlexAlign(align) {
+    switch (align) {
+      case "top":
+        return "top";
+      case "middle":
+        return "center";
+      case "bottom":
+        return "bottom";
+      default:
+        return null;
+    }
+  }
+
+  alignItemHToFlexAlign(align) {
+    switch (align) {
+      case "left":
+        return "flex-start";
+      case "center":
+        return "center";
+      case "right":
+        return "flex-end";
+      default:
+        return null;
+    }
+  }
+
+  alignItemVToFlexAlign(align) {
+    switch (align) {
+      case "top":
+        return "flex-start";
+      case "middle":
+        return "center";
+      case "bottom":
+        return "flex-end";
+      default:
+        return null;
+    } 
+  }
+
+  alignFieldsToFlexAlign(node) {
+    var style = "";
+    if (node.fields.alignTextH) {
+      style += `--align-text-h: ${this.alignTextHToFlexAlign(node.fields.alignTextH)};`;
+    }
+    if (node.fields.alignTextV) {
+      style += `--align-text-v: ${this.alignTextVToFlexAlign(node.fields.alignTextV)};`;
+    }
+    if (node.fields.alignItemH) {
+      style += `--align-item-h: ${this.alignItemHToFlexAlign(node.fields.alignItemH)};`;
+    }
+    if (node.fields.alignItemV) {
+      style += `--align-item-v: ${this.alignItemVToFlexAlign(node.fields.alignItemV)};`;
+    }
+    return style;
   }
 }
 

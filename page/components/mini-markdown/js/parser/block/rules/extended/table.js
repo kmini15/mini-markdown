@@ -84,7 +84,8 @@ class TableRule extends BlockRule {
       const alignment = alignments[i];
       const headerCellNode = new Node("TABLE_HEADER");
       headerCellNode.fields = {
-        align: alignment,
+        alignTextH: alignment,
+        alignItemH: alignment,
       };
       const textNode = new Node("TEXT");
       textNode.value = cell;
@@ -105,7 +106,8 @@ class TableRule extends BlockRule {
       const alignment = alignments[i];
       const cellNode = new Node("TABLE_DATA");
       cellNode.fields = {
-        align: alignment,
+        alignTextH: alignment,
+        alignItemH: alignment,
       };
       const textNode = new Node("TEXT");
       textNode.value = cell;

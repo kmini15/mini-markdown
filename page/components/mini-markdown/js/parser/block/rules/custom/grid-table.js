@@ -122,17 +122,17 @@ class GridTableRule extends BlockRule {
       }
       let alignV;
       if (markL === ":") {
-        alignV = "center";
+        alignV = "middle";
       } else if (markL === "'") {
-        alignV = "start";
+        alignV = "top";
       } else if (markL === ".") {
-        alignV = "end";
+        alignV = "bottom";
       } else if (markR === ":") {
-        alignV = "center";
+        alignV = "middle";
       } else if (markR === "'") {
-        alignV = "start";
+        alignV = "top";
       } else if (markR === ".") {
-        alignV = "end";
+        alignV = "bottom";
       } else {
         alignV = "";
       }
@@ -302,34 +302,8 @@ class GridTableRule extends BlockRule {
         const cellType = (header) ? "GRID_TABLE_HEADER" : "GRID_TABLE_DATA";
         const alignTextH = alignH;
         const alignTextV = alignV;
-        let alignItemH;
-        let alignItemV;
-        switch (alignH) {
-          case "left":
-            alignItemH = "start";
-            break;
-          case "center":
-            alignItemH = "center";
-            break;
-          case "right":
-            alignItemH = "end";
-            break;
-          default:
-            alignItemH = "";
-        }
-        switch (alignV) {
-          case "top":
-            alignItemV = "start";
-            break;
-          case "middle":
-            alignItemV = "center";
-            break;
-          case "bottom":
-            alignItemV = "end";
-            break;
-          default:
-            alignItemV = "";
-        }
+        const alignItemH = alignH;
+        const alignItemV = alignV;
         const cellNode = new Node(cellType);
         cellNode.fields = {
           row: row + 1,

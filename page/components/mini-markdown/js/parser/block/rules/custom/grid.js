@@ -91,55 +91,55 @@ class GridItemRule extends BlockRule {
         alignTextH = "center";
         alignTextV = "middle";
         alignItemH = "center";
-        alignItemV = "center";
+        alignItemV = "middle";
         break;
       case ": ":
         alignTextH = "left";
         alignTextV = "middle";
-        alignItemH = "start";
-        alignItemV = "center";
+        alignItemH = "left";
+        alignItemV = "middle";
         break;
       case " :":
         alignTextH = "right";
         alignTextV = "middle";
-        alignItemH = "end";
-        alignItemV = "center";
+        alignItemH = "right";
+        alignItemV = "middle";
         break;
       case "''":
         alignTextH = "center";
         alignTextV = "top";
         alignItemH = "center";
-        alignItemV = "start";
+        alignItemV = "top";
         break;
       case "' ":
         alignTextH = "left";
         alignTextV = "top";
-        alignItemH = "start";
-        alignItemV = "start";
+        alignItemH = "left";
+        alignItemV = "top";
         break;
       case " '":
         alignTextH = "right";
         alignTextV = "top";
-        alignItemH = "end";
-        alignItemV = "start";
+        alignItemH = "right";
+        alignItemV = "top";
         break;
       case "..":
         alignTextH = "center";
         alignTextV = "bottom";
         alignItemH = "center";
-        alignItemV = "end";
+        alignItemV = "bottom";
         break;
       case ". ":
         alignTextH = "left";
         alignTextV = "bottom";
-        alignItemH = "start";
-        alignItemV = "end";
+        alignItemH = "left";
+        alignItemV = "bottom";
         break;
       case " .":
         alignTextH = "right";
         alignTextV = "bottom";
-        alignItemH = "end";
-        alignItemV = "end";
+        alignItemH = "right";
+        alignItemV = "bottom";
         break;
       default:
         alignTextH = "";
