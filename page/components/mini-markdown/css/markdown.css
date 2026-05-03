@@ -40,8 +40,6 @@
 
 /* Paragraph */
 .mini-markdown p {
-  text-align: justify;
-  word-break: keep-all;
   font-size: 0.875rem;
 }
 
