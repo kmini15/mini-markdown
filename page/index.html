@@ -96,20 +96,6 @@
       mam.resolveImageSources(contentPreview);
     }
 
-    let isFirstFocus = true;
-    editor.addEventListener("focus", () => {
-      if (isFirstFocus) {
-        isFirstFocus = false;
-        editor.value = "";
-        contentPreview.innerHTML = "";
-        contentHtml.innerText = "";
-        contentAst.innerText = "";
-        mam.setTextMarkdown("");
-        mam.setTextHtml("");
-        return;
-      }
-    });
-
     function debounce(fn, delay) {
       let timer = null;
       return function (...args) {
