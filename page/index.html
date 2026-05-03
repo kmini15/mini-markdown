@@ -85,8 +85,8 @@
       var text = await readFile("./assets/input.md");
       editor.value = text;
       const ast = mmd.parse(text);
-      const astText = mmd.renderAst(ast);
-      const htmlText = mmd.renderHtml(ast);
+      const astText = await mmd.renderAst(ast);
+      const htmlText = await mmd.renderHtml(ast);
       contentPreview.innerHTML = htmlText;
       contentHtml.innerText = htmlText;
       contentAst.innerText = astText;
@@ -106,11 +106,11 @@
       };
     }
 
-    editor.addEventListener("input", debounce((e) => {
+    editor.addEventListener("input", debounce(async (e) => {
       const text = e.target.value;
       const ast = mmd.parse(text);
-      const astText = mmd.renderAst(ast);
-      const htmlText = mmd.renderHtml(ast);
+      const astText = await mmd.renderAst(ast);
+      const htmlText = await mmd.renderHtml(ast);
       contentPreview.innerHTML = htmlText;
       contentHtml.innerText = htmlText;
       contentAst.innerText = astText;

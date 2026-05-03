@@ -9,11 +9,12 @@ class MiniMarkdown {
     this.inlineParser = new InlineParser();
     this.htmlRenderer = new HtmlRenderer();
     this.astRenderer = new AstRenderer();
+    this.root = null;
   }
 
-  async mount(container) {
-    this.container = container;
-    this.container.classList.add("mini-markdown");
+  async mount(root) {
+    this.root = root;
+    this.root.classList.add("mini-markdown");
     await this.loadCSS();
   }
 
@@ -22,7 +23,7 @@ class MiniMarkdown {
     node = this.parseInline(node, node.fields.references);
     return node;
   }
-  
+
   parseInline(node, references = {}) {
     for (let child = node.firstChild; child; child = child.next) {
       child = this.parseInline(child, references);
@@ -34,13 +35,15 @@ class MiniMarkdown {
     }
     return node;
   }
-  
-  renderHtml(node) {
+
+  async renderHtml(node) {
     var text = this.htmlRenderer.render(node);
-    return text;
+    this.root.innerHTML = text;
+    await this.applyImageSizeVariables();
+    return this.root.innerHTML;
   }
 
-  renderAst(node) {
+  async renderAst(node) {
     var text = this.astRenderer.render(node);
     return text;
   }
@@ -57,6 +60,32 @@ class MiniMarkdown {
         reject(new Error(`Failed to load CSS: ${url}`));
       };
       document.head.appendChild(link);
+    });
+  }
+
+  waitImagesLoaded() {
+    if (!this.root) return Promise.resolve();
+    const images = this.root.querySelectorAll("img");
+    const promises = Array.from(images).map(img => {
+      if (img.complete && img.naturalWidth > 0) {
+        return Promise.resolve();
+      }
+      return new Promise((resolve) => {
+        img.addEventListener("load", resolve, { once: true });
+        img.addEventListener("error", resolve, { once: true });
+      });
+    });
+    return Promise.all(promises);
+  }
+
+  async applyImageSizeVariables() {
+    if (!this.root) return;
+    await this.waitImagesLoaded();
+    this.root.querySelectorAll("img").forEach(img => {
+      const width = img.naturalWidth;
+      const height = img.naturalHeight;
+      if (!width || !height) return;
+      img.style.setProperty("--image-ratio", width / height);
     });
   }
 }
