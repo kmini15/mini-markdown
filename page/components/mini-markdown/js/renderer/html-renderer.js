@@ -26,6 +26,9 @@ class HtmlRenderer {
       case "CODE_BLOCK":
         var language = node.fields.language ? ` class="language-${node.fields.language}"` : "";
         return `<pre><code${language}>${this.escapeHtml(text)}\n</code></pre>\n`;
+      case "FENCED_CODE_BLOCK":
+        var language = node.fields.language ? ` class="language-${node.fields.language}"` : "";
+        return `<pre><code${language}>${this.escapeHtml(text)}\n</code></pre>\n`;
       case "BLOCKQUOTE":
         return `<blockquote>\n${text}</blockquote>\n`;
       case "HEADING":

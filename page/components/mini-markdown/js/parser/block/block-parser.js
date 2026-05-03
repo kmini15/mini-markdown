@@ -24,8 +24,8 @@ class BlockParser {
     this.rules = [
       new DocumentRule(),
       new LinkReferenceDefinitionRule(),
-      new CodeBlockRule(),
       new FencedCodeBlockRule(),
+      new CodeBlockRule(),
       new BlockquoteRule(),
       new ListRule(),
       new ListItemRule(),
@@ -40,7 +40,7 @@ class BlockParser {
       new ScrollRule(),
     ];
     this.maxDepth = 20;
-    this.DEBUG_MODE = false;
+    this.DEBUG_MODE = true;
   }
 
   parse(text) {
