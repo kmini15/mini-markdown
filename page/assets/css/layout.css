@@ -152,10 +152,16 @@ div .scroll-text {
 }
 
 #output-preview {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
   font-size: 1.0em;
 }
 
 #output-html {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
   font-family: "D2Coding", monospace;
   font-size: 0.8em;
   white-space: pre;
@@ -164,6 +170,9 @@ div .scroll-text {
 }
 
 #output-ast {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
   font-family: "D2Coding", monospace;
   font-size: 0.8em;
   white-space: pre;

@@ -35,13 +35,19 @@
           <div class="tab-button" data-tab="output-tab3">AST</div>
         </div>
         <div id="output-tab1" class="tab-panel">
-          <div id="output-preview" class="scroll-text"></div>
+          <div id="output-preview" class="scroll-text">
+            <div id="content-preview"></div>
+          </div>
         </div>
         <div id="output-tab2" class="tab-panel">
-          <div id="output-html" class="scroll-text"></div>
+          <div id="output-html" class="scroll-text">
+            <div id="content-html"></div>
+          </div>
         </div>
         <div id="output-tab3" class="tab-panel">
-          <div id="output-ast" class="scroll-text"></div>
+          <div id="output-ast" class="scroll-text">
+            <div id="content-ast"></div>
+          </div>
         </div>
       </div>
     </main>
@@ -56,17 +62,17 @@
     const mmd = new MiniMarkdown();
     const mhl = new MiniHighlighter();
     const mam = new MiniAssetManager();
-    const mmdElem = document.getElementById("output-preview");
+    const mmdElem = document.getElementById("content-preview");
     await mmd.mount(mmdElem);
-    const mhlElem = document.getElementById("output-preview");
+    const mhlElem = document.getElementById("content-preview");
     await mhl.mount(mhlElem);
     const mamElem = document.getElementById("mini-asset-manager");
     await mam.mount(mamElem);
     // Get DOM elements
     const editor = document.getElementById("editor");
-    const outputPreview = document.getElementById("output-preview");
-    const outputHtml = document.getElementById("output-html");
-    const outputAst = document.getElementById("output-ast");
+    const contentPreview = document.getElementById("content-preview");
+    const contentHtml = document.getElementById("content-html");
+    const contentAst = document.getElementById("content-ast");
 
     async function readFile(path) {
       const res = await fetch(path);
@@ -81,13 +87,13 @@
       const ast = mmd.parse(text);
       const astText = mmd.renderAst(ast);
       const htmlText = mmd.renderHtml(ast);
-      outputPreview.innerHTML = htmlText;
-      outputHtml.innerText = htmlText;
-      outputAst.innerText = astText;
+      contentPreview.innerHTML = htmlText;
+      contentHtml.innerText = htmlText;
+      contentAst.innerText = astText;
       mhl.highlight();
       mam.setTextMarkdown(text);
-      mam.setTextHtml(outputPreview.innerHTML);
-      mam.resolveImageSources(outputPreview);
+      mam.setTextHtml(contentPreview.innerHTML);
+      mam.resolveImageSources(contentPreview);
     }
 
     let isFirstFocus = true;
@@ -95,9 +101,9 @@
       if (isFirstFocus) {
         isFirstFocus = false;
         editor.value = "";
-        outputPreview.innerHTML = "";
-        outputHtml.innerText = "";
-        outputAst.innerText = "";
+        contentPreview.innerHTML = "";
+        contentHtml.innerText = "";
+        contentAst.innerText = "";
         mam.setTextMarkdown("");
         mam.setTextHtml("");
         return;
@@ -119,13 +125,13 @@
       const ast = mmd.parse(text);
       const astText = mmd.renderAst(ast);
       const htmlText = mmd.renderHtml(ast);
-      outputPreview.innerHTML = htmlText;
-      outputHtml.innerText = htmlText;
-      outputAst.innerText = astText;
+      contentPreview.innerHTML = htmlText;
+      contentHtml.innerText = htmlText;
+      contentAst.innerText = astText;
       mhl.highlight();
       mam.setTextMarkdown(text);
-      mam.setTextHtml(outputPreview.innerHTML);
-      mam.resolveImageSources(outputPreview);
+      mam.setTextHtml(contentPreview.innerHTML);
+      mam.resolveImageSources(contentPreview);
     }, 200));
 
     init();

@@ -30,11 +30,9 @@
 
 .mini-markdown {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-  font-size: 16px;
+  font-size: 1.0rem;
   font-weight: 400;
   line-height: 1.5;
-  text-align: justify;
-  word-break: keep-all;
   color: var(--color-fg-default);
   background-color: var(--color-bg-default);
   padding: 1em;
@@ -42,120 +40,115 @@
 
 /* Paragraph */
 .mini-markdown p {
-  flex: 1 1 0;
-  margin-bottom: 1.0em;
+  text-align: justify;
+  word-break: keep-all;
+  font-size: 0.875rem;
+}
+
+.mini-markdown p+p {
+  margin-top: 0.875rem;
 }
 
 /* Heading */
 .mini-markdown h1 {
-  flex: 1 1 0;
-  font-size: 2.0em;
-  font-weight: var(--base-text-weight-bold, 700);
-  margin-bottom: 0.8em;
+  font-size: 2.0rem;
+  font-weight: 700;
+  margin-bottom: 0.8rem;
   border-bottom: 3px solid var(--color-border-default);
 }
 
 .mini-markdown h2 {
-  flex: 1 1 0;
-  font-size: 1.6em;
-  font-weight: var(--base-text-weight-bold, 700);
-  margin-bottom: 0.6em;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.6rem;
 }
 
 .mini-markdown h3 {
-  flex: 1 1 0;
-  font-size: 1.4em;
-  font-weight: var(--base-text-weight-bold, 700);
-  margin-bottom: 0.4em;
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 0.4rem;
 }
 
 .mini-markdown h4 {
-  flex: 1 1 0;
-  font-size: 1.2em;
-  font-weight: var(--base-text-weight-bold, 700);
-  margin-bottom: 0.3em;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 0.3rem;
 }
 
 .mini-markdown h5 {
-  flex: 1 1 0;
-  font-size: 1.0em;
-  font-weight: var(--base-text-weight-bold, 700);
-  margin-bottom: 0.2em;
+  font-size: 1.0rem;
+  font-weight: 700;
+  margin-bottom: 0.2rem;
 }
 
 .mini-markdown h6 {
-  flex: 1 1 0;
-  font-size: 0.8em;
-  font-weight: var(--base-text-weight-bold, 700);
-  margin-bottom: 0.1em;
+  font-size: 0.875rem;
+  font-weight: 700;
+  margin-bottom: 0.1rem;
+  color: var(--color-fg-muted);
 }
 
 /* Blockquote */
 .mini-markdown blockquote {
-  flex: 1 1 0;
+  flex-direction: column;
+  justify-content: flex-start;
   background-color: var(--color-blockquote-bg);
   color: var(--color-blockquote-fg);
   border-left: 6px solid var(--color-blockquote-border);
-  padding-left: 1em;
-  margin: 1em 0;
+  padding-left: 1rem;
   text-align: left;
+}
+
+.mini-markdown blockquote>blockquote {
+  padding-top: 0.5rem;
 }
 
 /* Lists */
 .mini-markdown ul,
 .mini-markdown ol {
-  flex: 1 1 0;
-  margin: 0.4em 0;
-  padding-left: 2em;
-}
-
-.mini-markdown li {
-  flex: 1 1 0;
-  margin: 0.2em 0;
+  padding-left: 1.5rem;
+  font-size: 0.875rem;
 }
 
 /* Code */
 .mini-markdown code {
-  flex: 1 1 0;
   font-family: D2Coding, Menlo, Monaco, "Courier New", monospace;
-  font-size: 0.8em;
-  font-weight: 500;
   background-color: var(--color-code-bg);
+  font-size: 0.875rem;
   color: var(--color-code-fg);
-  padding: 0.2em 0.4em;
   border-radius: 4px;
+  padding: 0.12rem 0.24rem;
 }
 
 /* Code Block */
 .mini-markdown pre {
   flex: 1 1 0;
   background-color: var(--color-code-bg);
-  padding: 0.8em 1.2em;
+  font-size: 0.875rem;
+  text-align: left;
+  padding: 0.4rem 0.8rem;
   border-radius: 4px;
   line-height: 1.2;
 }
 
-.mini-markdown pre code {
-  flex: 1 1 0;
-  color: var(--color-code-fg);
-  padding: 0;
-  background: none;
-  text-align: left;
+.mini-markdown pre>code {
+  all: unset;
+  font-family: D2Coding, Menlo, Monaco, "Courier New", monospace;
+  font-size: 0.8rem;
 }
 
 /* Horizontal Rule */
 .mini-markdown hr {
-  flex: 1 1 0;
   border: none;
   border-top: 3px solid var(--color-border-default);
-  margin: 1em 0;
+  margin: 1rem 0;
 }
 
 /* Links */
 .mini-markdown a {
-  flex: 1 1 0;
   color: var(--color-highlight-aris-1);
   text-decoration: none;
+  font-size: 0.875rem;
 }
 
 /* Images */
@@ -164,9 +157,8 @@
   max-width: 100%;
   height: auto;
   display: block;
-  margin: 1em auto;
   border-radius: 4px;
-  max-height: 24em;
+  max-height: 24rem;
 }
 
 /* Tables */
@@ -174,8 +166,7 @@
   flex: 1 1 0;
   width: 100%;
   border-collapse: collapse;
-  margin: 1em 0;
-  font-size: 0.8em;
+  margin: 1rem 0;
 }
 
 .mini-markdown table th,
@@ -226,6 +217,7 @@
   width: 100%;
   display: grid;
   margin: 1em 0;
+  padding: 0;
   gap: var(--gap, 8px);
   grid-template-columns: repeat(var(--columns), 1fr);
 }
@@ -240,16 +232,13 @@
   align-content: var(--align-text-v, center);
   align-items: var(--align-item-h, stretch);
   justify-content: var(--align-item-v, space-between);
+  font-size: 0.875rem;
 }
 
-.mini-markdown .grid-item * {
-  flex: 1 1 0;
-  margin: 0;
-}
-
-.mini-markdown .grid-item .grid {
+.mini-markdown .grid-item>.grid {
   flex: 0 0 0;
   margin: 0;
+  padding: 0;
 }
 
 /* Grid Table */
@@ -259,7 +248,6 @@
   grid-template-columns: repeat(var(--columns), 1fr);
   /* object-fit: contain; */
   min-width: max-content;
-  font-size: 0.8em;
 }
 
 .mini-markdown .grid-table-cell {
@@ -277,6 +265,7 @@
   align-items: var(--align-item-h, stretch);
   justify-content: var(--align-item-v, space-between);
   min-width: max-content;
+  font-size: 0.875rem;
 }
 
 .mini-markdown .grid-table-cell img,

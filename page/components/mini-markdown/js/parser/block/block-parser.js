@@ -24,12 +24,12 @@ class BlockParser {
     this.rules = [
       new DocumentRule(),
       new LinkReferenceDefinitionRule(),
-      new HtmlRule(),
       new CodeBlockRule(),
       new FencedCodeBlockRule(),
       new BlockquoteRule(),
       new ListRule(),
       new ListItemRule(),
+      new HtmlRule(),
       new HeadingRule(),
       new SetextHeadingRule(),
       new HorizontalRuleRule(),
