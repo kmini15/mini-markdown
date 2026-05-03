@@ -57,7 +57,6 @@ class BlockParser {
       const context = new LineContext(line);
       let stackIndex = 0;
       stackIndex = this.match(stack, stackIndex, reader, context);
-      stackIndex = this.carry(stack, stackIndex, reader, context);
       stackIndex = this.apply(stack, stackIndex, reader, context);
       stackIndex = this.continue(stack, stackIndex, reader, context);
       stackIndex = this.close(stack, stackIndex, reader, context);
@@ -92,19 +91,7 @@ class BlockParser {
       if (rule.match(node, reader, context)) {
         if (this.DEBUG_MODE) console.log("match", node.type, context.remains());
         stackIndex = i;
-      } else {
-        break;
-      }
-    }
-    return stackIndex;
-  }
-
-  carry(stack, stackIndex, reader, context) {
-    for (let i = stackIndex + 1; i < stack.length; i++) {
-      const node = stack[i];
-      const rule = this.getRule(node);
-      if (!rule) break; // No rule for this node type
-      if (rule.carry(node, reader, context)) {
+      } else if (rule.carry(node, reader, context)) {
         if (this.DEBUG_MODE) console.log("carry", node.type, context.remains());
         stackIndex = i;
       } else {
@@ -112,6 +99,34 @@ class BlockParser {
       }
     }
     return stackIndex;
+  }
+
+  apply(stack, stackIndex, reader, context) {
+    const lastNode = stack[stack.length - 1];
+    if (lastNode.type !== "PARAGRAPH") return stackIndex;
+    for (let rule of this.rules) {
+      if (rule.apply(lastNode, reader, context)) {
+        if (this.DEBUG_MODE) console.log("apply", lastNode.type, context.remains());
+        break;
+      }
+    }
+    return stackIndex;
+  }
+
+  continue(stack, stackIndex, reader, context) {
+    const lastNode = stack[stack.length - 1];
+    if (lastNode.type !== "PARAGRAPH") return stackIndex;
+    if (context.remains().trim() === "") return stackIndex;
+    const currNode = stack[stackIndex];
+    for (let rule of this.rules) {
+      reader.capture();
+      context.capture();
+      const newNode = rule.start(currNode, reader, context);
+      context.restore();
+      reader.restore();
+      if (newNode) return stackIndex;
+    }
+    return stack.length - 1;
   }
 
   close(stack, stackIndex, reader, context) {
@@ -142,34 +157,6 @@ class BlockParser {
     }
     stackIndex = stack.length - 1;
     return stackIndex;
-  }
-
-  apply(stack, stackIndex, reader, context) {
-    const lastNode = stack[stack.length - 1];
-    if (lastNode.type !== "PARAGRAPH") return stackIndex;
-    for (let rule of this.rules) {
-      if (rule.apply(lastNode, reader, context)) {
-        if (this.DEBUG_MODE) console.log("apply", lastNode.type, context.remains());
-        break;
-      }
-    }
-    return stackIndex;
-  }
-
-  continue(stack, stackIndex, reader, context) {
-    const lastNode = stack[stack.length - 1];
-    if (lastNode.type !== "PARAGRAPH") return stackIndex;
-    if (context.remains().trim() === "") return stackIndex;
-    const currNode = stack[stackIndex];
-    for (let rule of this.rules) {
-      reader.capture();
-      context.capture();
-      const newNode = rule.start(currNode, reader, context);
-      context.restore();
-      reader.restore();
-      if (newNode) return stackIndex;
-    }
-    return stack.length - 1;
   }
 
   fallback(stack, stackIndex, reader, context) {

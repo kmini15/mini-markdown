@@ -158,7 +158,7 @@
   height: auto;
   display: block;
   border-radius: 4px;
-  max-height: 24rem;
+  max-height: 20rem;
 }
 
 /* Tables */
@@ -214,7 +214,6 @@
 /* Grid */
 .mini-markdown .grid {
   flex: 1 1 0;
-  width: 100%;
   display: grid;
   margin: 1em 0;
   padding: 0;
@@ -246,7 +245,6 @@
   flex: 1 1 0;
   display: grid;
   grid-template-columns: repeat(var(--columns), 1fr);
-  /* object-fit: contain; */
   min-width: max-content;
 }
 
