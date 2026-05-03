@@ -40,7 +40,7 @@ class BlockParser {
       new ScrollRule(),
     ];
     this.maxDepth = 20;
-    this.DEBUG_MODE = true;
+    this.DEBUG_MODE = false;
   }
 
   parse(text) {

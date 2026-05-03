@@ -3,8 +3,8 @@ import { Node, BlockRule } from "../block-rule.js";
 class TableRule extends BlockRule {
   constructor() {
     super("TABLE");
-    this.pattern_row = /^[\s\S]+\|[\s\S]+$/;
-    this.pattern_delimiter = /^\|?[-:]+\|[-:]+/;
+    this.pattern_row = /^(\s*)[\s\S]+\|[\s\S]+/;
+    this.pattern_delimiter = /^(\s*)\|?[-:]+\|[-:]+/;
   }
 
   start(parent, reader, context) {
