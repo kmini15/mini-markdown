@@ -25,11 +25,17 @@ class HtmlRule extends BlockRule {
   start(parent, reader, context) {
     const parsed = context.remains().match(this.pattern);
     if (!parsed) return null;
-    context.advance(context.remains().length);
     let stack = [];
     let lines = [];
+    let isFirstLine = true;
     while (!reader.eof()) {
-      const line = reader.current();
+      let line;
+      if (isFirstLine) {
+        line = context.remains();
+        isFirstLine = false;
+      } else {
+        line = reader.current();
+      }
       const openTags = [...line.matchAll(/<([a-zA-Z][a-zA-Z0-9-]*)(\s[^>]*)?>/g)];
       const closeTags = [...line.matchAll(/<\/([a-zA-Z][a-zA-Z0-9-]*)>/g)];
       for (const m of openTags) {
@@ -56,6 +62,7 @@ class HtmlRule extends BlockRule {
     };
     const htmlNode = new Node(this.type);
     htmlNode.appendChild(textNode);
+    context.advance(context.remains().length);
     reader.retreat();
     return htmlNode;
   }
