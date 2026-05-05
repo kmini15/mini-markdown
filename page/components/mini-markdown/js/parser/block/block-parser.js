@@ -16,6 +16,8 @@ import { GridRule, GridItemRule } from "./rules/custom/grid.js";
 import { TableRule } from "./rules/extended/table.js";
 import { GridTableRule } from "./rules/custom/grid-table.js";
 import { ScrollRule } from "./rules/custom/scroll.js";
+import { JustifiedRow, JustifiedRowItem } from "./rules/custom/justified-row.js";
+import { JustifiedCol, JustifiedColItem } from "./rules/custom/justified-col.js";
 
 const textWidth = new TextWidth();
 
@@ -38,6 +40,10 @@ class BlockParser {
       new GridItemRule(),
       new GridTableRule(),
       new ScrollRule(),
+      new JustifiedRow(),
+      new JustifiedRowItem(),
+      new JustifiedCol(),
+      new JustifiedColItem(),
     ];
     this.maxDepth = 20;
     this.DEBUG_MODE = false;

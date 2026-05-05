@@ -36,16 +36,22 @@ class MiniMarkdown {
     return node;
   }
 
-  async renderHtml(node) {
+  renderHtml(node) {
     var text = this.htmlRenderer.render(node);
-    this.root.innerHTML = text;
-    await this.applyImageSizeVariables();
-    return this.root.innerHTML;
+    return text;
   }
 
-  async renderAst(node) {
+  renderAst(node) {
     var text = this.astRenderer.render(node);
     return text;
+  }
+
+  async applyJS() {
+    if (!this.root) return;
+    await this.waitImagesLoaded();
+    this.applyImageRatios();
+    this.applyJustifiedRowVariables();
+    this.applyJustifiedColVariables();
   }
 
   async loadCSS() {
@@ -78,14 +84,64 @@ class MiniMarkdown {
     return Promise.all(promises);
   }
 
-  async applyImageSizeVariables() {
+  applyImageRatios() {
     if (!this.root) return;
-    await this.waitImagesLoaded();
     this.root.querySelectorAll("img").forEach(img => {
-      const width = img.naturalWidth;
-      const height = img.naturalHeight;
-      if (!width || !height) return;
-      img.style.setProperty("--image-ratio", width / height);
+      const apply = () => {
+        const w = img.naturalWidth;
+        const h = img.naturalHeight;
+        if (!w || !h) return;
+        img.style.setProperty("--image-ratio", w / h);
+      };
+      // 1. 이미 로드된 경우
+      if (img.complete && img.naturalWidth > 0) {
+        apply();
+        return;
+      }
+      // 2. 앞으로 로드될 경우
+      img.addEventListener("load", apply, { once: true });
+      // 3. 실패 fallback (선택)
+      img.addEventListener("error", () => {
+        img.style.setProperty("--image-ratio", 1);
+      }, { once: true });
+    });
+  }
+
+  applyJustifiedRowVariables() {
+    if (!this.root) return;
+    this.root.querySelectorAll(".justified-row").forEach(row => {
+      const items = row.querySelectorAll(".justified-row-item");
+      const gap = parseFloat(getComputedStyle(row).getPropertyValue("--gap")) || 0;      
+      items.forEach(item => {
+        const width = item.offsetWidth;
+        const height = item.offsetHeight;
+        console.log("item size", width, height);
+        if (width > 0 && height > 0) {
+          item.style.setProperty("--item-ratio", width / height);
+          return;
+        } else {
+          item.style.setProperty("--item-ratio", 1);
+        }
+      })
+    });
+  }
+
+  applyJustifiedColVariables() {
+    if (!this.root) return;
+    this.root.querySelectorAll(".justified-col").forEach(col => {
+      const items = col.querySelectorAll(".justified-col-item");
+      const gap = parseFloat(getComputedStyle(col).getPropertyValue("--gap")) || 0;      
+      items.forEach(item => {
+        const width = item.offsetWidth;
+        const height = item.offsetHeight;
+        console.log("item size", width, height);
+        if (width > 0 && height > 0) {
+          item.style.setProperty("--item-ratio", width / height);
+          return;
+        } else {
+          item.style.setProperty("--item-ratio", 1);
+        }
+      })
     });
   }
 }

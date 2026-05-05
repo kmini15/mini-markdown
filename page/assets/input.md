@@ -202,10 +202,10 @@
 #### Escape Backticks
 
 <::>::::[2:8px]
-    [  ]    ```TEST`code`inline```  
-            ``escape `code` inline``
-    [  ]```TEST`code`inline```  
-        ``escape `code` inline``
+    [  ]    Test1: ```TEST`code`inline```  
+            Test2: ``escape `code` inline``
+    [  ]Test1: ```TEST`code`inline```  
+        Test2: ``escape `code` inline``
 
 #### Code Blocks
 
@@ -298,16 +298,16 @@
 ### Table
 
 <::>::::[1:8px]
-    [  ]    | Header1 | Header2 | Header3 |
-            |---------|:-------:|--------:|
-            | Cell1   | Cell2   | Cell3   |
-            | Cell1   | Cell2   | Cell3   |
-            | Cell1   | Cell2   | Cell3   |
-    [  ]| Header1 | Header2 | Header3 |
-        |---------|:-------:|--------:|
-        | Cell1   | Cell2   | Cell3   |
-        | Cell1   | Cell2   | Cell3   |
-        | Cell1   | Cell2   | Cell3   |
+    [  ]    | Header0 | Header1 | Header2 | Header3 |
+            |---------|:--------|:-------:|--------:|
+            | Cell0   | Cell1   | Cell2   | Cell3   |
+            | Cell0   | Cell1   | Cell2   | Cell3   |
+            | Cell0   | Cell1   | Cell2   | Cell3   |
+    [  ]| Header0 | Header1 | Header2 | Header3 |
+        |---------|:--------|:-------:|--------:|
+        | Cell0   | Cell1   | Cell2   | Cell3   |
+        | Cell0   | Cell1   | Cell2   | Cell3   |
+        | Cell0   | Cell1   | Cell2   | Cell3   |
 
 ---
 
@@ -535,3 +535,12 @@
 <::>    스크롤 테스트 스크롤 테스트 스크롤 테스트 스크롤 테스트 스크롤 테스트 스크롤 테스트 스크롤 테스트 스크롤 테스트
         스크롤 테스트 스크롤 테스트 스크롤 테스트 스크롤 테스트 스크롤 테스트 스크롤 테스트 스크롤 테스트 스크롤 테스트
         스크롤 테스트 스크롤 테스트 스크롤 테스트 스크롤 테스트 스크롤 테스트 스크롤 테스트 스크롤 테스트 스크롤 테스트
+
+---
+
+### Justified Row
+====[100%:8px]
+[  ]![](assets/test.jpg)
+[  ]![](assets/test_V.jpg)
+[  ]![](assets/test_H.jpg)
+[  ]![](assets/test.gif)

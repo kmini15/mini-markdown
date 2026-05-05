@@ -1,11 +1,9 @@
-/* .mini-markdown * {
-  box-shadow: 0 0 0 1px #ff0000;
-} */
-
-.mini-markdown {
-  all: unset;
-  display: block;
-  color-scheme: dark;
+.mini-markdown * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  /* Debug: Show element boundaries */
+  /* box-shadow: 0 0 0 1px #ff0000; */
 }
 
 .mini-markdown {
@@ -29,13 +27,21 @@
 }
 
 .mini-markdown {
+  display: block;
+  padding: 1em;
+}
+
+.mini-markdown {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
   font-size: 1.0rem;
   font-weight: 400;
   line-height: 1.5;
-  color: var(--color-fg-default);
+}
+
+.mini-markdown {
+  color-scheme: dark;
   background-color: var(--color-bg-default);
-  padding: 1em;
+  color: var(--color-fg-default);
 }
 
 /* Paragraph */
@@ -49,6 +55,7 @@
 
 /* Heading */
 .mini-markdown h1 {
+  display: block;
   font-size: 2.0rem;
   font-weight: 700;
   margin-bottom: 0.8rem;
@@ -56,30 +63,35 @@
 }
 
 .mini-markdown h2 {
+  display: block;
   font-size: 1.5rem;
   font-weight: 700;
   margin-bottom: 0.6rem;
 }
 
 .mini-markdown h3 {
+  display: block;
   font-size: 1.2rem;
   font-weight: 700;
   margin-bottom: 0.4rem;
 }
 
 .mini-markdown h4 {
+  display: block;
   font-size: 1.1rem;
   font-weight: 700;
   margin-bottom: 0.3rem;
 }
 
 .mini-markdown h5 {
+  display: block;
   font-size: 1.0rem;
   font-weight: 700;
   margin-bottom: 0.2rem;
 }
 
 .mini-markdown h6 {
+  display: block;
   font-size: 0.875rem;
   font-weight: 700;
   margin-bottom: 0.1rem;
@@ -88,13 +100,12 @@
 
 /* Blockquote */
 .mini-markdown blockquote {
-  flex-direction: column;
-  justify-content: flex-start;
-  background-color: var(--color-blockquote-bg);
-  color: var(--color-blockquote-fg);
+  display: block;
   border-left: 6px solid var(--color-blockquote-border);
   padding-left: 1rem;
   text-align: left;
+  background-color: var(--color-blockquote-bg);
+  color: var(--color-blockquote-fg);
 }
 
 .mini-markdown blockquote>blockquote {
@@ -110,29 +121,21 @@
 
 /* Code */
 .mini-markdown code {
+  display: inline-block;
   font-family: D2Coding, Menlo, Monaco, "Courier New", monospace;
-  background-color: var(--color-code-bg);
   font-size: 0.875rem;
+  background-color: var(--color-code-bg);
   color: var(--color-code-fg);
-  border-radius: 4px;
+  line-height: 1;
   padding: 0.12rem 0.24rem;
+  border-radius: 4px;
 }
 
 /* Code Block */
-.mini-markdown pre {
-  flex: 1 1 0;
-  background-color: var(--color-code-bg);
-  font-size: 0.875rem;
-  text-align: left;
-  padding: 0.4rem 0.8rem;
-  border-radius: 4px;
-  line-height: 1.2;
-}
-
 .mini-markdown pre>code {
-  all: unset;
-  font-family: D2Coding, Menlo, Monaco, "Courier New", monospace;
-  font-size: 0.8rem;
+  display: block;
+  line-height: 1.2;
+  padding: 0.4rem 0.4rem;
 }
 
 /* Horizontal Rule */
@@ -149,14 +152,20 @@
   font-size: 0.875rem;
 }
 
-/* Images */
+/* Image */
 .mini-markdown img {
-  flex: 1 1 0;
-  max-width: 100%;
-  height: auto;
   display: block;
+  max-width: 100%;
+  max-height: 16rem;
   border-radius: 4px;
-  max-height: 20rem;
+}
+
+/* Video */
+.mini-markdown video {
+  display: block;
+  max-width: 100%;
+  max-height: 16rem;
+  border-radius: 4px;
 }
 
 /* Tables */
@@ -211,31 +220,20 @@
 
 /* Grid */
 .mini-markdown .grid {
-  flex: 1 1 0;
   display: grid;
-  margin: 1em 0;
-  padding: 0;
-  gap: var(--gap, 8px);
+  margin: 1rem 0;
   grid-template-columns: repeat(var(--columns), 1fr);
+  place-content: stretch stretch;
+  gap: var(--gap, 0);
 }
 
 .mini-markdown .grid-item {
-  flex: 1 1 0;
-  display: flex;
-  flex-direction: column;
-  margin: 0;
-  padding: 0;
-  text-align: var(--align-text-h, left);
-  align-content: var(--align-text-v, center);
-  align-items: var(--align-item-h, stretch);
-  justify-content: var(--align-item-v, space-between);
-  font-size: 0.875rem;
+  display: block;
+  place-self: var(--align-item-v, stretch) var(--align-item-h, stretch);
 }
 
 .mini-markdown .grid-item>.grid {
-  flex: 0 0 0;
   margin: 0;
-  padding: 0;
 }
 
 /* Grid Table */
@@ -293,9 +291,31 @@
 
 /* Scroll (Horizontal Overflow) */
 .mini-markdown .scroll {
-  flex: 1 1 0;
-  display: flex;
+  display: block;
   overflow-x: auto;
   scrollbar-width: thin;
   border-radius: 4px;
+}
+
+/* Justified Row */
+.mini-markdown .justified-row {
+  display: flex;
+  flex-direction: row;
+  width: var(--width, 100%);
+  gap: var(--gap, 0);
+}
+
+.mini-markdown .justified-row-item {
+  display: block;
+  flex: var(--item-ratio, 1) var(--item-ratio, 1) 0;
+  aspect-ratio: var(--item-ratio, auto);
+  align-self: center;
+}
+
+.mini-markdown .justified-row-item * {
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
 }

@@ -85,15 +85,16 @@
       var text = await readFile("./assets/input.md");
       editor.value = text;
       const ast = mmd.parse(text);
-      const astText = await mmd.renderAst(ast);
-      const htmlText = await mmd.renderHtml(ast);
+      const astText = mmd.renderAst(ast);
+      const htmlText = mmd.renderHtml(ast);
       contentPreview.innerHTML = htmlText;
-      contentHtml.innerText = htmlText;
+      mam.resolveImageSources(contentPreview);
+      await mmd.applyJS();
+      contentHtml.innerText = contentPreview.innerHTML;
       contentAst.innerText = astText;
       mhl.highlight();
       mam.setTextMarkdown(text);
       mam.setTextHtml(contentPreview.innerHTML);
-      mam.resolveImageSources(contentPreview);
     }
 
     function debounce(fn, delay) {
@@ -109,15 +110,16 @@
     editor.addEventListener("input", debounce(async (e) => {
       const text = e.target.value;
       const ast = mmd.parse(text);
-      const astText = await mmd.renderAst(ast);
-      const htmlText = await mmd.renderHtml(ast);
+      const astText = mmd.renderAst(ast);
+      const htmlText = mmd.renderHtml(ast);
       contentPreview.innerHTML = htmlText;
-      contentHtml.innerText = htmlText;
+      mam.resolveImageSources(contentPreview);
+      await mmd.applyJS();
+      contentHtml.innerText = contentPreview.innerHTML;
       contentAst.innerText = astText;
       mhl.highlight();
       mam.setTextMarkdown(text);
       mam.setTextHtml(contentPreview.innerHTML);
-      mam.resolveImageSources(contentPreview);
     }, 200));
 
     init();

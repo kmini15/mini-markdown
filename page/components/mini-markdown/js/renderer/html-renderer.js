@@ -89,6 +89,20 @@ class HtmlRenderer {
         return `<div class="grid-table-cell grid-table-data ${row}" style="${style}">${text}</div>\n`;
       case "SCROLL":
         return `<div class="scroll">\n${text}</div>\n`;
+      case "JUSTIFIED_ROW":
+        var style = "";
+        style += `--width: ${node.fields.width};`;
+        style += `--gap: ${node.fields.gap};`;
+        return `<div class="justified-row" style="${style}">\n${text}</div>\n`;
+      case "JUSTIFIED_ROW_ITEM":
+        return `<div class="justified-row-item">\n${text}</div>\n`;
+      case "JUSTIFIED_COL":
+        var style = "";
+        style += `--height: ${node.fields.height};`;  
+        style += `--gap: ${node.fields.gap};`;
+        return `<div class="justified-col" style="${style}">\n${text}</div>\n`;
+      case "JUSTIFIED_COL_ITEM":
+        return `<div class="justified-col-item">\n${text}</div>\n`;
       case "PARAGRAPH":
         return `<p>${text}</p>\n`;
       // INLINE
@@ -158,11 +172,11 @@ class HtmlRenderer {
   alignItemHToFlexAlign(align) {
     switch (align) {
       case "left":
-        return "flex-start";
+        return "start";
       case "center":
         return "center";
       case "right":
-        return "flex-end";
+        return "end";
       default:
         return null;
     }
@@ -171,14 +185,14 @@ class HtmlRenderer {
   alignItemVToFlexAlign(align) {
     switch (align) {
       case "top":
-        return "flex-start";
+        return "start";
       case "middle":
         return "center";
       case "bottom":
-        return "flex-end";
+        return "end";
       default:
         return null;
-    } 
+    }
   }
 
   alignFieldsToFlexAlign(node) {
