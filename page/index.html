@@ -84,12 +84,10 @@
     async function init() {
       var text = await readFile("./assets/input.md");
       editor.value = text;
-      const ast = mmd.parse(text);
+      const ast = mmd.parseAst(text);
       const astText = mmd.renderAst(ast);
-      const htmlText = mmd.renderHtml(ast);
-      contentPreview.innerHTML = htmlText;
+      mmd.render(text);
       mam.resolveImageSources(contentPreview);
-      await mmd.applyJS();
       contentHtml.innerText = contentPreview.innerHTML;
       contentAst.innerText = astText;
       mhl.highlight();
@@ -109,12 +107,10 @@
 
     editor.addEventListener("input", debounce(async (e) => {
       const text = e.target.value;
-      const ast = mmd.parse(text);
+      const ast = mmd.parseAst(text);
       const astText = mmd.renderAst(ast);
-      const htmlText = mmd.renderHtml(ast);
-      contentPreview.innerHTML = htmlText;
+      mmd.render(text);
       mam.resolveImageSources(contentPreview);
-      await mmd.applyJS();
       contentHtml.innerText = contentPreview.innerHTML;
       contentAst.innerText = astText;
       mhl.highlight();

@@ -1,0 +1,28 @@
+.mini-markdown .justified-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  width: var(--width, 100%);
+  gap: var(--gap, 0);
+}
+
+.mini-markdown .justified-row .justified-row-item {
+  display: block;
+  flex: var(--item-ratio, auto) var(--item-ratio, auto) 0;
+}
+
+.mini-markdown .justified-row .justified-row-item * {
+  width: 100%;
+  height: auto;
+  max-width: none;
+  max-height: none;
+}
+
+.mini-markdown .justified-row .justified-row-item:has(img, video) {
+  align-self: flex-start;
+}
+
+.mini-markdown .justified-row .justified-row-item img,
+.mini-markdown .justified-row .justified-row-item video {
+  display: block;
+}

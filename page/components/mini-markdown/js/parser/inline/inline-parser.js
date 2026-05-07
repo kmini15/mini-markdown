@@ -37,7 +37,7 @@ class InlineParser {
 
   parse(text, references = {}) {
     this.references = references;
-    this.node = new Node("INLINE");
+    this.node = new Node("inline");
     this.text = text;
     this.pos = 0;
     this.parseInline();
@@ -62,7 +62,7 @@ class InlineParser {
       }
       // fallback
       if (!result) {
-        const node = new Node("TEXT");
+        const node = new Node("text");
         node.value = this.text[this.pos];
         this.node.appendChild(node);
         this.pos++;
@@ -86,13 +86,13 @@ class InlineParser {
     }
     const nextChar = this.text[this.pos + 1];
     if (nextChar === "\n") {
-      const node = new Node("HARD_BREAK");
+      const node = new Node("hard_break");
       node.value = nextChar;
       this.node.appendChild(node);
       this.pos += 2;
       return true;
     } else {
-      const node = new Node("TEXT");
+      const node = new Node("text");
       node.value = nextChar;
       this.node.appendChild(node);
       this.pos += 2;
@@ -103,13 +103,13 @@ class InlineParser {
   parseNewline() {
     let isHardBreak = false;
     const lastChild = this.node.lastChild;
-    if (lastChild && lastChild.type === "TEXT") {
+    if (lastChild && lastChild.type === "text") {
       if (lastChild.value.endsWith("  ")) {
         isHardBreak = true;
       }
       lastChild.value = lastChild.value.replace(this.patterns.finiSpace, "");
     }
-    const node = new Node(isHardBreak ? "HARD_BREAK" : "SOFT_BREAK");
+    const node = new Node(isHardBreak ? "hard_break" : "soft_break");
     this.node.appendChild(node);
     this.pos++;
     this.match(this.patterns.initSpace);
@@ -128,7 +128,7 @@ class InlineParser {
     while (closeTicks = this.match(this.patterns.backticksClose)) {
       if (closeTicks[0].length === openTicks[0].length) {
         const contentEnd = this.pos - closeTicks[0].length;
-        const node = new Node("CODE");
+        const node = new Node("code");
         node.value = this.text.slice(contentStart, contentEnd);
         this.node.appendChild(node);
         return true;
@@ -136,14 +136,14 @@ class InlineParser {
     }
     // fallback: Push TEXT node with the opening backticks.
     this.pos = contentStart;
-    const node = new Node("TEXT");
+    const node = new Node("text");
     node.value = openTicks[0];
     this.node.appendChild(node);
     return true;
   }
 
   parseBracketL() {
-    const node = new Node("TEXT");
+    const node = new Node("text");
     node.value = "[";
     this.pos++;
     this.node.appendChild(node);
@@ -154,7 +154,7 @@ class InlineParser {
   parseBracketR() {
     // No matching open bracket, treat as literal
     if (this.bracketStack.length === 0) {
-      const node = new Node("TEXT");
+      const node = new Node("text");
       node.value = "]";
       this.pos++;
       this.node.appendChild(node);
@@ -182,7 +182,7 @@ class InlineParser {
         }
     }
     // fallback
-    const node = new Node("TEXT");
+    const node = new Node("text");
     node.value = "]";
     this.node.appendChild(node);
     return true;
@@ -191,7 +191,7 @@ class InlineParser {
   parseBracketImage(openNode) {
     const content = this.match(this.patterns.image);
     if (!content) return false;
-    const imageNode = new Node("IMAGE");
+    const imageNode = new Node("image");
     imageNode.fields.src = content[1];
     imageNode.fields.title = content[3] ? content[3] : "";
     for (let curr = openNode.next; curr; curr = curr.next) {
@@ -205,7 +205,7 @@ class InlineParser {
   parseBracketLink(openNode) {
     const content = this.match(this.patterns.link);
     if (!content) return false;
-    const node = new Node("LINK");
+    const node = new Node("link");
     node.fields.href = content[1];
     node.fields.title = content[3] ? content[3] : "";
     for (let curr = openNode.next; curr; curr = curr.next) {
@@ -223,7 +223,7 @@ class InlineParser {
     const reference = this.references[label];
     if (!reference) return false;
     const { destination, title } = reference;
-    const node = new Node("LINK");
+    const node = new Node("link");
     node.fields.href = destination;
     node.fields.title = title;
     for (let curr = openNode.next; curr; curr = curr.next) {
@@ -236,7 +236,7 @@ class InlineParser {
 
   parseBang() {
     if (this.text[this.pos] === "!") {
-      const node = new Node("TEXT");
+      const node = new Node("text");
       node.value = "!";
       this.pos++;
       this.node.appendChild(node);
@@ -258,7 +258,7 @@ class InlineParser {
     const char_next = (pos_next < this.text.length) ? this.text[pos_next] : " ";
     open = !/\s/.test(char_next);
     close = !/\s/.test(char_prev);
-    const node = new Node("MARK");
+    const node = new Node("mark");
     node.value = markers[0];
     node.fields.marker = markers[0][0];
     node.fields.count = markers[0].length;
@@ -282,7 +282,7 @@ class InlineParser {
     const char_next = (pos_next < this.text.length) ? this.text[pos_next] : " ";
     open = !/\s/.test(char_next) && /\s|_|\*/.test(char_prev);
     close = !/\s/.test(char_prev) && /\s|_|\*/.test(char_next);
-    const node = new Node("MARK");
+    const node = new Node("mark");
     node.value = markers[0];
     node.fields.marker = markers[0][0];
     node.fields.count = markers[0].length;
@@ -296,10 +296,10 @@ class InlineParser {
   parseAutolink() {
     const autolink_url = this.match(this.patterns.autolink_url)
     if (autolink_url) {
-      const node = new Node("LINK");
+      const node = new Node("link");
       node.fields.href = autolink_url[1];
       node.fields.title = "";
-      const textNode = new Node("TEXT");
+      const textNode = new Node("text");
       textNode.value = autolink_url[1];
       node.appendChild(textNode);
       this.node.appendChild(node);
@@ -307,10 +307,10 @@ class InlineParser {
     }
     const autolink_email = this.match(this.patterns.autolink_email);
     if (autolink_email) {
-      const node = new Node("LINK");
+      const node = new Node("link");
       node.fields.href = "mailto:" + autolink_email[1];
       node.fields.title = "";
-      const textNode = new Node("TEXT");
+      const textNode = new Node("text");
       textNode.value = autolink_email[1];
       node.appendChild(textNode);
       this.node.appendChild(node);
@@ -322,7 +322,7 @@ class InlineParser {
   parseText() {
     const text = this.match(this.patterns.chunk);
     if (text) {
-      const node = new Node("TEXT");
+      const node = new Node("text");
       node.value = text[0];
       this.node.appendChild(node);
       return true;
@@ -331,11 +331,11 @@ class InlineParser {
   }
 
   processMarks(node) {
-    const markList = new Node("MARK_LIST");
+    const markList = new Node("mark_list");
     for (let child = node.firstChild; child; child = child.next) {
       const result = this.processMarks(child);
-      if (result.type === "MARK") {
-        const markNode = new Node("MARK_NODE");
+      if (result.type === "mark") {
+        const markNode = new Node("mark_node");
         markNode.fields.node = result;
         markList.appendChild(markNode);
       }
@@ -372,7 +372,7 @@ class InlineParser {
         }
         // convert the matched markers to BOLD or ITALIC nodes.
         if (openCount >= 2 && closeCount >= 2) {
-          const boldNode = new Node("BOLD");
+          const boldNode = new Node("bold");
           for (let curr = openNode.next; curr !== closeNode;) {
             let temp = curr.next;
             boldNode.appendChild(curr);
@@ -384,7 +384,7 @@ class InlineParser {
           closeNode.value = closeNode.value.slice(2);
           openNode.insertAfter(boldNode);
         } else if (openCount >= 1 && closeCount >= 1) {
-          const italicNode = new Node("ITALIC");
+          const italicNode = new Node("italic");
           for (let curr = openNode.next; curr !== closeNode;) {
             let temp = curr.next;
             italicNode.appendChild(curr);
@@ -408,9 +408,9 @@ class InlineParser {
         matched = true;
         break;
       }
-      // convert unmatched markers back to TEXT nodes
+      // convert unmatched markers back to text nodes
       if (!matched) {
-        const textNode = new Node("TEXT");
+        const textNode = new Node("text");
         textNode.value = openMarkNode.fields.node.value;
         openMarkNode.fields.node.insertBefore(textNode);
         openMarkNode.fields.node.unlink();
@@ -425,7 +425,7 @@ class InlineParser {
       this.processTexts(child);
     }
     for (let child = node.firstChild; child;) {
-      if (child.type === "TEXT" && child.next && child.next.type === "TEXT") {
+      if (child.type === "text" && child.next && child.next.type === "text") {
         child.value += child.next.value;
         child.next.unlink();
         continue;
