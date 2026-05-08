@@ -1,39 +1,47 @@
 import BlockParser from "./parser/block-parser.js";
-import InlineParser from "./parser/inline/inline-parser.js";
+import InlineParser from "./parser/inline-parser.js";
 import HtmlRenderer from "./renderer/html-renderer.js";
 import AstRenderer from "./renderer/ast-renderer.js";
 
-import Document from "./extensions/basic/document/index.js";
-import Heading from "./extensions/basic/heading/index.js";
-import SetextHeading from "./extensions/basic/setext-heading/index.js";
-import Paragraph from "./extensions/basic/paragraph/index.js";
-import HorizontalRule from "./extensions/basic/horizontal-rule/index.js";
-import Blockquote from "./extensions/basic/blockquote/index.js";
-import CodeBlock from "./extensions/basic/code-block/index.js";
-import List from "./extensions/basic/list/index.js";
-import LinkReference from "./extensions/basic/link-reference/index.js";
-import Html from "./extensions/basic/html/index.js";
-import Grid from "./extensions/custom/grid/index.js";
-import JustifiedRow from "./extensions/custom/justified-row/index.js";
+import Basic from "./extensions/basic/index.js";
+import Custom from "./extensions/custom/index.js";
 
 class MiniMarkdown {
   constructor(extensions = MiniMarkdown.defaultExtensions()) {
-    this.extensions = extensions;
-    this.blockParser = new BlockParser(
-      this.extensions.flatMap(ext => ext.blockRules ?? [])
-    );
-    this.inlineParser = new InlineParser();
-    const rendererMap = Object.fromEntries(
-      this.extensions.flatMap(ext => Object.entries(ext.renderers ?? {}))
-    );
-    console.log("HtmlRenderer map", rendererMap);
-    this.htmlRenderer = new HtmlRenderer(rendererMap);
-    this.astRenderer = new AstRenderer();
     this.root = null;
-    
+    this.extensions = extensions;
+    this.blockRules = this.extensions.flatMap(ext => ext.blockRules ?? []);
+    this.inlineRules = this.extensions.flatMap(ext => ext.inlineRules ?? []);
+    this.renderers = this.extensions.flatMap(ext => ext.renderers ?? []);
     this.behaviors = this.extensions.flatMap(ext => ext.behaviors ?? []);
-
     this.styles = this.extensions.flatMap(ext => ext.styles ?? []);
+
+    this.blockRules.sort(this.comparePriority.bind(this));
+    this.inlineRules.sort(this.comparePriority.bind(this));
+
+    this.blockParser = new BlockParser(this.blockRules.map(rule => rule.rule));
+    this.inlineParser = new InlineParser(this.inlineRules.map(rule => rule.rule));
+    this.htmlRenderer = new HtmlRenderer(this.renderers);
+    this.astRenderer = new AstRenderer();
+  }
+
+  static defaultExtensions() {
+    return [
+      Basic,
+      Custom,
+    ];
+  }
+
+  comparePriority(a, b) {
+    return (
+      a.priority.major - b.priority.major ||
+      a.priority.minor - b.priority.minor
+    );
+  }
+
+  async mount(root) {
+    this.root = root;
+    this.root.classList.add("mini-markdown");
     for (const style of this.styles) {
       const link = document.createElement("link");
       link.rel = "stylesheet";
@@ -42,44 +50,15 @@ class MiniMarkdown {
     }
   }
 
-  static defaultExtensions() {
-    return [
-      Document,
-      CodeBlock,
-      Blockquote,
-      List,
-      LinkReference,
-      Grid,
-      JustifiedRow,
-      Html,
-      Heading,
-      SetextHeading,
-      HorizontalRule,
-      Paragraph,
-    ];
-  }
-
-  async mount(root) {
-    this.root = root;
-    this.root.classList.add("mini-markdown");
-  }
-  
-  parseInline(node, references = {}) {
-    for (let child = node.firstChild; child; child = child.next) {
-      child = this.parseInline(child, references);
-    }
-    if (node.type === "text" && node.fields.inline) {
-      const inlineNode = this.inlineParser.parse(node.value, references);
-      node.insertAfter(inlineNode);
-      node.unlink();
-    }
-    return node;
-  }
-    
   parseAst(text) {
     var node = this.blockParser.parse(text);
-    node = this.parseInline(node);
+    var node = this.inlineParser.parse(node);
     return node;
+  }
+
+  renderAst(node) {
+    var text = this.astRenderer.render(node);
+    return text;
   }
 
   renderHtml(node) {
@@ -87,17 +66,12 @@ class MiniMarkdown {
     return text;
   }
 
-  renderAst(node) {
-    var text = this.astRenderer.render(node);
-    return text;
-  }
-  
   render(text) {
     for (const behavior of this.behaviors) {
       behavior.unmount(this.root);
     }
-    const ast = this.parseAst(text);
-    const html = this.renderHtml(ast);
+    const node = this.parseAst(text);
+    const html = this.renderHtml(node);
     this.root.innerHTML = html;
     for (const behavior of this.behaviors) {
       behavior.mount(this.root);

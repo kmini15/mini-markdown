@@ -77,7 +77,6 @@
     async function readFile(path) {
       const res = await fetch(path);
       const text = await res.text();
-      console.log(text);
       return text;
     }
 

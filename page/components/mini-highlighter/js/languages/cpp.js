@@ -117,7 +117,6 @@ class HighlighterLanguageCpp {
     this.output = "";
     this.pos = 0;
 
-    console.log(code);
     while (this.pos < code.length) {
       const rest = code.slice(this.pos);
       if (this.highlightLineComment(rest)) continue;

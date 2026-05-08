@@ -1,6 +1,5 @@
 import Node from "../core/node.js";
 
-
 class AstRenderer {
   render(node, indent = "") {
     let result = "[" + node.type + "]";

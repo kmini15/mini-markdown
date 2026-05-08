@@ -1,11 +1,12 @@
 import Node from "../core/node.js";
-import { DocumentRenderer } from "../extensions/basic/document/renderer.js";
-import { ParagraphRenderer } from "../extensions/basic/paragraph/renderer.js";
-import { HeadingRenderer } from "../extensions/basic/heading/renderer.js";
 
 class HtmlRenderer {
-  constructor(renderers = {}) {
+  constructor(renderers) {
     this.renderers = renderers;
+  }
+  
+  getRenderer(node) {
+    return this.renderers.find(renderer => renderer.type === node.type);
   }
 
   render(node) {
@@ -13,17 +14,10 @@ class HtmlRenderer {
     for (let child = node.firstChild; child; child = child.next) {
       text += this.render(child);
     }
-    // console.log("render", node.type, text);
-    const renderer = this.renderers[node.type];
+    const renderer = this.getRenderer(node);
     if (renderer) {
       return renderer.render(text, node);
     } else {
-      if (node.type === "soft_break") {
-        return "\n";
-      }
-      if (node.type === "image") {
-        return `<img src="${node.fields.src}" alt="${node.fields.alt}">`;
-      }
       return node.value || text;
     }
   }
