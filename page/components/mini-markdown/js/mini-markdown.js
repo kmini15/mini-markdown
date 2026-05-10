@@ -4,6 +4,7 @@ import HtmlRenderer from "./renderer/html-renderer.js";
 import AstRenderer from "./renderer/ast-renderer.js";
 
 import Basic from "./extensions/basic/index.js";
+import Extended from "./extensions/extended/index.js";
 import Custom from "./extensions/custom/index.js";
 
 class MiniMarkdown {
@@ -28,6 +29,7 @@ class MiniMarkdown {
   static defaultExtensions() {
     return [
       Basic,
+      Extended,
       Custom,
     ];
   }
