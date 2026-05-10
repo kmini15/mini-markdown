@@ -4,7 +4,6 @@ import NodeStack from "../core/node-stack.js";
 
 class BlockParser {
   constructor(rules) {
-    console.log(rules);
     this.rules = rules;
     this.maxDepth = 20;
     this.DEBUG_MODE = false;
