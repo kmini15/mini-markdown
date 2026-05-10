@@ -3,7 +3,7 @@ import Node from "../core/node.js";
 class AstRenderer {
   render(node, indent = "") {
     let result = "[" + node.type + "]";
-    if (node.value.length > 0) {
+    if (node.value && node.value.length > 0) {
       const text_value = node.value.replace(/(\r\n)|(\n)/g, "<br>");
       result += `("${text_value}")`;
     }

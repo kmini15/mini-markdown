@@ -184,8 +184,10 @@
 ### Code
 
 ::::[100%:8px:2]
-[  ]    This is a code span: `code`
-[  ]This is a code span: `code`
+[  ]    This is a code span: `code`\
+        This is a code span: ``code`code`code``
+[  ]This is a code span: `code`\
+    This is a code span: ``code`code`code``
 
 ---
 
@@ -316,6 +318,26 @@
     | Cell 5   | Cell 6   | Cell 7   | Cell 8   |
 
 ---
+
+### Fenced Code Block
+
+::::[100%:8px:2]
+[  ]    ```cpp
+        #include <iostream>
+        
+        int main(int argc, char* argv[]) {
+          std::cout << "Hello, Markdown!" << std::endl;
+          return 0;
+        }
+        ```
+[  ]```cpp
+    #include <iostream>
+    
+    int main(int argc, char* argv[]) {
+        std::cout << "Hello, Markdown!" << std::endl;
+        return 0;
+    }
+    ```
 
 ## Custom Syntax
 
