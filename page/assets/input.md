@@ -1,8 +1,54 @@
-# Markdown Test Page
+# Markdown Test Page {#markdown-test-page}
 
-## Basic Syntax
+## Table of Contents
 
-### Blockquote
+### [Basic Syntax](#basic-syntax)
+::::[100%:8px:2]
+[  ]- Block
+        - [Blockquote](#blockquote)
+        - [Code Block](#code-block)
+        - [List](#list)
+        - [Paragraph](#paragraph)
+        - [Headings-ATX](#headings-atx)
+        - [Headings-Setext](#headings-setext)
+        - [Horizontal Rule](#horizontal-rule)
+        - [HTML](#html)
+        - [Link Reference](#link-reference)
+[  ]- Inline
+        - [Hard Break](#hard-break)
+        - [Soft Break](#soft-break)
+        - [Escape](#escape)
+        - [Code](#code)
+        - [Image](#image)
+        - [Link](#link)
+        - [Link Citation](#link-citation)
+        - [Autolink-URL](#autolink-url)
+        - [Autolink-Email](#autolink-email)
+        - [Emphasis](#emphasis)
+
+### [Extended Syntax](#extended-syntax)
+::::[100%:8px:2]
+[  ]- Block
+        - [Fenced Code Block](#fenced-code-block)
+        - [Heading-ATX-ID](#heading-atx-id)
+        - [Table](#table)
+[  ]- Inline
+        - None
+        
+### [Custom Syntax](#custom-syntax)
+::::[100%:8px:2]
+[  ]- Block
+        - [Grid](#grid)
+        - [Grid Table](#grid-table)
+        - [Justified Row](#justified-row)
+[  ]- Inline
+        - [Image Style](#image-style)
+    
+---
+
+## Basic Syntax {#basic-syntax}
+
+### Blockquote {#blockquote}
 
 ::::[100%:8px:2]
 [  ]    > This is a blockquote.
@@ -18,7 +64,7 @@
     
 ---
 
-### Code Block
+### Code Block {#code-block}
 
     #include <iostream>
     
@@ -29,7 +75,7 @@
 
 ---
 
-### List
+### List {#list}
 
 ::::[100%:8px:2]
 [  ]    1. item1
@@ -53,7 +99,7 @@
 
 ---
 
-### Paragraph
+### Paragraph {#paragraph}
 
 ::::[100%:8px:2]
 [  ]    This is a paragraph. It can contain multiple sentences. 
@@ -63,7 +109,7 @@
     
 ---
 
-### Headings - ATX Style
+### Headings-ATX {#headings-atx}
 
 ::::[100%:8px:2]
 [  ]    # Heading Level 1
@@ -81,7 +127,7 @@
 
 ---
 
-### Headings - Setext Style
+### Headings-Setext {#headings-setext}
 
 ::::[100%:8px:2]
 [  ]    Heading Level 1
@@ -97,7 +143,7 @@
 
 ---
 
-### Horizontal Rule
+### Horizontal Rule {#horizontal-rule}
 ::::[100%:8px:2]
 [  ]    ---
         ***
@@ -106,7 +152,7 @@
     ***
     ___
     
-### HTML
+### HTML {#html}
 
 ::::[100%:8px:2]
 [  ]    <div>
@@ -132,7 +178,7 @@
 
 ---
 
-### Link Reference
+### Link Reference {#link-reference}
 
 ::::[100%:8px:2]
 [  ]    [Google][Google]
@@ -143,7 +189,7 @@
     [Google]: https://www.google.com 
 ---
 
-### Hard Break
+### Hard Break {#hard-break}
 
 ::::[100%:8px:2]
 [  ]    This is a line with a hard break.  
@@ -159,7 +205,7 @@
 
 ---
 
-### Soft Break
+### Soft Break {#soft-break}
 
 ::::[100%:8px:2]
 [  ]    This is a line with a soft break.
@@ -169,7 +215,7 @@
 
 ---
 
-### Escape
+### Escape {#escape}
 
 ::::[100%:8px:2]
 [  ]    This is a backslash: \\  
@@ -181,7 +227,7 @@
 
 ---
 
-### Code
+### Code {#code}
 
 ::::[100%:8px:2]
 [  ]    This is a code span: `code`\
@@ -191,15 +237,15 @@
 
 ---
 
-### Image
+### Image {#image}
 
 ::::[100%:8px:2]
-[  ]    ![Alt Text](assets/test.jpg)
-[  ]![Alt Text](assets/test.jpg)
+[  ]    ![IMAGE](assets/test.jpg)
+[  ]![IMAGE](assets/test.jpg)
 
 ---
 
-### Link
+### Link {#link}
 
 ::::[100%:8px:2]
 [  ]    [Google](https://www.google.com)
@@ -207,7 +253,7 @@
 
 ---
 
-### Link Citation
+### Link Citation {#link-citation}
 
 ::::[100%:8px:2]
 [  ]    [Google][Google]
@@ -219,7 +265,7 @@
 
 ---
 
-### Autolink-URL
+### Autolink-URL {#autolink-url}
 
 ::::[100%:8px:2]
 [  ]    <https://www.google.com>
@@ -227,7 +273,7 @@
 
 ---
 
-### Autolink-Email
+### Autolink-Email {#autolink-email}
 
 ::::[100%:8px:2]
 [  ]    <user@example.com>
@@ -235,7 +281,7 @@
 
 ---
 
-### Emphasis
+### Emphasis {#emphasis}
 
 ::::[100%:8px:2]
 [  ]    **Bold *bold&italic* Bold**
@@ -303,23 +349,9 @@
 
 ---
 
-## Extended Syntax
+## Extended Syntax {#extended-syntax}
 
-### Table
-
-::::[100%:8px:1]
-[  ]    | Header 1 | Header 2 | Header 3 | Header 4 |
-        |----------|:---------|:--------:|---------:|
-        | Cell 1   | Cell 2   | Cell 3   | Cell 4   |
-        | Cell 5   | Cell 6   | Cell 7   | Cell 8   |
-[  ]| Header 1 | Header 2 | Header 3 | Header 4 |
-    |----------|:---------|:--------:|---------:|
-    | Cell 1   | Cell 2   | Cell 3   | Cell 4   |
-    | Cell 5   | Cell 6   | Cell 7   | Cell 8   |
-
----
-
-### Fenced Code Block
+### Fenced Code Block {#fenced-code-block}
 
 ::::[100%:8px:2]
 [  ]    ```cpp
@@ -339,43 +371,91 @@
     }
     ```
 
-## Custom Syntax
+---
 
-### Grid
+### Heading-ATX-ID {#heading-atx-id}
+
+::::[100%:8px:2]
+[  ]    # Heading Level 1 {#heading-level-1}
+        ## Heading Level 2 {#heading-level-2}
+        ### Heading Level 3 {#heading-level-3}
+        #### Heading Level 4 {#heading-level-4}
+        ##### Heading Level 5 {#heading-level-5}
+        ###### Heading Level 6 {#heading-level-6}
+        
+        [Heading Level 1](#heading-level-1)\
+        [Heading Level 2](#heading-level-2)\
+        [Heading Level 3](#heading-level-3)\
+        [Heading Level 4](#heading-level-4)\
+        [Heading Level 5](#heading-level-5)\
+        [Heading Level 6](#heading-level-6)\
+[  ]# Heading Level 1 {#heading-level-1}
+    ## Heading Level 2 {#heading-level-2}
+    ### Heading Level 3 {#heading-level-3}
+    #### Heading Level 4 {#heading-level-4}
+    ##### Heading Level 5 {#heading-level-5}
+    ###### Heading Level 6 {#heading-level-6}
+    
+    [Heading Level 1](#heading-level-1)\
+    [Heading Level 2](#heading-level-2)\
+    [Heading Level 3](#heading-level-3)\
+    [Heading Level 4](#heading-level-4)\
+    [Heading Level 5](#heading-level-5)\
+    [Heading Level 6](#heading-level-6)\
+
+---
+
+### Table {#table}
+
+::::[100%:8px:1]
+[  ]    | Header 1 | Header 2 | Header 3 | Header 4 |
+        |----------|:---------|:--------:|---------:|
+        | Cell 1   | Cell 2   | Cell 3   | Cell 4   |
+        | Cell 5   | Cell 6   | Cell 7   | Cell 8   |
+[  ]| Header 1 | Header 2 | Header 3 | Header 4 |
+    |----------|:---------|:--------:|---------:|
+    | Cell 1   | Cell 2   | Cell 3   | Cell 4   |
+    | Cell 5   | Cell 6   | Cell 7   | Cell 8   |
+
+---
+
+## Custom Syntax {#custom-syntax}
+
+### Grid {#grid}
 
 #### Columns
 
 ::::[100%:8px:2]
 [  ]    ::::[100%:8px:3]
-        [  ] ![](assets/test.jpg)
-        [  ] ![](assets/test.jpg)
-        [  ] ![](assets/test.jpg)
-        [  ] ![](assets/test.jpg)
-        [  ] ![](assets/test.jpg)
-        [  ] ![](assets/test.jpg)
+        [  ] ![IMAGE](assets/test.jpg)
+        [  ] ![IMAGE](assets/test.jpg)
+        [  ] ![IMAGE](assets/test.jpg)
+        [  ] ![IMAGE](assets/test.jpg)
+        [  ] ![IMAGE](assets/test.jpg)
+        [  ] ![IMAGE](assets/test.jpg)
 [' ]::::[100%:8px:3]
-    [  ] ![](assets/test.jpg)
-    [  ] ![](assets/test.jpg)
-    [  ] ![](assets/test.jpg)
-    [  ] ![](assets/test.jpg)
-    [  ] ![](assets/test.jpg)
-    [  ] ![](assets/test.jpg)
+    [  ] ![IMAGE](assets/test.jpg)
+    [  ] ![IMAGE](assets/test.jpg)
+    [  ] ![IMAGE](assets/test.jpg)
+    [  ] ![IMAGE](assets/test.jpg)
+    [  ] ![IMAGE](assets/test.jpg)
+    [  ] ![IMAGE](assets/test.jpg)
 
 ::::[100%:8px:2]
 [  ]    ::::[100%:8px:3 2 1]
-        [  ] ![](assets/test.jpg)
-        [  ] ![](assets/test.jpg)
-        [  ] ![](assets/test.jpg)
-        [  ] ![](assets/test.jpg)
-        [  ] ![](assets/test.jpg)
-        [  ] ![](assets/test.jpg)
+        [  ] ![IMAGE](assets/test.jpg)
+        [  ] ![IMAGE](assets/test.jpg)
+        [  ] ![IMAGE](assets/test.jpg)
+        [  ] ![IMAGE](assets/test.jpg)
+        [  ] ![IMAGE](assets/test.jpg)
+        [  ] ![IMAGE](assets/test.jpg)
 [' ]::::[100%:8px:3 2 1]
-    [  ] ![](assets/test.jpg)
-    [  ] ![](assets/test.jpg)
-    [  ] ![](assets/test.jpg)
-    [  ] ![](assets/test.jpg)
-    [  ] ![](assets/test.jpg)
-    [  ] ![](assets/test.jpg)
+    [  ] ![IMAGE](assets/test.jpg)
+    [  ] ![IMAGE](assets/test.jpg)
+    [  ] ![IMAGE](assets/test.jpg)
+    [  ] ![IMAGE](assets/test.jpg)
+    [  ] ![IMAGE](assets/test.jpg)
+    [  ] ![IMAGE](assets/test.jpg)
 
 #### Alignment
 
@@ -402,218 +482,135 @@
     [ .] Bottom Right
     
 [  ]    ::::[100%:8px:3]{height: 24rem;}
-        [' ] ![](assets/test.jpg){width: 50%}
-        [''] ![](assets/test.jpg){width: 50%}
-        [ '] ![](assets/test.jpg){width: 50%}
-        [: ] ![](assets/test.jpg){width: 50%}
-        [::] ![](assets/test.jpg){width: 50%}
-        [ :] ![](assets/test.jpg){width: 50%}
-        [. ] ![](assets/test.jpg){width: 50%}
-        [..] ![](assets/test.jpg){width: 50%}
-        [ .] ![](assets/test.jpg){width: 50%}
+        [' ] ![IMAGE](assets/test.jpg){width: 50%}
+        [''] ![IMAGE](assets/test.jpg){width: 50%}
+        [ '] ![IMAGE](assets/test.jpg){width: 50%}
+        [: ] ![IMAGE](assets/test.jpg){width: 50%}
+        [::] ![IMAGE](assets/test.jpg){width: 50%}
+        [ :] ![IMAGE](assets/test.jpg){width: 50%}
+        [. ] ![IMAGE](assets/test.jpg){width: 50%}
+        [..] ![IMAGE](assets/test.jpg){width: 50%}
+        [ .] ![IMAGE](assets/test.jpg){width: 50%}
 [' ]::::[100%:8px:3]{height: 24rem;}
-    [' ] ![](assets/test.jpg){width: 50%}
-    [''] ![](assets/test.jpg){width: 50%}
-    [ '] ![](assets/test.jpg){width: 50%}
-    [: ] ![](assets/test.jpg){width: 50%}
-    [::] ![](assets/test.jpg){width: 50%}
-    [ :] ![](assets/test.jpg){width: 50%}
-    [. ] ![](assets/test.jpg){width: 50%}
-    [..] ![](assets/test.jpg){width: 50%}
-    [ .] ![](assets/test.jpg){width: 50%}
+    [' ] ![IMAGE](assets/test.jpg){width: 50%}
+    [''] ![IMAGE](assets/test.jpg){width: 50%}
+    [ '] ![IMAGE](assets/test.jpg){width: 50%}
+    [: ] ![IMAGE](assets/test.jpg){width: 50%}
+    [::] ![IMAGE](assets/test.jpg){width: 50%}
+    [ :] ![IMAGE](assets/test.jpg){width: 50%}
+    [. ] ![IMAGE](assets/test.jpg){width: 50%}
+    [..] ![IMAGE](assets/test.jpg){width: 50%}
+    [ .] ![IMAGE](assets/test.jpg){width: 50%}
     
 #### Mosaic
 
 ::::[100%:8px:2]
 [  ]    ::::[100%:4px:10]
-        [  ]![](assets/test.jpg)
+        [  ]![IMAGE](assets/test.jpg)
         [  ]
         [  ]
         [  ]
-        [  ]![](assets/test.gif)
+        [  ]![IMAGE](assets/test.gif)
         [  ]
-        [  ]![](assets/test.jpg)
-        [  ]![](assets/test.gif)
-        [  ]![](assets/test.jpg)
+        [  ]![IMAGE](assets/test.jpg)
+        [  ]![IMAGE](assets/test.gif)
+        [  ]![IMAGE](assets/test.jpg)
         [  ]
-        [  ]![](assets/test.gif)
-        [  ]![](assets/test.jpg)
+        [  ]![IMAGE](assets/test.gif)
+        [  ]![IMAGE](assets/test.jpg)
         [  ]
-        [  ]![](assets/test.gif)
-        [  ]![](assets/test.jpg)
+        [  ]![IMAGE](assets/test.gif)
+        [  ]![IMAGE](assets/test.jpg)
         [  ]
-        [  ]![](assets/test.gif)
-        [  ]
-        [  ]
-        [  ]![](assets/test.jpg)
-        [  ]![](assets/test.gif)
-        [  ]
-        [  ]![](assets/test.jpg)
-        [  ]
-        [  ]![](assets/test.gif)
-        [  ]
-        [  ]![](assets/test.jpg)
-        [  ]![](assets/test.gif)
-        [  ]![](assets/test.jpg)
-        [  ]
-        [  ]![](assets/test.gif)
-        [  ]
-        [  ]![](assets/test.jpg)
-        [  ]
-        [  ]![](assets/test.gif)
-        [  ]
-        [  ]![](assets/test.jpg)
+        [  ]![IMAGE](assets/test.gif)
         [  ]
         [  ]
-        [  ]![](assets/test.gif)
-        [  ]![](assets/test.jpg)
+        [  ]![IMAGE](assets/test.jpg)
+        [  ]![IMAGE](assets/test.gif)
         [  ]
-        [  ]![](assets/test.gif)
+        [  ]![IMAGE](assets/test.jpg)
         [  ]
-        [  ]![](assets/test.jpg)
+        [  ]![IMAGE](assets/test.gif)
         [  ]
-        [  ]![](assets/test.gif)
+        [  ]![IMAGE](assets/test.jpg)
+        [  ]![IMAGE](assets/test.gif)
+        [  ]![IMAGE](assets/test.jpg)
+        [  ]
+        [  ]![IMAGE](assets/test.gif)
+        [  ]
+        [  ]![IMAGE](assets/test.jpg)
+        [  ]
+        [  ]![IMAGE](assets/test.gif)
+        [  ]
+        [  ]![IMAGE](assets/test.jpg)
         [  ]
         [  ]
-        [  ]![](assets/test.jpg)
+        [  ]![IMAGE](assets/test.gif)
+        [  ]![IMAGE](assets/test.jpg)
+        [  ]
+        [  ]![IMAGE](assets/test.gif)
+        [  ]
+        [  ]![IMAGE](assets/test.jpg)
+        [  ]
+        [  ]![IMAGE](assets/test.gif)
+        [  ]
+        [  ]
+        [  ]![IMAGE](assets/test.jpg)
 [' ]::::[100%:4px:10]
-    [  ]![](assets/test.jpg)
+    [  ]![IMAGE](assets/test.jpg)
     [  ]
     [  ]
     [  ]
-    [  ]![](assets/test.gif)
+    [  ]![IMAGE](assets/test.gif)
     [  ]
-    [  ]![](assets/test.jpg)
-    [  ]![](assets/test.gif)
-    [  ]![](assets/test.jpg)
+    [  ]![IMAGE](assets/test.jpg)
+    [  ]![IMAGE](assets/test.gif)
+    [  ]![IMAGE](assets/test.jpg)
     [  ]
-    [  ]![](assets/test.gif)
-    [  ]![](assets/test.jpg)
+    [  ]![IMAGE](assets/test.gif)
+    [  ]![IMAGE](assets/test.jpg)
     [  ]
-    [  ]![](assets/test.gif)
-    [  ]![](assets/test.jpg)
+    [  ]![IMAGE](assets/test.gif)
+    [  ]![IMAGE](assets/test.jpg)
     [  ]
-    [  ]![](assets/test.gif)
-    [  ]
-    [  ]
-    [  ]![](assets/test.jpg)
-    [  ]![](assets/test.gif)
-    [  ]
-    [  ]![](assets/test.jpg)
-    [  ]
-    [  ]![](assets/test.gif)
-    [  ]
-    [  ]![](assets/test.jpg)
-    [  ]![](assets/test.gif)
-    [  ]![](assets/test.jpg)
-    [  ]
-    [  ]![](assets/test.gif)
-    [  ]
-    [  ]![](assets/test.jpg)
-    [  ]
-    [  ]![](assets/test.gif)
-    [  ]
-    [  ]![](assets/test.jpg)
+    [  ]![IMAGE](assets/test.gif)
     [  ]
     [  ]
-    [  ]![](assets/test.gif)
-    [  ]![](assets/test.jpg)
+    [  ]![IMAGE](assets/test.jpg)
+    [  ]![IMAGE](assets/test.gif)
     [  ]
-    [  ]![](assets/test.gif)
+    [  ]![IMAGE](assets/test.jpg)
     [  ]
-    [  ]![](assets/test.jpg)
+    [  ]![IMAGE](assets/test.gif)
     [  ]
-    [  ]![](assets/test.gif)
+    [  ]![IMAGE](assets/test.jpg)
+    [  ]![IMAGE](assets/test.gif)
+    [  ]![IMAGE](assets/test.jpg)
+    [  ]
+    [  ]![IMAGE](assets/test.gif)
+    [  ]
+    [  ]![IMAGE](assets/test.jpg)
+    [  ]
+    [  ]![IMAGE](assets/test.gif)
+    [  ]
+    [  ]![IMAGE](assets/test.jpg)
     [  ]
     [  ]
-    [  ]![](assets/test.jpg)
+    [  ]![IMAGE](assets/test.gif)
+    [  ]![IMAGE](assets/test.jpg)
+    [  ]
+    [  ]![IMAGE](assets/test.gif)
+    [  ]
+    [  ]![IMAGE](assets/test.jpg)
+    [  ]
+    [  ]![IMAGE](assets/test.gif)
+    [  ]
+    [  ]
+    [  ]![IMAGE](assets/test.jpg)
     
 ---
 
-### Justified Row
-
-::::[100%:8px:2]
-[  ]    ====[100%:8px]
-        [  ]![](assets/test.jpg)
-        [  ]![](assets/test_H.jpg)
-        [  ]![](assets/test_V.jpg)
-        [  ]![](assets/test.gif)
-[' ]====[100%:8px]
-    [  ]![](assets/test.jpg)
-    [  ]![](assets/test_H.jpg)
-    [  ]![](assets/test_V.jpg)
-    [  ]![](assets/test.gif)
-
----
-
-### Justified Row with Grid
-
-#### Justified Gallery
-::::[100%:8px:2]
-[  ]    ::::[100%:8px:1]
-        [  ]====[100%:8px]
-            [  ]![](assets/test.jpg)
-            [  ]![](assets/test_H.jpg)
-            [  ]![](assets/test_V.jpg)
-            [  ]![](assets/test.gif)
-        [  ]====[100%:8px]
-            [  ]![](assets/test_H.jpg)
-            [  ]![](assets/test.jpg)
-            [  ]![](assets/test.gif)
-        [  ]====[100%:8px]
-            [  ]![](assets/test.gif)
-            [  ]![](assets/test_H.jpg)
-            [  ]![](assets/test_V.jpg)
-[' ]::::[100%:8px:1]
-    [  ]====[100%:8px]
-        [  ]![](assets/test.jpg)
-        [  ]![](assets/test_H.jpg)
-        [  ]![](assets/test_V.jpg)
-        [  ]![](assets/test.gif)
-    [  ]====[100%:8px]
-        [  ]![](assets/test_H.jpg)
-        [  ]![](assets/test.jpg)
-        [  ]![](assets/test.gif)
-    [  ]====[100%:8px]
-        [  ]![](assets/test.gif)
-        [  ]![](assets/test_H.jpg)
-        [  ]![](assets/test_V.jpg)
-
-#### Aligned Justified Gallery
-
-::::[100%:8px:2]
-[  ]    ::::[100%:8px:1]
-        [: ]====[80%:8px]
-            [  ]![](assets/test.jpg)
-            [  ]![](assets/test_H.jpg)
-            [  ]![](assets/test_V.jpg)
-            [  ]![](assets/test.gif)
-        [ :]====[80%:8px]
-            [  ]![](assets/test_H.jpg)
-            [  ]![](assets/test.jpg)
-            [  ]![](assets/test.gif)
-        [::]====[80%:8px]
-            [  ]![](assets/test.gif)
-            [  ]![](assets/test_H.jpg)
-            [  ]![](assets/test_V.jpg)
-[' ]::::[100%:8px:1]
-    [: ]====[80%:8px]
-        [  ]![](assets/test.jpg)
-        [  ]![](assets/test_H.jpg)
-        [  ]![](assets/test_V.jpg)
-        [  ]![](assets/test.gif)
-    [ :]====[80%:8px]
-        [  ]![](assets/test_H.jpg)
-        [  ]![](assets/test.jpg)
-        [  ]![](assets/test.gif)
-    [::]====[80%:8px]
-        [  ]![](assets/test.gif)
-        [  ]![](assets/test_H.jpg)
-        [  ]![](assets/test_V.jpg)
-
----
-
-### Grid Table
+### Grid Table {#grid-table}
 
 ::::[100%:8px:1]
 [  ]    +-------+-------+-------+-------+-------+-------+--------+ 
@@ -658,3 +655,96 @@
     |-------+-------+-------|   Header              |--------|
     |       |  Merged Cell  |       Cell            |        |
     +-------+---------------+:=====================:+--------+
+
+---
+
+### Justified Row
+
+::::[100%:8px:2]
+[  ]    ====[100%:8px]
+        [  ]![IMAGE](assets/test.jpg)
+        [  ]![IMAGE](assets/test_H.jpg)
+        [  ]![IMAGE](assets/test_V.jpg)
+        [  ]![IMAGE](assets/test.gif)
+[' ]====[100%:8px]
+    [  ]![IMAGE](assets/test.jpg)
+    [  ]![IMAGE](assets/test_H.jpg)
+    [  ]![IMAGE](assets/test_V.jpg)
+    [  ]![IMAGE](assets/test.gif)
+
+---
+
+#### Justified Row with Grid
+
+#### Justified Gallery
+::::[100%:8px:2]
+[  ]    ::::[100%:8px:1]
+        [  ]====[100%:8px]
+            [  ]![IMAGE](assets/test.jpg)
+            [  ]![IMAGE](assets/test_H.jpg)
+            [  ]![IMAGE](assets/test_V.jpg)
+            [  ]![IMAGE](assets/test.gif)
+        [  ]====[100%:8px]
+            [  ]![IMAGE](assets/test_H.jpg)
+            [  ]![IMAGE](assets/test.jpg)
+            [  ]![IMAGE](assets/test.gif)
+        [  ]====[100%:8px]
+            [  ]![IMAGE](assets/test.gif)
+            [  ]![IMAGE](assets/test_H.jpg)
+            [  ]![IMAGE](assets/test_V.jpg)
+[' ]::::[100%:8px:1]
+    [  ]====[100%:8px]
+        [  ]![IMAGE](assets/test.jpg)
+        [  ]![IMAGE](assets/test_H.jpg)
+        [  ]![IMAGE](assets/test_V.jpg)
+        [  ]![IMAGE](assets/test.gif)
+    [  ]====[100%:8px]
+        [  ]![IMAGE](assets/test_H.jpg)
+        [  ]![IMAGE](assets/test.jpg)
+        [  ]![IMAGE](assets/test.gif)
+    [  ]====[100%:8px]
+        [  ]![IMAGE](assets/test.gif)
+        [  ]![IMAGE](assets/test_H.jpg)
+        [  ]![IMAGE](assets/test_V.jpg)
+
+#### Aligned Justified Gallery
+
+::::[100%:8px:2]
+[  ]    ::::[100%:8px:1]
+        [: ]====[80%:8px]
+            [  ]![IMAGE](assets/test.jpg)
+            [  ]![IMAGE](assets/test_H.jpg)
+            [  ]![IMAGE](assets/test_V.jpg)
+            [  ]![IMAGE](assets/test.gif)
+        [ :]====[80%:8px]
+            [  ]![IMAGE](assets/test_H.jpg)
+            [  ]![IMAGE](assets/test.jpg)
+            [  ]![IMAGE](assets/test.gif)
+        [::]====[80%:8px]
+            [  ]![IMAGE](assets/test.gif)
+            [  ]![IMAGE](assets/test_H.jpg)
+            [  ]![IMAGE](assets/test_V.jpg)
+[' ]::::[100%:8px:1]
+    [: ]====[80%:8px]
+        [  ]![IMAGE](assets/test.jpg)
+        [  ]![IMAGE](assets/test_H.jpg)
+        [  ]![IMAGE](assets/test_V.jpg)
+        [  ]![IMAGE](assets/test.gif)
+    [ :]====[80%:8px]
+        [  ]![IMAGE](assets/test_H.jpg)
+        [  ]![IMAGE](assets/test.jpg)
+        [  ]![IMAGE](assets/test.gif)
+    [::]====[80%:8px]
+        [  ]![IMAGE](assets/test.gif)
+        [  ]![IMAGE](assets/test_H.jpg)
+        [  ]![IMAGE](assets/test_V.jpg)
+
+---
+
+### Image Style {#image-style}
+
+::::[100%:8px:2]
+[  ]    ![IMAGE](assets/test.jpg){width: 50%}
+[  ]![IMAGE](assets/test.jpg){width: 50%}
+
+---

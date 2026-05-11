@@ -11,8 +11,12 @@ export default {
     ...Grid.blockRules,
     ...GridTable.blockRules,
     ...JustifiedRow.blockRules,
+    ...ImageStyle.blockRules,
   ],
   inlineRules: [
+    ...Grid.inlineRules,
+    ...GridTable.inlineRules,
+    ...JustifiedRow.inlineRules,
     ...ImageStyle.inlineRules,
   ],
   renderers: [

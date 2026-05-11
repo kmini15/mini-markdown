@@ -1,28 +1,34 @@
-import Table from "./block/table/index.js";
 import FencedCodeBlock from "./block/fenced-code-block/index.js";
+import HeadingAtxId from "./block/heading-atx-id/index.js";
+import Table from "./block/table/index.js";
 
 const name = "extended";
 
 export default {
   name: name,
   blockRules: [
-    ...Table.blockRules,
     ...FencedCodeBlock.blockRules,
+    ...HeadingAtxId.blockRules,
+    ...Table.blockRules,
   ],
   inlineRules: [
-    ...Table.inlineRules,
     ...FencedCodeBlock.inlineRules,
+    ...HeadingAtxId.inlineRules,
+    ...Table.inlineRules,
   ],
   renderers: [
-    ...Table.renderers,
     ...FencedCodeBlock.renderers,
+    ...HeadingAtxId.renderers,
+    ...Table.renderers,
   ],
   behaviors: [
-    ...Table.behaviors,
     ...FencedCodeBlock.behaviors,
+    ...HeadingAtxId.behaviors,
+    ...Table.behaviors,
   ],
   styles: [
-    ...Table.styles,
     ...FencedCodeBlock.styles,
+    ...HeadingAtxId.styles,
+    ...Table.styles,
   ],
 };
