@@ -38,6 +38,7 @@
 ### [Custom Syntax](#custom-syntax)
 ::::[100%:8px:2]
 [  ]- Block
+        - [Details](#details)
         - [Grid](#grid)
         - [Grid Table](#grid-table)
         - [Justified Row](#justified-row)
@@ -420,6 +421,36 @@
 ---
 
 ## Custom Syntax {#custom-syntax}
+
+### Details {#details}
+
+#### Default Closed
+::::[100%:8px:2]
+[  ]    <..>[Summary]
+            - item1
+            - item2
+            > Blockquote
+                Code Block
+[  ]<..>[Summary]
+        - item1
+        - item2
+        > Blockquote
+            Code Block
+
+#### Default Open
+::::[100%:8px:2]
+[  ]    <''>[Summary]
+            - item1
+            - item2
+            > Blockquote
+                Code Block
+[  ]<''>[Summary]
+        - item1
+        - item2
+        > Blockquote
+            Code Block
+
+---
 
 ### Grid {#grid}
 
