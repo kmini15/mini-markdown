@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mini Markdown Test</title>
+</head>
+<body>
+    <div id="markdown-output"></div>
+    <script type="module">
+        import MiniMarkdown from "./index.js";
+        const mmd = new MiniMarkdown();
+        const mmdRoot = document.getElementById("markdown-output");
+        mmd.mount(mmdRoot);
+        mmd.style();
+        const response = await fetch("./index.md");
+        const markdown = await response.text();
+        mmd.render(markdown);
+    </script>
+</body>
+</html>

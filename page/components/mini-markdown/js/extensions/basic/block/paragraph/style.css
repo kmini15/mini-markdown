@@ -1,7 +1,0 @@
-.mini-markdown p.paragraph {
-  font-size: 0.875rem;
-}
-
-.mini-markdown p.paragraph + p.paragraph {
-  margin-top: 0.875rem;
-}

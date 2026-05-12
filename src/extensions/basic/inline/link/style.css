@@ -1,0 +1,4 @@
+.mini-markdown a.link {
+  color: var(--color-link, rgb(120, 180, 240));
+  text-decoration: none;
+}
