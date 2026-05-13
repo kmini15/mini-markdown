@@ -1,13 +1,13 @@
 .mini-markdown div.grid-table {
   display: grid;
   grid-template-columns: repeat(var(--columns, 1), 1fr);
-  gap: 4px;
+  gap: var(--mmd-gap-xs);
 }
 
 .mini-markdown div.grid-table > div {
   grid-column: span var(--col-span, 1);
   grid-row: span var(--row-span, 1);
-  padding: 8px;
+  padding: var(--mmd-spacing-sm);
 }
 
 .mini-markdown div.grid-table > div.grid-table-cell {
@@ -17,11 +17,13 @@
 }
 
 .mini-markdown div.grid-table > div.grid-table-head {
-  font-weight: bold;
-  background-color: var(--color-grid-table-head-bg, rgb(20, 20, 20));
+  font-weight: var(--mmd-font-weight-bold);
+  background-color: var(--mmd-color-table-header-background);
+  color: var(--mmd-color-table-header-foreground);
 }
 
 .mini-markdown div.grid-table > div.grid-table-data {
-  font-weight: normal;
-  background-color: var(--color-grid-table-data-bg, rgb(40, 40, 40));
+  font-weight: var(--mmd-font-weight-normal);
+  background-color: var(--mmd-color-table-data-background);
+  color: var(--mmd-color-table-data-foreground);
 }

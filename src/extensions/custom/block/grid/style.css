@@ -3,7 +3,7 @@
   grid-template-columns: var(--columns, 1fr);
   width: var(--width, 100%);
   gap: var(--gap, 0);
-  margin: 1rem 0;
+  margin: var(--mmd-spacing-md) 0;
 }
 
 .mini-markdown div.grid-item {
@@ -12,12 +12,12 @@
   text-align: var(--align-h, left);
 }
 
-.mini-markdown div.grid-item div {
-  margin: 0;
+.mini-markdown div.grid-item > :first-child {
+  margin-top: 0;
 }
-  
-.mini-markdown div.grid-item p {
-  overflow-wrap: break-word;
+
+.mini-markdown div.grid-item > :last-child {
+  margin-bottom: 0;
 }
 
 .mini-markdown div.grid-item img,

@@ -1,5 +1,5 @@
 .mini-markdown hr.horizontal-rule {
   border: none;
-  border-top: 3px solid var(--color-border-default);
-  margin: 1rem 0;
+  border-top: 2px solid var(--mmd-color-border-subtle);
+  margin: var(--mmd-spacing-md) 0;
 }

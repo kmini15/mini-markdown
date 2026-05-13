@@ -1,4 +1,9 @@
 .mini-markdown a.autolink-email {
-  color: var(--color-link, rgb(120, 180, 240));
+  color: var(--mmd-color-link);
   text-decoration: none;
+}
+
+.mini-markdown a.autolink-email:hover {
+  color: var(--mmd-color-link-hover);
+  text-decoration: underline;
 }

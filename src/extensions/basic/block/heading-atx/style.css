@@ -1,43 +1,36 @@
+.mini-markdown h1.heading-atx,
+.mini-markdown h2.heading-atx,
+.mini-markdown h3.heading-atx,
+.mini-markdown h4.heading-atx,
+.mini-markdown h5.heading-atx,
+.mini-markdown h6.heading-atx {
+  margin-top: var(--mmd-spacing-md);
+  margin-bottom: var(--mmd-spacing-sm);
+  padding-bottom: var(--mmd-spacing-xs);
+}
+
 .mini-markdown h1.heading-atx {
-  display: block;
-  font-size: 2.0rem;
-  font-weight: 700;
-  margin-bottom: 0.8rem;
-  border-bottom: 3px solid var(--color-border-default);
+  margin-top: 0;
+  font-size: var(--mmd-font-size-3xl);
+  border-bottom: 2px solid var(--mmd-color-border);
 }
 
 .mini-markdown h2.heading-atx {
-  display: block;
-  font-size: 1.5rem;
-  font-weight: 700;
-  margin-bottom: 0.6rem;
+  font-size: var(--mmd-font-size-2xl);
 }
 
 .mini-markdown h3.heading-atx {
-  display: block;
-  font-size: 1.2rem;
-  font-weight: 700;
-  margin-bottom: 0.4rem;
+  font-size: var(--mmd-font-size-xl);
 }
 
 .mini-markdown h4.heading-atx {
-  display: block;
-  font-size: 1.1rem;
-  font-weight: 700;
-  margin-bottom: 0.3rem;
+  font-size: var(--mmd-font-size-lg);
 }
 
 .mini-markdown h5.heading-atx {
-  display: block;
-  font-size: 1.0rem;
-  font-weight: 700;
-  margin-bottom: 0.2rem;
+  font-size: var(--mmd-font-size-md);
 }
 
 .mini-markdown h6.heading-atx {
-  display: block;
-  font-size: 0.875rem;
-  font-weight: 700;
-  margin-bottom: 0.1rem;
-  color: var(--color-fg-muted);
+  font-size: var(--mmd-font-size-sm);
 }

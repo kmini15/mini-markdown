@@ -79,8 +79,6 @@ class GridItemRenderer extends Renderer {
       case "[ .]":
         style += "--align-v: end; --align-h: end;";
         break;
-      default:
-        style += "--align-v: stretch; --align-h: stretch;";
     }
     if (node.fields.style) {
       style += node.fields.style.slice(1, -1);

@@ -6,7 +6,7 @@ class BlockquoteRenderer extends Renderer {
   }
 
   render(text, node) {
-    return `<div class="${this.type}">\n${text}</div>\n`;
+    return `<blockquote class="${this.type}">\n${text}</blockquote>\n`;
   }
 }
 

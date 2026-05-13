@@ -1,9 +1,19 @@
 .mini-markdown ul.list {
-  padding-left: 1.5rem;
-  font-size: 0.875rem;
+  margin: var(--mmd-spacing-xs) 0;
+  padding-left: var(--mmd-spacing-lg);
+  font-size: var(--mmd-font-size-md);
 }
 
 .mini-markdown ol.list {
-  padding-left: 1.5rem;
-  font-size: 0.875rem;
+  margin: var(--mmd-spacing-xs) 0;
+  padding-left: var(--mmd-spacing-lg);
+  font-size: var(--mmd-font-size-md);
+}
+
+.mini-markdown li.list-item {
+  margin: 0;
+}
+
+.mini-markdown li.list-item > p {
+  margin: 0;
 }

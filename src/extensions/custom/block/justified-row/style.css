@@ -1,4 +1,4 @@
-.mini-markdown .justified-row {
+.mini-markdown div.justified-row {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
@@ -7,13 +7,21 @@
   gap: var(--gap, 0);
 }
 
-.mini-markdown .justified-row-item {
+.mini-markdown div.justified-row-item {
   display: block;
   flex: var(--item-ratio, auto) var(--item-ratio, auto) 0;
 }
 
-.mini-markdown .justified-row-item img,
-.mini-markdown .justified-row-item video {
+.mini-markdown div.justified-row-item > :first-child {
+  margin-top: 0;
+}
+
+.mini-markdown div.justified-row-item > :last-child {
+  margin-bottom: 0;
+}
+
+.mini-markdown div.justified-row-item img,
+.mini-markdown div.justified-row-item video {
   display: block;
   width: 100%;
   height: auto;

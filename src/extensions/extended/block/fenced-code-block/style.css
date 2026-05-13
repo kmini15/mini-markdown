@@ -1,16 +1,16 @@
 .mini-markdown pre.fenced-code-block {
-  display: block;
-  background-color: var(--color-code-bg);
-  border-radius: 4px;
-  padding: 0.4rem 0.4rem;
-  overflow-x: auto;
+  margin: 0;
+  padding: var(--mmd-spacing-md);
+  line-height: var(--mmd-line-height-code);
+  border-radius: var(--mmd-border-radius-md);
+  background-color: var(--mmd-color-code-block-background);
+  overflow: auto;
+  scrollbar-width: thin;
 }
 
 .mini-markdown pre.fenced-code-block>code.fenced-code-block {
-  display: block;
-  background-color: var(--color-code-bg);
-  font-family: D2Coding, Menlo, Monaco, "Courier New", monospace;
-  font-size: 0.875rem;
-  color: var(--color-code-fg);
-  line-height: 1.2;
+  font-family: var(--mmd-font-family-code);
+  font-size: var(--mmd-font-size-code);
+  color: var(--mmd-color-code-block-foreground);
+  background: none;
 }

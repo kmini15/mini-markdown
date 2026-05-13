@@ -1,14 +1,18 @@
-.mini-markdown div.blockquote {
-  display: block;
-  border-left: 6px solid var(--color-blockquote-border);
-  margin: 1rem 0;
-  padding-left: 1rem;
-  text-align: left;
-  background-color: var(--color-blockquote-bg);
-  color: var(--color-blockquote-fg);
+.mini-markdown blockquote.blockquote {
+  margin: var(--mmd-spacing-md) 0;
+  padding: 0 0 0 var(--mmd-spacing-md);
+  border-left-width: 6px;
+  border-left-style: solid;
+  border-left-color: var(--mmd-color-border-subtle);
+  border-radius: var(--mmd-border-radius-md);
+  background-color: var(--mmd-color-block-level-2);
+  color: var(--mmd-color-text-muted);
 }
 
-.mini-markdown div.blockquote>div.blockquote {
-  margin: 0;
-  margin-top: 0.5rem;
+.mini-markdown blockquote.blockquote > :first-child {
+  margin-top: 0;
+}
+
+.mini-markdown blockquote.blockquote > :last-child {
+  margin-bottom: 0;
 }

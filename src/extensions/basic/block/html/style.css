@@ -1,0 +1,44 @@
+.mini-markdown p {
+  margin: 0;
+}
+
+.mini-markdown p + p {
+  margin-top: var(--mmd-spacing-md);
+}
+
+.mini-markdown h1,
+.mini-markdown h2,
+.mini-markdown h3,
+.mini-markdown h4,
+.mini-markdown h5,
+.mini-markdown h6 {
+  margin-top: var(--mmd-spacing-md);
+  margin-bottom: var(--mmd-spacing-sm);
+  padding-bottom: var(--mmd-spacing-xs);
+}
+
+.mini-markdown h1 {
+  margin-top: 0;
+  font-size: var(--mmd-font-size-3xl);
+  border-bottom: 2px solid var(--mmd-color-border);
+}
+  
+.mini-markdown h2 {
+  font-size: var(--mmd-font-size-2xl);
+}
+
+.mini-markdown h3 {
+  font-size: var(--mmd-font-size-xl);
+}
+
+.mini-markdown h4 {
+  font-size: var(--mmd-font-size-lg);
+}
+
+.mini-markdown h5 {
+  font-size: var(--mmd-font-size-md);
+}
+
+.mini-markdown h6 {
+  font-size: var(--mmd-font-size-sm);
+}

@@ -4,22 +4,22 @@
 
 .mini-markdown table.table {
   border-collapse: separate;
-  border-spacing: 4px;
+  border-spacing: var(--mmd-gap-xs);
   width: 100%;
 }
 
 .mini-markdown table.table .table-cell {
   min-width: max-content;
   text-align: var(--align-h, left);
-  padding: 4px 8px;
+  padding: var(--mmd-spacing-xs) var(--mmd-spacing-sm);
 }
 
 .mini-markdown table.table th.table-cell {
-  font-weight: bold;
-  background-color: var(--color-table-head-bg, rgb(20, 20, 20));
+  font-weight: var(--mmd-font-weight-bold);
+  background-color: var(--mmd-color-table-header-background);
 }
 
 .mini-markdown table.table td.table-cell {
-  font-weight: normal;
-  background-color: var(--color-table-data-bg, rgb(40, 40, 40));
+  font-weight: var(--mmd-font-weight-normal);
+  background-color: var(--mmd-color-table-data-background);
 }
