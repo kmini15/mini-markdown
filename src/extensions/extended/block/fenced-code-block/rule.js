@@ -34,7 +34,6 @@ class FencedCodeBlockRule extends Rule {
       const capture = context.input.capture();
       context.input.advance();
       const line = context.input.current();
-      if (!line) break;
       const matchLine = line.match(this.patternLine);
       if (matchLine[1].length < column) {
         context.input.restore(capture);

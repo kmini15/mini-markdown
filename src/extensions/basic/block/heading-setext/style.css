@@ -12,25 +12,31 @@
 .mini-markdown h1.heading-setext {
   margin-top: 0;
   font-size: var(--mmd-font-size-3xl);
+  line-height: var(--mmd-line-height-text);
   border-bottom: 2px solid var(--mmd-color-border);
 }
 
 .mini-markdown h2.heading-setext {
   font-size: var(--mmd-font-size-2xl);
+  line-height: var(--mmd-line-height-text);
 }
 
 .mini-markdown h3.heading-setext {
   font-size: var(--mmd-font-size-xl);
+  line-height: var(--mmd-line-height-text);
 }
 
 .mini-markdown h4.heading-setext {
   font-size: var(--mmd-font-size-lg);
+  line-height: var(--mmd-line-height-text);
 }
 
 .mini-markdown h5.heading-setext {
   font-size: var(--mmd-font-size-md);
+  line-height: var(--mmd-line-height-text);
 }
 
 .mini-markdown h6.heading-setext {
   font-size: var(--mmd-font-size-sm);
+  line-height: var(--mmd-line-height-text);
 }

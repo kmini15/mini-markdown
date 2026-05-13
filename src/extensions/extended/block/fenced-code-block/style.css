@@ -1,5 +1,5 @@
 .mini-markdown pre.fenced-code-block {
-  margin: 0;
+  margin: var(--mmd-spacing-md) 0;
   padding: var(--mmd-spacing-md);
   line-height: var(--mmd-line-height-code);
   border-radius: var(--mmd-border-radius-md);

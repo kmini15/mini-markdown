@@ -39,6 +39,14 @@
   --mmd-font-family-code: D2Coding, Menlo, Monaco, "Courier New", monospace;
   --mmd-line-height-text: 1.5em;
   --mmd-line-height-code: 1.25em;
+  --mmd-line-height-xs: 1em;
+  --mmd-line-height-sm: 1.25em;
+  --mmd-line-height-md: 1.5em;
+  --mmd-line-height-lg: 1.75em;
+  --mmd-line-height-xl: 2em;
+  --mmd-line-height-2xl: 2.5em;
+  --mmd-line-height-3xl: 3em;
+  --mmd-line-height-4xl: 4em;
   --mmd-font-size-text: 1em;
   --mmd-font-size-code: 0.875em;
   --mmd-font-size-xs: 0.75em;
