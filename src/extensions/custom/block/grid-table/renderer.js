@@ -1,14 +1,14 @@
 import Renderer from "../../../../core/renderer.js";
 
-class GridTableRenderer extends Renderer {
+export class GridTableRenderer extends Renderer {
   constructor(type) {
     super(type);
   }
 
   render(text, node) {
     let style = "";
-    if (node.fields.columns) {
-      style += `--columns: ${node.fields.columns};`;
+    if (node.data.fields.columns) {
+      style += `--columns: ${node.data.fields.columns};`;
     }
     if (style) {
       style = ` style="${style}"`;
@@ -17,7 +17,7 @@ class GridTableRenderer extends Renderer {
   }
 }
 
-class GridTableRowRenderer extends Renderer {
+export class GridTableRowRenderer extends Renderer {
   constructor(type) {
     super(type);
   }
@@ -27,21 +27,21 @@ class GridTableRowRenderer extends Renderer {
   }
 }
 
-class GridTableCellRenderer extends Renderer {
+export class GridTableCellRenderer extends Renderer {
   constructor(type) {
     super(type);
   }
 
   render(text, node) {
     let style = "";
-    if (node.fields.rowSpan) {
-      style += `--row-span: ${node.fields.rowSpan};`;
+    if (node.data.fields.rowSpan) {
+      style += `--row-span: ${node.data.fields.rowSpan};`;
     }
-    if (node.fields.colSpan) {
-      style += `--col-span: ${node.fields.colSpan};`;
+    if (node.data.fields.colSpan) {
+      style += `--col-span: ${node.data.fields.colSpan};`;
     }
-    if (node.fields.alignH) {
-      switch (node.fields.alignH) {
+    if (node.data.fields.alignH) {
+      switch (node.data.fields.alignH) {
         case "left":
           style += `--align-h: start;`;
           break;
@@ -53,8 +53,8 @@ class GridTableCellRenderer extends Renderer {
           break;
       }
     }
-    if (node.fields.alignV) {
-      switch (node.fields.alignV) {
+    if (node.data.fields.alignV) {
+      switch (node.data.fields.alignV) {
         case "top":
           style += `--align-v: start;`;
           break;
@@ -70,7 +70,7 @@ class GridTableCellRenderer extends Renderer {
       style = ` style="${style}"`;
     }
     let type = "";
-    if (node.fields.header) {
+    if (node.data.fields.header) {
       type = "grid-table-head";
     } else {
       type = "grid-table-data";
@@ -78,5 +78,3 @@ class GridTableCellRenderer extends Renderer {
     return `<div class="${this.type} ${type}"${style}>${text}</div>\n`;
   }
 }
-
-export { GridTableRenderer, GridTableRowRenderer, GridTableCellRenderer };

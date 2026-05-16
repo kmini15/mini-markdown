@@ -10,7 +10,7 @@ const extensions = [
   /* Blocks */
   Details,
   Grid,
-  // GridTable,
+  GridTable,
   JustifiedRow,
   /* Inlines */
   ImageStyle,

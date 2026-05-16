@@ -1,6 +1,5 @@
 import { Block } from "../../../../core/block.js";
 import { Node } from "../../../../core/node.js";
-import { TextRuler } from "../../../../core/text-ruler.js";
 
 /*
 open line:  +----------+----------+----------+  <= patternOpen
@@ -55,18 +54,11 @@ class GridTableRule extends Block {
     this.patternMark = /^[|+](.+)[|+]$/;
     this.patternHead = /^([:'.=])[+=]+([:'.=])$/;
     this.patternData = /^([:'.-])[+-]+([:'.-])$/;
-    this.textRuler = new TextRuler();
-  }
-
-  start(context, parent) {
-    const capture = context.input.capture();
-    const tableNode = this.parse(context, parent);
-    context.input.restore(capture);
-    if (!tableNode) return false;
-    return true;
+    this.ruler = null;
   }
 
   parse(context, parent) {
+    this.ruler = context.input.ruler;
     const capture = context.input.capture();
     const openLine = context.input.current()?.trim();
     if (!openLine) return null;
@@ -109,7 +101,7 @@ class GridTableRule extends Block {
       .split("+")
       .slice(1, -1)
       .map(segment => segment.trim())
-      .map(segment => this.textRuler.measure(segment));
+      .map(segment => this.ruler.measure(segment));
     let offset = 0;
     return widths.map(width => {
       const bound = {
@@ -123,7 +115,7 @@ class GridTableRule extends Block {
 
   parseTableRow(columns, cellLine, markLine) {
     const tableWidth = columns[columns.length - 1].end + 1;
-    if (cellLine.length !== tableWidth || markLine.length !== tableWidth) {
+    if (this.ruler.measure(cellLine) !== tableWidth || this.ruler.measure(markLine) !== tableWidth) {
       return null; // Line length does not match expected table width
     }
     if (!this.patternCell.test(cellLine)) return null;
@@ -132,8 +124,8 @@ class GridTableRule extends Block {
     const rowSpans = [];
     let colSpan = 0;
     for (let i = 0; i < columns.length; i++) {
-      const column = columns[i];
-      if (cellLine[column.end] === "|") {
+      const index = this.ruler.indexAtColumn(cellLine, columns[i].end);
+      if (cellLine[index] === "|") {
         colSpans.push(colSpan + 1);
         colSpans.push(...Array(colSpan).fill(0));
         rowSpans.push(1);
@@ -153,16 +145,18 @@ class GridTableRule extends Block {
         aligns.push(null); // This column is spanned, so no align
         continue;
       }
-      const start = columns[i].start;
-      const end = columns[i + colSpans[i] - 1].end;
-      const segment = markLine.slice(start, end);
+      const markStart = this.ruler.indexAtColumn(markLine, columns[i].start);
+      const markEnd = this.ruler.indexAtColumn(markLine, columns[i + colSpans[i] - 1].end);
+      const segment = markLine.slice(markStart, markEnd);
       let mark = "span";
       mark = this.patternHead.test(segment) ? "head" : mark;
       mark = this.patternData.test(segment) ? "data" : mark;
       marks.push(mark);
-      let text = cellLine.slice(start, end).trim();
+      const cellStart = this.ruler.indexAtColumn(cellLine, columns[i].start);
+      const cellEnd = this.ruler.indexAtColumn(cellLine, columns[i + colSpans[i] - 1].end);
+      let text = cellLine.slice(cellStart, cellEnd).trim();
       if (mark === "span") {
-        text += "\n" + markLine.slice(start, end).trim();
+        text += "\n" + markLine.slice(markStart, markEnd).trim();
       }
       texts.push(text);
       let align = {
@@ -173,47 +167,7 @@ class GridTableRule extends Block {
         const alignMarkL = /[=-]/.test(segment.at(0)) ? " " : segment.at(0);
         const alignMarkR = /[=-]/.test(segment.at(-1)) ? " " : segment.at(-1);
         const alignMark = alignMarkL + alignMarkR;
-        switch (alignMark) {
-          case "' ":
-            align.alignH = "left";
-            align.alignV = "top";
-            break;
-          case "''":
-            align.alignH = "center";
-            align.alignV = "top";
-            break;
-          case " '":
-            align.alignH = "right";
-            align.alignV = "top";
-            break;
-          case ": ":
-            align.alignH = "left";
-            align.alignV = "middle";
-            break;
-          case "::":
-            align.alignH = "center";
-            align.alignV = "middle";
-            break;
-          case " :":
-            align.alignH = "right";
-            align.alignV = "middle";
-            break;
-          case ". ":
-            align.alignH = "left";
-            align.alignV = "bottom";
-            break;
-          case "..":
-            align.alignH = "center";
-            align.alignV = "bottom";
-            break;
-          case " .":
-            align.alignH = "right";
-            align.alignV = "bottom";
-            break;
-          default:
-            align.alignH = "none";
-            align.alignV = "none";
-        }
+        align = this.getAlignmentFromMark(alignMark);
       }
       aligns.push(align);
     }
@@ -226,15 +180,25 @@ class GridTableRule extends Block {
     };
     return tableRow;
   }
-  
+
   buildTableNode(tableRows) {
-    const tableNode = new Node("grid-table");
     const numCols = tableRows[0].colSpans.length;
-    tableNode.fields = {
+    const tableNode = new Node("grid-table");
+    tableNode.data.token = {
+      text: "",
+      start: { row: 0, col: 0, idx: 0 },
+      end: { row: 0, col: 0, idx: 0 },
+    }
+    tableNode.data.fields = {
       columns: numCols,
     };
     for (let row = 0; row < tableRows.length; row++) {
       const rowNode = new Node("grid-table-row");
+      rowNode.data.token = {
+        text: "",
+        start: { row: 0, col: 0, idx: 0 },
+        end: { row: 0, col: 0, idx: 0 },
+      }
       tableNode.appendChild(rowNode);
       const tableRow = tableRows[row];
       for (let col = 0; col < tableRow.colSpans.length; col++) {
@@ -256,23 +220,78 @@ class GridTableRule extends Block {
           tableRows[row].rowSpans[col]++;
         }
         const textNode = new Node("text");
-        textNode.value = text;
-        textNode.fields = {
-          inline: true,
+        textNode.data.token = {
+          text: text,
+          start: { row: 0, col: 0, idx: 0 },
+          end: { row: 0, col: 0, idx: 0 },
         };
         const cellNode = new Node("grid-table-cell");
-        cellNode.appendChild(textNode);
-        cellNode.fields = {
+        cellNode.data.token = {
+          text: "",
+          start: { row: 0, col: 0, idx: 0 },
+          end: { row: 0, col: 0, idx: 0 },
+        };
+        cellNode.data.fields = {
           rowSpan: tableRow.rowSpans[col],
           colSpan: tableRow.colSpans[col],
           header: tableRows[rowIndex].marks[col] === "head",
           alignH: tableRows[rowIndex].aligns[col].alignH,
           alignV: tableRows[rowIndex].aligns[col].alignV,
         };
+        cellNode.appendChild(textNode);
         rowNode.appendChild(cellNode);
       }
     }
     return tableNode;
+  }
+
+  getAlignmentFromMark(mark) {
+    let align = {
+      alignH: "none",
+      alignV: "none",
+    };
+    switch (mark) {
+      case "' ":
+        align.alignH = "left";
+        align.alignV = "top";
+        break;
+      case "''":
+        align.alignH = "center";
+        align.alignV = "top";
+        break;
+      case " '":
+        align.alignH = "right";
+        align.alignV = "top";
+        break;
+      case ": ":
+        align.alignH = "left";
+        align.alignV = "middle";
+        break;
+      case "::":
+        align.alignH = "center";
+        align.alignV = "middle";
+        break;
+      case " :":
+        align.alignH = "right";
+        align.alignV = "middle";
+        break;
+      case ". ":
+        align.alignH = "left";
+        align.alignV = "bottom";
+        break;
+      case "..":
+        align.alignH = "center";
+        align.alignV = "bottom";
+        break;
+      case " .":
+        align.alignH = "right";
+        align.alignV = "bottom";
+        break;
+      default:
+        align.alignH = "none";
+        align.alignV = "none";
+    }
+    return align;
   }
 }
 
