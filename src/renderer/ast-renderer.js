@@ -1,6 +1,6 @@
 import { Node } from "../core/node.js";
 
-class AstRenderer {
+export class AstRenderer {
   constructor() {
     this.renderToken = true;
     this.renderFields = true;
@@ -59,5 +59,3 @@ class AstRenderer {
       .replace(/'/g, "&#39;");
   }
 }
-
-export default AstRenderer;

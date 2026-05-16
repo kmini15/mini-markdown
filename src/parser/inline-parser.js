@@ -1,4 +1,4 @@
-class InlineParser {
+export class InlineParser {
   constructor(rules) {
     this.rules = rules;
   }
@@ -10,5 +10,3 @@ class InlineParser {
     return node;
   }
 }
-
-export default InlineParser;

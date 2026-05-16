@@ -6,7 +6,7 @@ export class BlockParser {
   constructor(rules) {
     this.rules = rules;
     this.maxDepth = 40;
-    this.DEBUG_MODE = true;
+    this.DEBUG_MODE = false;
   }
 
   parse(text) {

@@ -27,13 +27,13 @@ class TableCellRenderer extends Renderer {
 
   render(text, node) {
     let style = "";
-    if (node.fields.align) {
-      style += `--align-h: ${node.fields.align};`;
+    if (node.data.fields.align) {
+      style += `--align-h: ${node.data.fields.align};`;
     }
     if (style) {
       style = ` style="${style}"`;
     }
-    if (node.fields.isHeader) {
+    if (node.data.fields.isHeader) {
       return `<th class="${this.type}"${style}>${text}</th>\n`;
     } else {
       return `<td class="${this.type}"${style}>${text}</td>\n`;

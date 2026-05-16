@@ -1,4 +1,4 @@
-class HtmlRenderer {
+export class HtmlRenderer {
   constructor(renderers) {
     this.renderers = renderers;
   }
@@ -34,6 +34,3 @@ class HtmlRenderer {
       .replace(/'/g, "&#39;");
   }
 }
-
-
-export default HtmlRenderer;

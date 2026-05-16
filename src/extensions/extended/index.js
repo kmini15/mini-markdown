@@ -7,7 +7,7 @@ const name = "extended";
 const extensions = [
   FencedCodeBlock,
   HeadingAtxId,
-  // Table,
+  Table,
 ];
 
 const blocks = extensions.flatMap(ext => ext.blocks ?? []);

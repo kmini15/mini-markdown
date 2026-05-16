@@ -7,14 +7,6 @@ class TableRule extends Block {
     this.patternData = /^\s*([:-])[-]+([:-])\s*$/;
   }
 
-  start(context, parent) {
-    const capture = context.input.capture();
-    const tableNode = this.parse(context, parent);
-    context.input.restore(capture);
-    if (!tableNode) return false;
-    return true;
-  }
-
   parse(context, parent) {
     const capture = context.input.capture();
     const headLine = context.input.current()?.trim();
@@ -56,15 +48,31 @@ class TableRule extends Block {
       return null;
     }
     const tableNode = new Node(this.type);
+    tableNode.data.token = {
+      text: "",
+      start: { row: 0, col: 0, idx: 0 },
+      end: { row: 0, col: 0, idx: 0 },
+    }
     const tableRowNode = new Node(this.type + "-row");
+    tableRowNode.data.token = {
+      text: "",
+      start: { row: 0, col: 0, idx: 0 },
+      end: { row: 0, col: 0, idx: 0 },
+    }
     headCells.forEach((cell, index) => {
       const textNode = new Node("text");
-      textNode.value = cell;
-      textNode.fields = {
-        inline: true,
+      textNode.data.token = {
+        text: cell,
+        start: { row: 0, col: 0, idx: 0 },
+        end: { row: 0, col: 0, idx: 0 },
       }
       const tableCellNode = new Node(this.type + "-cell");
-      tableCellNode.fields = {
+      tableCellNode.data.token = {
+        text: "",
+        start: { row: 0, col: 0, idx: 0 },
+        end: { row: 0, col: 0, idx: 0 },
+      };
+      tableCellNode.data.fields = {
         align: aligns[index],
         isHeader: true,
       };
@@ -85,14 +93,25 @@ class TableRule extends Block {
         break;
       }
       const tableRowNode = new Node(this.type + "-row");
+      tableRowNode.data.token = {
+        text: "",
+        start: { row: 0, col: 0, idx: 0 },
+        end: { row: 0, col: 0, idx: 0 },
+      }
       dataCells.forEach((cell, index) => {
         const textNode = new Node("text");
-        textNode.value = cell;
-        textNode.fields = {
-          inline: true,
+        textNode.data.token = {
+          text: cell,
+          start: { row: 0, col: 0, idx: 0 },
+          end: { row: 0, col: 0, idx: 0 },
         }
         const tableCellNode = new Node(this.type + "-cell");
-        tableCellNode.fields = {
+        tableCellNode.data.token = {
+          text: "",
+          start: { row: 0, col: 0, idx: 0 },
+          end: { row: 0, col: 0, idx: 0 },
+        };
+        tableCellNode.data.fields = {
           align: aligns[index],
           isHeader: false,
         };

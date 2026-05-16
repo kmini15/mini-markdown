@@ -1,7 +1,7 @@
 import { BlockParser } from "./parser/block-parser.js";
-import InlineParser from "./parser/inline-parser.js";
-import HtmlRenderer from "./renderer/html-renderer.js";
-import AstRenderer from "./renderer/ast-renderer.js";
+import { InlineParser } from "./parser/inline-parser.js";
+import { HtmlRenderer } from "./renderer/html-renderer.js";
+import { AstRenderer } from "./renderer/ast-renderer.js";
 
 import Basic from "./extensions/basic/index.js";
 import Extended from "./extensions/extended/index.js";
