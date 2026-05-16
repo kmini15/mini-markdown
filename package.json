@@ -1,0 +1,8 @@
+{
+  "name": "@kmini15/mini-markdown",
+  "version": "0.1.2",
+  "description": "Mini Markdown Parser and Renderer",
+  "author": "KMini15",
+  "type": "module",
+  "main": "index.js"
+}
