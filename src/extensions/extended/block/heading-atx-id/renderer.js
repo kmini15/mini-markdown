@@ -1,15 +1,15 @@
 import Renderer from "../../../../core/renderer.js";
-
-class HeadingAtxIdRenderer extends Renderer {
+  
+export class HeadingAtxIdRenderer extends Renderer {
   constructor(type) {
     super(type);
   }
 
   render(text, node) {
-    const level = node.fields.level;
+    const level = node.data.fields.level;
     let id = "";
-    if (node.fields.id) {
-      id = node.fields.id;
+    if (node.data.fields.id) {
+      id = node.data.fields.id;
     }
     if (id) {
       id = ` id="${id}"`;
@@ -17,5 +17,3 @@ class HeadingAtxIdRenderer extends Renderer {
     return `<h${level}${id} class="heading-atx-id">${text}</h${level}>\n`;
   }
 }
-
-export { HeadingAtxIdRenderer };

@@ -34,7 +34,7 @@ class MiniMarkdown {
   static defaultExtensions() {
     return [
       Basic,
-      // Extended,
+      Extended,
       Custom,
     ];
   }

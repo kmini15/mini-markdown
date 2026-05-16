@@ -1,6 +1,6 @@
 import Renderer from "../../../../core/renderer.js";
 
-class GridRenderer extends Renderer {
+export class GridRenderer extends Renderer {
   constructor(type) {
     super(type);
   }
@@ -44,7 +44,7 @@ class GridRenderer extends Renderer {
   }
 }
 
-class GridItemRenderer extends Renderer {
+export class GridItemRenderer extends Renderer {
   constructor(type) {
     super(type);
   }
@@ -89,5 +89,3 @@ class GridItemRenderer extends Renderer {
     return `<div class="${this.type}" ${style}>\n${text}</div>\n`;
   }
 }
-
-export { GridRenderer, GridItemRenderer };

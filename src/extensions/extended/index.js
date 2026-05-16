@@ -4,31 +4,23 @@ import Table from "./block/table/index.js";
 
 const name = "extended";
 
+const extensions = [
+  // FencedCodeBlock,
+  HeadingAtxId,
+  // Table,
+];
+
+const blocks = extensions.flatMap(ext => ext.blocks ?? []);
+const inlines = extensions.flatMap(ext => ext.inlines ?? []);
+const renderers = extensions.flatMap(ext => ext.renderers ?? []);
+const behaviors = extensions.flatMap(ext => ext.behaviors ?? []);
+const styles = extensions.flatMap(ext => ext.styles ?? []);
+
 export default {
   name: name,
-  blockRules: [
-    ...FencedCodeBlock.blockRules,
-    // ...HeadingAtxId.blockRules,
-    // ...Table.blockRules,
-  ],
-  inlineRules: [
-    ...FencedCodeBlock.inlineRules,
-    // ...HeadingAtxId.inlineRules,
-    // ...Table.inlineRules,
-  ],
-  renderers: [
-    ...FencedCodeBlock.renderers,
-    // ...HeadingAtxId.renderers,
-    // ...Table.renderers,
-  ],
-  behaviors: [
-    ...FencedCodeBlock.behaviors,
-    // ...HeadingAtxId.behaviors,
-    // ...Table.behaviors,
-  ],
-  styles: [
-    ...FencedCodeBlock.styles,
-    // ...HeadingAtxId.styles,
-    // ...Table.styles,
-  ],
+  blocks: blocks,
+  inlines: inlines,
+  renderers: renderers,
+  behaviors: behaviors,
+  styles: styles,
 };
