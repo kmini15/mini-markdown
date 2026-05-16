@@ -7,14 +7,14 @@ class GridRenderer extends Renderer {
 
   render(text, node) {
     let style = "";
-    if (node.fields.width) {
-      style += `--width: ${node.fields.width};`;
+    if (node.data.fields.width) {
+      style += `--width: ${node.data.fields.width};`;
     }
-    if (node.fields.gap) {
-      style += `--gap: ${node.fields.gap};`;
+    if (node.data.fields.gap) {
+      style += `--gap: ${node.data.fields.gap};`;
     }
-    if (node.fields.columns) {
-      let columns = node.fields.columns.split(" ");
+    if (node.data.fields.columns) {
+      let columns = node.data.fields.columns.split(" ");
       if (columns.length == 1) {
         columns[0] = `repeat(${columns[0]}, minmax(0, 1fr))`;
       } else {
@@ -34,8 +34,8 @@ class GridRenderer extends Renderer {
       }
       style += `--columns: ${columns.join(" ")};`;
     }
-    if (node.fields.style) {
-      style += node.fields.style.slice(1, -1);
+    if (node.data.fields.style) {
+      style += node.data.fields.style.slice(1, -1);
     }
     if (style) {
       style = `style="${style}"`;
@@ -51,7 +51,7 @@ class GridItemRenderer extends Renderer {
 
   render(text, node) {
     let style = "";
-    switch (node.fields.align) {
+    switch (node.data.fields.align) {
       case "[' ]":
         style += "--align-v: start; --align-h: start;";
         break;
@@ -80,8 +80,8 @@ class GridItemRenderer extends Renderer {
         style += "--align-v: end; --align-h: end;";
         break;
     }
-    if (node.fields.style) {
-      style += node.fields.style.slice(1, -1);
+    if (node.data.fields.style) {
+      style += node.data.fields.style.slice(1, -1);
     }
     if (style) {
       style = `style="${style}"`;

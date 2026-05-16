@@ -34,7 +34,7 @@
         - [Table](#table)
 [  ]- Inline
         - None
-        
+
 ### [Custom Syntax](#custom-syntax)
 ::::[100%:8px:2]
 [  ]- Block

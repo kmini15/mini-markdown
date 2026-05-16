@@ -8,7 +8,6 @@ class LinkReferenceRule extends Block {
   }
   
   parse(context, parent) {
-    if (parent.data.type !== "document") return null;
     const input = context.input.current();
     const match = this.pattern.exec(input);
     if (!match) return null;

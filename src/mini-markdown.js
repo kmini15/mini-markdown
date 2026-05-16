@@ -35,7 +35,7 @@ class MiniMarkdown {
     return [
       Basic,
       // Extended,
-      // Custom,
+      Custom,
     ];
   }
 

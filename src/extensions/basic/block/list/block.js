@@ -5,13 +5,16 @@ export class ListRule extends Block {
   constructor(type) {
     super(type);
     this.pattern = /^(\s*)([-+*]\s|\d+\.\s)(.*)/;
+    this.patternItem = /^(\s*)([-+*]\s|\d+\.\s)(.*)/;
     this.patternIndent = /^(\s*)[^\s]/;
     this.patternOrdered = /^\d+\.\s/;
   }
 
   continue(context, node) {
     const input = context.input.current();
-    const refer = node.data.token.start.col; // start
+    const refer = this.patternItem.test(input)
+      ? node.data.token.start.col
+      : node.data.token.end.col;
     const match = this.patternIndent.exec(input);
     if (!match) return false;
     const cursor0 = context.input.capture();

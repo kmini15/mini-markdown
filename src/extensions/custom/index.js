@@ -6,41 +6,27 @@ import ImageStyle from "./inline/image-style/index.js";
 
 const name = "custom";
 
+const extensions = [
+  /* Blocks */
+  // Details,
+  Grid,
+  // GridTable,
+  // JustifiedRow,
+  /* Inlines */
+  // ImageStyle,
+];
+
+const blocks = extensions.flatMap(ext => ext.blocks ?? []);
+const inlines = extensions.flatMap(ext => ext.inlines ?? []);
+const renderers = extensions.flatMap(ext => ext.renderers ?? []);
+const behaviors = extensions.flatMap(ext => ext.behaviors ?? []);
+const styles = extensions.flatMap(ext => ext.styles ?? []);
+
 export default {
   name: name,
-  blockRules: [
-    ...Details.blockRules,
-    ...Grid.blockRules,
-    ...GridTable.blockRules,
-    ...JustifiedRow.blockRules,
-    ...ImageStyle.blockRules,
-  ],
-  inlineRules: [
-    ...Details.inlineRules,
-    ...Grid.inlineRules,
-    ...GridTable.inlineRules,
-    ...JustifiedRow.inlineRules,
-    ...ImageStyle.inlineRules,
-  ],
-  renderers: [
-    ...Details.renderers,
-    ...Grid.renderers,
-    ...GridTable.renderers,
-    ...JustifiedRow.renderers,
-    ...ImageStyle.renderers,
-  ],
-  behaviors: [
-    ...Details.behaviors,
-    ...Grid.behaviors,
-    ...GridTable.behaviors,
-    ...JustifiedRow.behaviors,
-    ...ImageStyle.behaviors,
-  ],
-  styles: [
-    ...Details.styles,
-    ...Grid.styles,
-    ...GridTable.styles,
-    ...JustifiedRow.styles,
-    ...ImageStyle.styles,
-  ],
+  blocks: blocks,
+  inlines: inlines,
+  renderers: renderers,
+  behaviors: behaviors,
+  styles: styles,
 };

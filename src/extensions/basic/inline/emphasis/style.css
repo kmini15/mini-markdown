@@ -3,5 +3,5 @@
 }
 
 .mini-markdown em.emphasis {
-  font-weight: var(--mmd-font-weight-normal);
+  font-style: italic;
 }
