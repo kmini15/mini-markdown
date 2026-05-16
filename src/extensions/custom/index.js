@@ -11,7 +11,7 @@ const extensions = [
   // Details,
   Grid,
   // GridTable,
-  // JustifiedRow,
+  JustifiedRow,
   /* Inlines */
   // ImageStyle,
 ];

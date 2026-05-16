@@ -1,10 +1,10 @@
 import { Block } from "../../../../core/block.js";
 import { Node } from "../../../../core/node.js";
 
-export class GridRule extends Block {
+export class JustifiedRowRule extends Block {
   constructor(type) {
     super(type);
-    this.pattern = /^(\s*)(::::)((\[)([^\]]+)(:[^\]]+)(:[^\]]+)(\])({.*?})?)(\s*)$/;
+    this.pattern = /^(\s*)(====)((\[)([^\]]+)(:[^\]]+)(\])({.*?})?)(\s*)$/;
     this.patternItem = /^(\s*)(\[[:.' ]{2}\])({.*?})?/;
     this.patternIndent = /^(\s*)/;
   }
@@ -44,14 +44,12 @@ export class GridRule extends Block {
     const cursor4 = context.input.capture();
     context.input.consume(match[6].length); // gap
     const cursor5 = context.input.capture();
-    context.input.consume(match[7].length); // columns
+    context.input.consume(match[7].length); // closing bracket
     const cursor6 = context.input.capture();
-    context.input.consume(match[8].length); // closing bracket
+    context.input.consume(match[8]?.length || 0); // style
     const cursor7 = context.input.capture();
-    context.input.consume(match[9]?.length || 0); // style
+    context.input.consume(match[9].length); // trailing spaces
     const cursor8 = context.input.capture();
-    context.input.consume(match[10].length); // trailing spaces
-    const cursor9 = context.input.capture();
     const child = new Node(this.type);
     child.data.token = {
       text: match[2],
@@ -61,21 +59,20 @@ export class GridRule extends Block {
     child.data.fields = {
       width: match[5].trim(),
       gap: match[6].trim().slice(1), // remove leading colon
-      columns: match[7].trim().slice(1), // remove leading colon
-      style: match[9] || "{}",
+      style: match[8] || "{}",
     };
     const args = new Node(this.type + "-args");
     args.data.token = {
       text: match[3],
       start: cursor2,
-      end: cursor8,
+      end: cursor7,
     };
     child.appendChild(args);
     return child;
   }
 }
 
-export class GridItemRule extends Block {
+export class JustifiedRowItemRule extends Block {
   constructor(type) {
     super(type);
     this.patternItem = /^(\s*)(\[[:.' ]{2}\])({.*?})?/;
@@ -100,7 +97,7 @@ export class GridItemRule extends Block {
   }
 
   parse(context, parent) {
-    if (parent.data.type !== "grid") return null;
+    if (parent.data.type !== "justified-row") return null;
     if (parent.data.type === this.type) return null;
     const input = context.input.current();
     const match = this.patternItem.exec(input);

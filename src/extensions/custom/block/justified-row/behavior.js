@@ -1,6 +1,6 @@
 import Behavior from "../../../../core/behavior.js";
 
-class JustifiedRowBehavior extends Behavior {
+export class JustifiedRowBehavior extends Behavior {
   constructor(type) {
     super(type);
   }
@@ -56,5 +56,3 @@ class JustifiedRowBehavior extends Behavior {
     });
   }
 }
-
-export { JustifiedRowBehavior };
