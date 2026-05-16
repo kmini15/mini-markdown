@@ -13,7 +13,7 @@ const extensions = [
   // GridTable,
   JustifiedRow,
   /* Inlines */
-  // ImageStyle,
+  ImageStyle,
 ];
 
 const blocks = extensions.flatMap(ext => ext.blocks ?? []);

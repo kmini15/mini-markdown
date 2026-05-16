@@ -1,17 +1,17 @@
 import Renderer from "../../../../core/renderer.js";
 
-class ImageStyleRenderer extends Renderer {
+export class ImageStyleRenderer extends Renderer {
   constructor(type) {
     super(type);
   }
 
   render(text, node) {
     let style = "";
-    if (node.fields.style) {
-      style = `style="${node.fields.style.slice(1, -1)}"`;
+    if (node.data.fields.style) {
+      style = `style="${node.data.fields.style.slice(1, -1)}"`;
     }
-    return `<img class="${this.type}" src="${node.fields.src}" title="${node.fields.title}" alt="${text}" ${style}>`;
+    const src = node.data.fields.src;
+    const title = node.data.fields.title;
+    return `<img class="${this.type}" src="${src}" title="${title}" alt="${text}" ${style}>`;
   }
 }
-
-export { ImageStyleRenderer };
