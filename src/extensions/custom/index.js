@@ -8,7 +8,7 @@ const name = "custom";
 
 const extensions = [
   /* Blocks */
-  // Details,
+  Details,
   Grid,
   // GridTable,
   JustifiedRow,
