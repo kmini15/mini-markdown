@@ -1,65 +1,64 @@
-import Rule from "../../../rule.js";
-import Node from "../../../../core/node.js";
-import TextWidth from "../../../../core/text-width.js";
+import { Block } from "../../../../core/block.js";
+import { Node } from "../../../../core/node.js";
 
-class FencedCodeBlockRule extends Rule {
+export class FencedCodeBlockRule extends Block {
   constructor(type) {
     super(type);
-    this.patternOpen = /(\s*)```(\w+)?\s*$/;
-    this.patternLine = /(\s*)(.*)$/;
-    this.patternClose = /(\s*)```\s*$/;
-    this.textWidth = new TextWidth();
-  }
-
-  start(context, parent) {
-    const capture = context.input.capture();
-    const node = this.parse(context, parent);
-    context.input.restore(capture);
-    if (!node) return false;
-    return true;
+    this.pattern = /^(\s*)(```)(\w+)?(\s*)$/;
+    this.patternIndent = /^(\s*)(.*)$/;
   }
 
   parse(context, parent) {
-    const line = context.input.current();
-    if (!line) return null;
-    const matchOpen = line.match(this.patternOpen);
-    if (!matchOpen) return null;
-    const [m_all, m_indent, m_language] = matchOpen;
-    const language = m_language || "";
-    const indent = m_indent.length + context.input.column();
-    const column = indent;
-    const lines = [];
+    const input = context.input.current();
+    const match = this.pattern.exec(input);
+    if (!match) return null;
+    const cursor0 = context.input.capture();
+    context.input.consume(match[1].length); // indent
+    const cursor1 = context.input.capture();
+    context.input.consume(match[2].length); // marker
+    const cursor2 = context.input.capture();
+    context.input.consume(match[3] ? match[3].length : 0); // language
+    const cursor3 = context.input.capture();
+    context.input.consume(match[4].length); // trailing spaces
+    const cursor4 = context.input.capture();
+    context.input.advance();
+    const child = new Node(this.type);
+    child.data.token = {
+      start: cursor1,
+      end: cursor2,
+    }
+    child.data.fields = {
+      language: match[3] || "",
+    }
     let isClosed = false;
     while (!context.input.eof()) {
-      const capture = context.input.capture();
-      context.input.advance();
-      const line = context.input.current();
-      const matchLine = line.match(this.patternLine);
-      if (matchLine[1].length < column) {
-        context.input.restore(capture);
-        return null;
+      const input = context.input.current();
+      const match = this.patternIndent.exec(input);
+      if (!match) break;
+      if (match[1].length < child.data.token.start.col) {
+        isClosed = false;
+        break;
       }
-      const matchClose = line.match(this.patternClose);
-      if (matchClose && matchClose[1].length === column) {
+      if (match[2].trim() === "```") {
+        context.input.advance();
         isClosed = true;
         break;
-      } else {
-        lines.push(line.slice(column));
       }
+      context.input.consume(child.data.token.start.idx);
+      const line = context.input.current();
+      context.input.advance();
+      const text = new Node("text");
+      text.data.text = line;
+      text.data.token = {
+        start: cursor1,
+        end: cursor2,
+      };
+      child.appendChild(text);
     }
     if (!isClosed) {
+      context.input.restore(cursor0);
       return null;
     }
-    context.input.consume(context.input.current().length);
-    const textNode = new Node("text");
-    textNode.value = lines.join("\n");
-    const codeNode = new Node(this.type);
-    codeNode.fields = {
-      language: language,
-    }
-    codeNode.appendChild(textNode);
-    return codeNode;
+    return child;
   }
 }
-
-export { FencedCodeBlockRule };

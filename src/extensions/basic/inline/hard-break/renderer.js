@@ -1,6 +1,6 @@
-import Renderer from "../../../renderer.js";
+import Renderer from "../../../../core/renderer.js";
 
-class HardBreakRenderer extends Renderer {
+export class HardBreakRenderer extends Renderer {
   constructor(type) {
     super(type);
   }
@@ -9,5 +9,3 @@ class HardBreakRenderer extends Renderer {
     return `<br>`;
   }
 }
-
-export { HardBreakRenderer };

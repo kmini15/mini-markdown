@@ -1,4 +1,4 @@
-import BlockParser from "./parser/block-parser.js";
+import { BlockParser } from "./parser/block-parser.js";
 import InlineParser from "./parser/inline-parser.js";
 import HtmlRenderer from "./renderer/html-renderer.js";
 import AstRenderer from "./renderer/ast-renderer.js";
@@ -11,26 +11,31 @@ class MiniMarkdown {
   constructor(extensions = MiniMarkdown.defaultExtensions()) {
     this.root = null;
     this.extensions = extensions;
-    this.blockRules = this.extensions.flatMap(ext => ext.blockRules ?? []);
-    this.inlineRules = this.extensions.flatMap(ext => ext.inlineRules ?? []);
+    this.blocks = this.extensions.flatMap(ext => ext.blocks ?? []);
+    this.inlines = this.extensions.flatMap(ext => ext.inlines ?? []);
     this.renderers = this.extensions.flatMap(ext => ext.renderers ?? []);
     this.behaviors = this.extensions.flatMap(ext => ext.behaviors ?? []);
     this.styles = this.extensions.flatMap(ext => ext.styles ?? []);
 
-    this.blockRules.sort(this.comparePriority.bind(this));
-    this.inlineRules.sort(this.comparePriority.bind(this));
+    this.blocks.sort(this.comparePriority.bind(this));
+    this.inlines.sort(this.comparePriority.bind(this));
 
-    this.blockParser = new BlockParser(this.blockRules.map(rule => rule.rule));
-    this.inlineParser = new InlineParser(this.inlineRules.map(rule => rule.rule));
+    this.blockParser = new BlockParser(this.blocks.map(rule => rule.rule));
+    this.inlineParser = new InlineParser(this.inlines.map(rule => rule.rule));
     this.htmlRenderer = new HtmlRenderer(this.renderers);
     this.astRenderer = new AstRenderer();
+
+    this.node_ast = null;
+    this.text_ast = "";
+    this.text_html = "";
+    this.text_markdown = "";
   }
 
   static defaultExtensions() {
     return [
       Basic,
-      Extended,
-      Custom,
+      // Extended,
+      // Custom,
     ];
   }
 
@@ -57,32 +62,31 @@ class MiniMarkdown {
     }
   }
 
-  parseAst(text) {
-    var node = this.blockParser.parse(text);
-    var node = this.inlineParser.parse(node);
-    return node;
-  }
-
-  renderAst(node) {
-    var text = this.astRenderer.render(node);
-    return text;
-  }
-
-  renderHtml(node) {
-    var text = this.htmlRenderer.render(node);
-    return text;
-  }
-
   render(text) {
     for (const behavior of this.behaviors) {
       behavior.unmount(this.root);
     }
-    const node = this.parseAst(text);
-    const html = this.renderHtml(node);
-    this.root.innerHTML = html;
+    this.node_ast = this.blockParser.parse(text);
+    this.node_ast = this.inlineParser.parse(this.node_ast);
+    this.text_ast = this.astRenderer.render(this.node_ast);
+    this.text_html = this.htmlRenderer.render(this.node_ast);
+    this.text_markdown = text;
+    this.root.innerHTML = this.text_html;
     for (const behavior of this.behaviors) {
       behavior.mount(this.root);
     }
+  }
+
+  getTextAst() {
+    return this.text_ast;
+  }
+
+  getTextHtml() {
+    return this.text_html;
+  }
+
+  getTextMarkdown() {
+    return this.text_markdown;
   }
 }
 

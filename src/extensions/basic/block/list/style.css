@@ -1,13 +1,21 @@
 .mini-markdown ul.list {
-  margin: var(--mmd-spacing-xs) 0;
+  margin: var(--mmd-spacing-md) 0;
   padding-left: var(--mmd-spacing-lg);
   font-size: var(--mmd-font-size-md);
 }
 
 .mini-markdown ol.list {
-  margin: var(--mmd-spacing-xs) 0;
+  margin: var(--mmd-spacing-md) 0;
   padding-left: var(--mmd-spacing-lg);
   font-size: var(--mmd-font-size-md);
+}
+
+.mini-markdown li.list-item > ul.list {
+  margin: 0;
+}
+
+.mini-markdown li.list-item > ol.list {
+  margin: 0;
 }
 
 .mini-markdown li.list-item {

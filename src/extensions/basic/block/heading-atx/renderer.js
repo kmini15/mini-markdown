@@ -1,14 +1,12 @@
-import Renderer from "../../../renderer.js";
+import Renderer from "../../../../core/renderer.js";
 
-class HeadingAtxRenderer extends Renderer {
+export class HeadingAtxRenderer extends Renderer {
   constructor(type) {
     super(type);
   }
 
   render(text, node) {
-    const level = node.fields.level;
+    const level = node.data.fields.level;
     return `<h${level} class="heading-atx">${text}</h${level}>\n`;
   }
 }
-
-export { HeadingAtxRenderer };

@@ -1,22 +1,42 @@
 <!DOCTYPE html>
 
 <html lang="ko">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mini Markdown Test</title>
+    <link rel="stylesheet" href="./index.css">
 </head>
+
 <body>
-    <div id="markdown-output"></div>
-    <script type="module">
-        import MiniMarkdown from "./index.js";
-        const mmd = new MiniMarkdown();
-        const mmdRoot = document.getElementById("markdown-output");
-        mmd.mount(mmdRoot);
-        mmd.style();
-        const response = await fetch("./index.md");
-        const markdown = await response.text();
-        mmd.render(markdown);
-    </script>
+    <main>
+        <section class="section-0">
+            <div class="header">
+                <h2>Editor</h2>
+            </div>
+            <pre><div id="editor" contenteditable="true" spellcheck="false"></div></pre>
+        </section>
+        <section class="section-1">
+            <div class="header">
+                <h2>Preview</h2>
+            </div>
+            <div id="preview"></div>
+        </section>
+        <section class="section-2">
+            <div class="header">
+                <h2>Preview - Abstract Syntax Tree</h2>
+            </div>
+            <pre><div id="preview-ast"></div></pre>
+        </section>
+        <section class="section-3">
+            <div class="header">
+                <h2>Preview - HTML</h2>
+            </div>
+            <pre><div id="preview-html"></div></pre>
+        </section>
+    </main>
+    <script type="module" src="./index.js"></script>
 </body>
+
 </html>

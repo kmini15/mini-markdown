@@ -1,13 +1,11 @@
-import Renderer from "../../../renderer.js";
+import Renderer from "../../../../core/renderer.js";
 
-class HtmlRenderer extends Renderer {
+export class HtmlRenderer extends Renderer {
   constructor(type) {
     super(type);
   }
 
   render(text, node) {
-    return `<div class="${this.type}">\n${text}</div>\n`;
+    return node.data.token.text;
   }
 }
-
-export { HtmlRenderer };

@@ -1,13 +1,11 @@
-import Renderer from "../../../renderer.js";
+import Renderer from "../../../../core/renderer.js";
 
-class EscapeRenderer extends Renderer {
+export class EscapeRenderer extends Renderer {
   constructor(type) {
     super(type);
   }
 
   render(text, node) {
-    return node.value;
+    return node.data.token.text.slice(1);
   }
 }
-
-export { EscapeRenderer };

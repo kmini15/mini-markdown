@@ -1,13 +1,11 @@
-import Renderer from "../../../renderer.js";
+import Renderer from "../../../../core/renderer.js";
 
-class ParagraphRenderer extends Renderer {
+export class ParagraphRenderer extends Renderer {
   constructor(type) {
     super(type);
   }
 
   render(text, node) {
-    return `<p class="paragraph">${text}</p>\n`;
+    return `<p class="paragraph">${text.trim()}</p>\n`;
   }
 }
-
-export { ParagraphRenderer };

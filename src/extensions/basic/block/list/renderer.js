@@ -1,23 +1,25 @@
-import Renderer from "../../../renderer.js";
+import Renderer from "../../../../core/renderer.js";
 
-class ListRenderer extends Renderer {
+export class ListRenderer extends Renderer {
   constructor(type) {
     super(type);
   }
 
   render(text, node) {
-    return `<${node.fields.ordered ? 'ol' : 'ul'} class="${this.type}">\n${text}</${node.fields.ordered ? 'ol' : 'ul'}>\n`;
+    if (node.data.fields.ordered) {
+      return `<ol class="${this.type}">\n${text}</ol>\n`;
+    } else {
+      return `<ul class="${this.type}">\n${text}</ul>\n`;
+    }
   }
 }
 
-class ListItemRenderer extends Renderer {
+export class ListItemRenderer extends Renderer {
   constructor(type) {
     super(type);
   }
 
   render(text, node) {
-    return `<li class="${this.type}">${text}</li>\n`;
+    return `<li class="${this.type}">\n${text}</li>\n`;
   }
 }
-
-export { ListRenderer, ListItemRenderer };

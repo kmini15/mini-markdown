@@ -1,4 +1,4 @@
-import Behavior from "../../../behavior.js";
+import Behavior from "../../../../core/behavior.js";
 
 class DetailsBehavior extends Behavior {
   constructor(type) {

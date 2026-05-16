@@ -1,20 +1,14 @@
-import { LinkRule } from "./rule.js";
+import { LinkRule } from "./inline.js";
 import { LinkRenderer } from "./renderer.js";
-import { LinkBehavior } from "./behavior.js";
 
 const name = "link";
 
 export default {
   name: name,
-  blockRules: [],
-  inlineRules: [{
+  inlines: [{
     rule: new LinkRule(name),
-    priority: {
-      major: 6000,
-      minor: 5000,
-    },
+    priority: { major: 6000, minor: 5000 },
   }],
   renderers: [new LinkRenderer(name)],
-  behaviors: [new LinkBehavior(name)],
   styles: [new URL("./style.css", import.meta.url).href],
 };

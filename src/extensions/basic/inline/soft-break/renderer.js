@@ -1,6 +1,6 @@
-import Renderer from "../../../renderer.js";
+import Renderer from "../../../../core/renderer.js";
 
-class SoftBreakRenderer extends Renderer {
+export class SoftBreakRenderer extends Renderer {
   constructor(type) {
     super(type);
   }
@@ -9,5 +9,3 @@ class SoftBreakRenderer extends Renderer {
     return `\n`;
   }
 }
-
-export { SoftBreakRenderer };

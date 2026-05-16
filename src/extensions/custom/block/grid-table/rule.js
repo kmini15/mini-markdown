@@ -1,6 +1,6 @@
-import Rule from "../../../rule.js";
-import Node from "../../../../core/node.js";
-import TextWidth from "../../../../core/text-width.js";
+import { Block } from "../../../../core/block.js";
+import { Node } from "../../../../core/node.js";
+import { TextRuler } from "../../../../core/text-ruler.js";
 
 /*
 open line:  +----------+----------+----------+  <= patternOpen
@@ -47,7 +47,7 @@ Example of a grid table with various alignments, spans, and headers:
 +-------+---------------+:=====================:+--------+
 */
 
-class GridTableRule extends Rule {
+class GridTableRule extends Block {
   constructor(type) {
     super(type);
     this.patternOpen = /^[+][+-]+[+]$/;
@@ -55,7 +55,7 @@ class GridTableRule extends Rule {
     this.patternMark = /^[|+](.+)[|+]$/;
     this.patternHead = /^([:'.=])[+=]+([:'.=])$/;
     this.patternData = /^([:'.-])[+-]+([:'.-])$/;
-    this.textWidth = new TextWidth();
+    this.textRuler = new TextRuler();
   }
 
   start(context, parent) {
@@ -109,11 +109,11 @@ class GridTableRule extends Rule {
       .split("+")
       .slice(1, -1)
       .map(segment => segment.trim())
-      .map(segment => this.textWidth.measure(segment));
+      .map(segment => this.textRuler.measure(segment));
     let offset = 0;
     return widths.map(width => {
       const bound = {
-        begin: offset + 1,
+        start: offset + 1,
         end: offset + width + 1,
       };
       offset = bound.end;
@@ -153,16 +153,16 @@ class GridTableRule extends Rule {
         aligns.push(null); // This column is spanned, so no align
         continue;
       }
-      const begin = columns[i].begin;
+      const start = columns[i].start;
       const end = columns[i + colSpans[i] - 1].end;
-      const segment = markLine.slice(begin, end);
+      const segment = markLine.slice(start, end);
       let mark = "span";
       mark = this.patternHead.test(segment) ? "head" : mark;
       mark = this.patternData.test(segment) ? "data" : mark;
       marks.push(mark);
-      let text = cellLine.slice(begin, end).trim();
+      let text = cellLine.slice(start, end).trim();
       if (mark === "span") {
-        text += "\n" + markLine.slice(begin, end).trim();
+        text += "\n" + markLine.slice(start, end).trim();
       }
       texts.push(text);
       let align = {

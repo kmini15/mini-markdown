@@ -1,7 +1,7 @@
-import Rule from "../../../rule.js";
-import Node from "../../../../core/node.js";
+import { Block } from "../../../../core/block.js";
+import { Node } from "../../../../core/node.js";
 
-class ImageStyleRule extends Rule {
+class ImageStyleRule extends Block {
   constructor(type) {
     super(type);
     this.input = "";

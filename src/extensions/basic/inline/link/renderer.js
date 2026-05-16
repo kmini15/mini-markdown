@@ -1,17 +1,15 @@
-import Renderer from "../../../renderer.js";
+import Renderer from "../../../../core/renderer.js";
 
-class LinkRenderer extends Renderer {
+export class LinkRenderer extends Renderer {
   constructor(type) {
     super(type);
   }
 
   render(text, node) {
     let title = "";
-    if (node.fields.title) {
-      title = ` title="${node.fields.title}"`;
+    if (node.data.fields.title) {
+      title = ` title="${node.data.fields.title}"`;
     }
-    return `<a class="${this.type}" href="${node.fields.href}"${title}>${text}</a>`;
+    return `<a class="${this.type}" href="${node.data.fields.href}"${title}>${text}</a>`;
   }
 }
-
-export { LinkRenderer };

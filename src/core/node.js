@@ -1,14 +1,16 @@
-class Node {
-  constructor(type) {
+export class Node {
+  constructor(type, lazy = false) {
     this.parent = null;
     this.firstChild = null;
     this.lastChild = null;
     this.prev = null;
     this.next = null;
-
-    this.type = type;
-    this.value = "";
-    this.fields = {};
+    this.data = {
+      type: type,
+      lazy: lazy,
+      token: { text: null, start: null, end: null },
+      fields: {},
+    };
   }
 
   unlink() {
@@ -81,5 +83,3 @@ class Node {
     this.next = node;
   }
 }
-
-export default Node;

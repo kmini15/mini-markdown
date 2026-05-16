@@ -1,0 +1,138 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  width: 100vw;
+  height: 100vh;
+  font-family: 'D2Coding', Menlo, Monaco, 'Courier New', monospace;
+  font-size: 12px;
+  line-height: 1.2em;
+  color: rgba(200, 200, 200, 1);
+}
+
+body {
+  width: 100%;
+  height: 100%;
+  padding: 8px;
+  background-color: rgba(20, 20, 20, 1);
+  color-scheme: dark;
+  overflow: hidden;
+}
+
+main {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  border-collapse: collapse;
+  grid-gap: 0;
+}
+
+section {
+  width: 100%;
+  height: 100%;
+  border: 1px solid rgba(80, 80, 80, 1);
+  overflow: auto;
+  scrollbar-width: thin;
+}
+
+section.section-0 {
+  border-top-left-radius: 8px;
+}
+
+section.section-1 {
+  border-top-right-radius: 8px;
+}
+
+section.section-2 {
+  border-bottom-left-radius: 8px;
+}
+
+section.section-3 {
+  border-bottom-right-radius: 8px;
+}
+
+.header {
+  width: 100%;
+  padding: 8px 0 4px 8px;
+  background-color: rgba(40, 40, 40, 1);
+  margin-bottom: 8px;
+}
+
+.header h2 {
+  font-size: 14px;
+  color: rgba(200, 200, 200, 1);
+  vertical-align: bottom;
+}
+
+#editor,
+#preview,
+#preview-ast,
+#preview-html {
+  width: 100%;
+  height: 100%;
+  padding: 8px;
+  outline: none;
+}
+
+#preview-ast {
+  --color-highlight-midori-0: rgb(200, 220, 180);
+  --color-highlight-midori-1: rgb(180, 240, 120);
+  --color-highlight-midori-2: rgb(150, 240, 120);
+  --color-highlight-momoi-0: rgb(220, 180, 200);
+  --color-highlight-momoi-1: rgb(240, 120, 180);
+  --color-highlight-momoi-2: rgb(240, 120, 150);
+  --color-highlight-aris-0: rgb(180, 200, 220);
+  --color-highlight-aris-1: rgb(120, 180, 240);
+  --color-highlight-aris-2: rgb(120, 150, 240);
+  --color-highlight-yuzu-0: rgb(220, 200, 180);
+  --color-highlight-yuzu-1: rgb(240, 180, 120);
+  --color-highlight-yuzu-2: rgb(240, 150, 120);
+  --color-highlight-kei-0: rgb(220, 200, 200);
+  --color-highlight-kei-1: rgb(240, 180, 180);
+  --color-highlight-kei-2: rgb(240, 150, 180);
+}
+
+#preview-ast span.type {
+  color: var(--color-highlight-yuzu-1);
+}
+
+#preview-ast span.text {
+  color: var(--color-highlight-yuzu-2);
+}
+
+#preview-ast span.field-key {
+  color: var(--color-highlight-kei-1);
+}
+
+#preview-ast span.field-value {
+  color: var(--color-highlight-aris-1);
+}
+
+#preview-ast span.token-start-row {
+  color: var(--color-highlight-momoi-1);
+}
+
+#preview-ast span.token-start-col {
+  color: var(--color-highlight-momoi-1);
+}
+
+#preview-ast span.token-start-idx {
+  color: var(--color-highlight-midori-1);
+}
+
+#preview-ast span.token-end-row {
+  color: var(--color-highlight-momoi-1);
+}
+
+#preview-ast span.token-end-col {
+  color: var(--color-highlight-momoi-1);
+}
+
+#preview-ast span.token-end-idx {
+  color: var(--color-highlight-midori-1);
+}

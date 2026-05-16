@@ -1,13 +1,11 @@
-import Renderer from "../../../renderer.js";
+import Renderer from "../../../../core/renderer.js";
 
-class AutolinkUrlRenderer extends Renderer {
+export class AutolinkUrlRenderer extends Renderer {
   constructor(type) {
     super(type);
   }
 
   render(text, node) {
-    return `<a class="${this.type}" href="${node.fields.href}">${node.fields.href}</a>`;
+    return `<a class="${this.type}" href="${node.data.fields.href}">${text}</a>`;
   }
 }
-
-export { AutolinkUrlRenderer };

@@ -1,4 +1,4 @@
-class NodeStack {
+export class NodeStack {
   constructor() {
     this.stack = [];
   }
@@ -25,5 +25,3 @@ class NodeStack {
     return this.stack.length;
   }
 }
-
-export default NodeStack;

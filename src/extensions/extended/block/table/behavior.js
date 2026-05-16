@@ -1,4 +1,4 @@
-import Behavior from "../../../behavior.js";
+import Behavior from "../../../../core/behavior.js";
 
 class TableBehavior extends Behavior {
   constructor(type) {

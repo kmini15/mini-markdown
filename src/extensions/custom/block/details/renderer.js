@@ -1,4 +1,4 @@
-import Renderer from "../../../renderer.js";
+import Renderer from "../../../../core/renderer.js";
 
 class DetailsRenderer extends Renderer {
   constructor(type) {

@@ -1,4 +1,4 @@
-import Renderer from "../../../renderer.js";
+import Renderer from "../../../../core/renderer.js";
 
 class GridTableRenderer extends Renderer {
   constructor(type) {

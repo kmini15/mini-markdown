@@ -1,13 +1,13 @@
-import TextWidth from "./text-width.js";
+import { TextRuler } from "./text-ruler.js";
 
-class TextContext {
-  constructor(text) {
+export class TextContext {
+  constructor(text, ruler = new TextRuler()) {
+    this.ruler = ruler;
     this.lines = text.replace(/\r\n?/g, "\n").split("\n");
     this.numLines = this.lines.length;
     this.row = 0; // line number in text
     this.col = 0; // column number in line
     this.idx = 0; // index in line
-    this.textWidth = new TextWidth();
   }
 
   eof() {
@@ -35,24 +35,18 @@ class TextContext {
 
   consume(n = 1) {
     if (this.eof()) return;
-    const width = this.textWidth.measure(this.current().slice(0, n));
+    const width = this.ruler.measure(this.current().slice(0, n));
     this.col += width;
     this.idx += n;
   }
   
-  column() {
-    return this.col;
+  capture() {
+    return { idx: this.idx, row: this.row, col: this.col };
   }
 
-  capture() {
-    return { row: this.row, col: this.col, idx: this.idx };
-  }
-  
   restore(cursor) {
     this.row = cursor.row;
     this.col = cursor.col;
     this.idx = cursor.idx;
   }
 }
-
-export default TextContext;

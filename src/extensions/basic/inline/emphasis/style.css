@@ -1,9 +1,7 @@
 .mini-markdown strong.emphasis {
   font-weight: var(--mmd-font-weight-bold);
-  font-style: normal;
 }
 
 .mini-markdown em.emphasis {
   font-weight: var(--mmd-font-weight-normal);
-  font-style: italic;
 }

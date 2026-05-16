@@ -1,6 +1,6 @@
-import Renderer from "../../../renderer.js";
+import Renderer from "../../../../core/renderer.js";
 
-class HorizontalRuleRenderer extends Renderer {
+export class HorizontalRuleRenderer extends Renderer {
   constructor(type) {
     super(type);
   }
@@ -9,5 +9,3 @@ class HorizontalRuleRenderer extends Renderer {
     return `<hr class="${this.type}"/>\n`;
   }
 }
-
-export { HorizontalRuleRenderer };

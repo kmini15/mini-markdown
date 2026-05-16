@@ -1,13 +1,13 @@
-import Rule from "../../../rule.js";
-import Node from "../../../../core/node.js";
-import TextWidth from "../../../../core/text-width.js";
+import { Block } from "../../../../core/block.js";
+import { Node } from "../../../../core/node.js";
+import { TextRuler } from "../../../../core/text-ruler.js";
 
-class GridRule extends Rule {
+class GridRule extends Block {
   constructor(type) {
     super(type);
     this.pattern_open = /^(((\s*)::::)\[([^\]:]+):([^\]:]+):([^\]:]+)\]({.*?})?)\s*$/;
     this.pattern_item = /^(((\s*)(\[[:.' ]{2}\]))({.*?})?)(.*)$/;
-    this.textWidth = new TextWidth();
+    this.textRuler = new TextRuler();
   }
 
   continue(context, node) {
@@ -15,14 +15,14 @@ class GridRule extends Rule {
     const match = line.match(this.pattern_item);
     if (match) {
       const [m_all, m_marker, m_column, m_indent, m_align, m_style] = match;
-      const indent = this.textWidth.measure(m_indent) + context.input.column();
+      const indent = this.textRuler.measure(m_indent) + context.input.column();
       if (indent < node.fields.indent) return false;
       context.input.consume(node.fields.indent - context.input.column());
       return true;
     } else {
       const match = line.match(/^(((\s*)))/);
       const [m_all, m_marker, m_column, m_indent] = match;
-      const column = this.textWidth.measure(m_column) + context.input.column();
+      const column = this.textRuler.measure(m_column) + context.input.column();
       if (column < node.fields.column) return false;
       context.input.consume(node.fields.indent - context.input.column());
       return true;
@@ -41,8 +41,8 @@ class GridRule extends Rule {
     const match = line.match(this.pattern_open);
     if (!match) return null;
     const [m_all, m_marker, m_column, m_indent, m_width, m_gap, m_columns, m_style] = match;
-    const indent = this.textWidth.measure(m_indent) + context.input.column();
-    const column = this.textWidth.measure(m_column) + context.input.column();
+    const indent = this.textRuler.measure(m_indent) + context.input.column();
+    const column = this.textRuler.measure(m_column) + context.input.column();
     const child = new Node(this.type);
     child.fields = {
       indent: indent,
@@ -57,11 +57,11 @@ class GridRule extends Rule {
   }
 }
 
-class GridItemRule extends Rule {
+class GridItemRule extends Block {
   constructor(type) {
     super(type);
     this.pattern_item = /^(((\s*)(\[[:.' ]{2}\]))({.*?})?)(.*)$/;
-    this.textWidth = new TextWidth();
+    this.textRuler = new TextRuler();
   }
 
   continue(context, node) {
@@ -69,14 +69,14 @@ class GridItemRule extends Rule {
     const match = line.match(this.pattern_item);
     if (match) {
       const [m_all, m_marker, m_column, m_indent, m_align, m_style] = match;
-      const indent = this.textWidth.measure(m_indent) + context.input.column();
+      const indent = this.textRuler.measure(m_indent) + context.input.column();
       if (indent < node.fields.column) return false;
       context.input.consume(node.fields.column - context.input.column());
       return true;
     } else {
       const match = line.match(/^(((\s*)))/);
       const [m_all, m_marker, m_column, m_indent] = match;
-      const column = this.textWidth.measure(m_column) + context.input.column();
+      const column = this.textRuler.measure(m_column) + context.input.column();
       if (column < node.fields.column) return false;
       context.input.consume(node.fields.column - context.input.column());
       return true;
@@ -99,8 +99,8 @@ class GridItemRule extends Rule {
     const match = line.match(this.pattern_item);
     if (!match) return null;
     const [m_all, m_marker, m_column, m_indent, m_align, m_style, m_content] = match;
-    const indent = this.textWidth.measure(m_indent) + context.input.column();
-    const column = this.textWidth.measure(m_column) + context.input.column();
+    const indent = this.textRuler.measure(m_indent) + context.input.column();
+    const column = this.textRuler.measure(m_column) + context.input.column();
     const child = new Node(this.type);
     child.fields = {
       indent: indent,

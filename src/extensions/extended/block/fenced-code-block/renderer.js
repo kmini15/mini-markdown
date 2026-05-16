@@ -1,4 +1,4 @@
-import Renderer from "../../../renderer.js";
+import Renderer from "../../../../core/renderer.js";
 
 class FencedCodeBlockRenderer extends Renderer {
   constructor(type) {
@@ -7,10 +7,10 @@ class FencedCodeBlockRenderer extends Renderer {
   
   render(text, node) {
     let language = "";
-    if (node.fields.language) {
-      language = `language-${node.fields.language}`;
+    if (node.data.fields.language) {
+      language = `language-${node.data.fields.language}`;
     }
-    return `<pre class="${this.type}"><code class="${this.type} ${language}">${this.escapeHtml(text)}</code></pre>\n`;
+    return `<pre class="${this.type}"><code class="${this.type} ${language}">${this.escapeHtml(text)}</code></pre>`;
   }
 
   escapeHtml(text) {

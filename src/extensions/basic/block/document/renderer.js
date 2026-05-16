@@ -1,6 +1,6 @@
-import Renderer from "../../../renderer.js";
+import Renderer from "../../../../core/renderer.js";
 
-class DocumentRenderer extends Renderer {
+export class DocumentRenderer extends Renderer {
   constructor(type) {
     super(type);
   }
@@ -9,5 +9,3 @@ class DocumentRenderer extends Renderer {
     return `<div class="document">\n${text}</div>\n`;
   }
 }
-
-export { DocumentRenderer };

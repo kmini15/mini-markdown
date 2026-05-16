@@ -1,4 +1,4 @@
-import Renderer from "../../../renderer.js";
+import Renderer from "../../../../core/renderer.js";
 
 class ImageRenderer extends Renderer {
   constructor(type) {
@@ -6,7 +6,11 @@ class ImageRenderer extends Renderer {
   }
 
   render(text, node) {
-    return `<img class="${this.type}" src="${node.fields.src}" title="${node.fields.title}" alt="${text}">`;
+    let title = "";
+    if (node.data.fields.title) {
+      title = ` title="${node.data.fields.title}"`;
+    }
+    return `<img class="${this.type}" src="${node.data.fields.src}"${title} alt="${text}">`;
   }
 }
 

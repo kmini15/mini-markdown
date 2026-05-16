@@ -1,25 +1,25 @@
-import Rule from "../../../rule.js";
-import Node from "../../../../core/node.js";
-import TextWidth from "../../../../core/text-width.js";
+import { Block } from "../../../../core/block.js";
+import { Node } from "../../../../core/node.js";
+import { TextRuler } from "../../../../core/text-ruler.js";
 
-class DetailsRule extends Rule {
+class DetailsRule extends Block {
   constructor(type) {
     super(type);
     this.pattern = /^(((\s*)(<\.\.>|<\'\'>))\[([^\]]+)\]\s*)$/;
-    this.textWidth = new TextWidth();
+    this.textRuler = new TextRuler();
   }
-  
+
   continue(context, node) {
     const line = context.input.current();
     const match = /(\s*)/.exec(line);
     if (!match) return false;
     const [m_all, m_column] = match;
-    const column = this.textWidth.measure(m_column) + context.input.column();
+    const column = this.textRuler.measure(m_column) + context.input.column();
     if (column < node.fields.column) return false;
     context.input.consume(node.fields.column - context.input.column());
     return true;
   }
-  
+
   start(context, parent) {
     const capture = context.input.capture();
     const child = this.parse(context, parent);
@@ -27,14 +27,14 @@ class DetailsRule extends Rule {
     if (!child) return false;
     return true;
   }
-  
+
   parse(context, parent) {
     const line = context.input.current();
     const match = this.pattern.exec(line);
     if (!match) return null;
     const [m_all, m_marker, m_column, m_indent, m_type, m_summary] = match;
-    const indent = this.textWidth.measure(m_indent) + context.input.column();
-    const column = this.textWidth.measure(m_column) + context.input.column();
+    const indent = this.textRuler.measure(m_indent) + context.input.column();
+    const column = this.textRuler.measure(m_column) + context.input.column();
     const summaryText = new Node("text");
     summaryText.value = m_summary.trim();
     summaryText.fields = {

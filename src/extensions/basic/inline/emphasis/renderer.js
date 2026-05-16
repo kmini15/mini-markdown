@@ -1,18 +1,16 @@
-import Renderer from "../../../renderer.js";
+import Renderer from "../../../../core/renderer.js";
 
-class EmphasisRenderer extends Renderer {
+export class EmphasisRenderer extends Renderer {
   constructor(type) {
     super(type);
   }
 
   render(text, node) {
-    if (node.fields.type === "bold") {
+    if (node.data.fields.type === "bold") {
       return `<strong class="${this.type}">${text}</strong>`;
-    } else if (node.fields.type === "italic") {
+    } else if (node.data.fields.type === "italic") {
       return `<em class="${this.type}">${text}</em>`;
     }
     return text;
   }
 }
-
-export { EmphasisRenderer };

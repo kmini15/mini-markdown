@@ -1,12 +1,10 @@
-import Rule from "../../../rule.js";
-import Node from "../../../../core/node.js";
-import TextWidth from "../../../../core/text-width.js";
+import { Block } from "../../../../core/block.js";
+import { Node } from "../../../../core/node.js";
 
-class TableRule extends Rule {
+class TableRule extends Block {
   constructor(type) {
     super(type);
     this.patternData = /^\s*([:-])[-]+([:-])\s*$/;
-    this.textWidth = new TextWidth();
   }
 
   start(context, parent) {

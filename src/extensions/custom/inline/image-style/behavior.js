@@ -1,4 +1,4 @@
-import Behavior from "../../../behavior.js";
+import Behavior from "../../../../core/behavior.js";
 
 class ImageStyleBehavior extends Behavior {
   constructor(type) {

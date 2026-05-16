@@ -1,12 +1,11 @@
-import { ListRule, ListItemRule } from "./rule.js";
+import { ListRule, ListItemRule } from "./block.js";
 import { ListRenderer, ListItemRenderer } from "./renderer.js";
-import { ListBehavior } from "./behavior.js";
 
 const name = "list";
 
 export default {
   name: name,
-  blockRules: [{
+  blocks: [{
     rule: new ListRule(name),
     priority: {
       major: 4000,
@@ -19,8 +18,6 @@ export default {
       minor: 5000,
     },
   }],
-  inlineRules: [],
   renderers: [new ListRenderer(name), new ListItemRenderer(name + "-item")],
-  behaviors: [new ListBehavior(name)],
   styles: [new URL("./style.css", import.meta.url).href],
 };
