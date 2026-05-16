@@ -20,15 +20,14 @@ class AstRenderer {
       result += `(<span class="token-end-idx">${token.end.idx}</span>)]`;
     }
     if (this.renderToken && token) {
-      const escaped_text = this.escapeHtml(token.text);
-      const nowrap_text = escaped_text.replace(/\r\n|\n/g, "\\n");
-      if (token.text && token.text.length > this.maxTextLength) {
-        const render_text = nowrap_text.slice(0, this.maxTextLength);
-        result += `("<span class="text">${render_text}</span>...")`;
-      } else {
-        const render_text = nowrap_text;
-        result += `("<span class="text">${render_text}</span>")`;
+      let text = token.text.replace(/\r\n|\n/g, "\\n");
+      if (text && text.length > this.maxTextLength) {
+        text = text.slice(0, this.maxTextLength - 3) + "...";
       }
+      const escaped_text = this.escapeHtml(text);
+      const nowrap_text = escaped_text.replace(/\r\n|\n/g, "\\n");
+      const render_text = nowrap_text;
+      result += `("<span class="text">${render_text}</span>")`;
     }
     if (this.renderFields) {
       const string_fields = Object.entries(fields).map(

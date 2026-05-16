@@ -24,6 +24,7 @@ export class FencedCodeBlockRule extends Block {
     context.input.advance();
     const child = new Node(this.type);
     child.data.token = {
+      text: match[2],
       start: cursor1,
       end: cursor2,
     }
@@ -44,12 +45,16 @@ export class FencedCodeBlockRule extends Block {
         isClosed = true;
         break;
       }
-      context.input.consume(child.data.token.start.idx);
+      const cursor0 = context.input.capture();
+      context.input.consume(child.data.token.start.col); // indent
+      const cursor1 = context.input.capture();
       const line = context.input.current();
+      context.input.consume(line.length); // line
+      const cursor2 = context.input.capture();
       context.input.advance();
-      const text = new Node("text");
-      text.data.text = line;
+      const text = new Node("literal");
       text.data.token = {
+        text: line + "\n",
         start: cursor1,
         end: cursor2,
       };

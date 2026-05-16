@@ -5,7 +5,7 @@ import Table from "./block/table/index.js";
 const name = "extended";
 
 const extensions = [
-  // FencedCodeBlock,
+  FencedCodeBlock,
   HeadingAtxId,
   // Table,
 ];
