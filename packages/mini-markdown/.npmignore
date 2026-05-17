@@ -1,6 +1,5 @@
 *
 !src/**
-!tests/**
 !index.js
 !package.json
 !README.md

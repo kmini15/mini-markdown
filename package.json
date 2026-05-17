@@ -1,14 +1,10 @@
 {
-  "name": "@kmini15/mini-markdown",
-  "version": "0.1.2",
-  "description": "Mini Markdown Parser and Renderer",
-  "author": "KMini15",
-  "type": "module",
-  "main": "index.js",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
   "scripts": {
     "dev:test": "vite tests"
-  },
-  "devDependencies": {
-    "vite": "^8.0.13"
   }
 }

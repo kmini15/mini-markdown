@@ -18,4 +18,3 @@ npm run dev:test
 
 ## VSCode Extension
 - [VSCode Marketplace](https://marketplace.visualstudio.com/items?itemName=KMini15.mini-markdown-extension)
-- [GitHub Repository](https://github.com/kmini15/mini-markdown-extension)
