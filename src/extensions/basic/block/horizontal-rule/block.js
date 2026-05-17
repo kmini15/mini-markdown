@@ -1,7 +1,7 @@
 import { Block } from "../../../../core/block.js";
 import { Node } from "../../../../core/node.js";
 
-class HorizontalRuleRule extends Block {
+export class HorizontalRuleRule extends Block {
   constructor(type) {
     super(type);
     this.pattern = /^(\s*)([-*_]{3,})(\s*)$/;
@@ -27,5 +27,3 @@ class HorizontalRuleRule extends Block {
     return child;
   }
 }
-
-export { HorizontalRuleRule };

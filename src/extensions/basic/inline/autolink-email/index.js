@@ -3,7 +3,7 @@ import { AutolinkEmailRenderer } from "./renderer.js";
 
 const name = "autolink-email";
 
-export default {
+export const AutolinkEmail = {
   name: name,
   inlines: [{
     rule: new AutolinkEmailRule(name),

@@ -3,7 +3,7 @@ import { CodeInlineRenderer } from "./renderer.js";
 
 const name = "code-inline";
 
-export default {
+export const CodeInline = {
   name: name,
   inlines: [{
     rule: new CodeInlineRule(name),

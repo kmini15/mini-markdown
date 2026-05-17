@@ -3,7 +3,7 @@ import { CodeBlockRenderer } from "./renderer.js";
 
 const name = "code-block";
 
-export default {
+export const CodeBlock = {
   name: name,
   blocks: [{
     rule: new CodeBlockRule(name),

@@ -3,7 +3,7 @@ import { LinkRenderer } from "./renderer.js";
 
 const name = "link";
 
-export default {
+export const Link = {
   name: name,
   inlines: [{
     rule: new LinkRule(name),

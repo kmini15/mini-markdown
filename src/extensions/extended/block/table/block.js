@@ -1,7 +1,7 @@
 import { Block } from "../../../../core/block.js";
 import { Node } from "../../../../core/node.js";
 
-class TableRule extends Block {
+export class TableRule extends Block {
   constructor(type) {
     super(type);
     this.patternData = /^\s*([:-])[-]+([:-])\s*$/;
@@ -125,5 +125,3 @@ class TableRule extends Block {
   }
 
 }
-
-export { TableRule };

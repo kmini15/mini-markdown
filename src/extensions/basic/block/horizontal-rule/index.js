@@ -3,7 +3,7 @@ import { HorizontalRuleRenderer } from "./renderer.js";
 
 const name = "horizontal-rule";
 
-export default {
+export const HorizontalRule = {
   name: name,
   blocks: [{
     rule: new HorizontalRuleRule(name),

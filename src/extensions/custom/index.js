@@ -1,32 +1,34 @@
-import Details from "./block/details/index.js";
-import Grid from "./block/grid/index.js";
-import GridTable from "./block/grid-table/index.js"
-import JustifiedRow from "./block/justified-row/index.js";
-import ImageStyle from "./inline/image-style/index.js";
+import { Details } from "./block/details/index.js";
+import { Grid } from "./block/grid/index.js";
+import { GridTable } from "./block/grid-table/index.js"
+import { JustifiedRow } from "./block/justified-row/index.js";
+import { ImageStyle } from "./inline/image-style/index.js";
 
 const name = "custom";
 
-const extensions = [
-  /* Blocks */
+const blocks = [
   Details,
   Grid,
   GridTable,
   JustifiedRow,
-  /* Inlines */
+];
+
+const inlines = [
   ImageStyle,
 ];
 
-const blocks = extensions.flatMap(ext => ext.blocks ?? []);
-const inlines = extensions.flatMap(ext => ext.inlines ?? []);
-const renderers = extensions.flatMap(ext => ext.renderers ?? []);
-const behaviors = extensions.flatMap(ext => ext.behaviors ?? []);
-const styles = extensions.flatMap(ext => ext.styles ?? []);
+const extensions = [
+  ...blocks,
+  ...inlines,
+];
 
-export default {
+const collect = key => extensions.flatMap(extension => extension[key] ?? []);
+
+export const Custom = {
   name: name,
-  blocks: blocks,
-  inlines: inlines,
-  renderers: renderers,
-  behaviors: behaviors,
-  styles: styles,
+  blocks: collect("blocks"),
+  inlines: collect("inlines"),
+  renderers: collect("renderers"),
+  behaviors: collect("behaviors"),
+  styles: collect("styles"),
 };

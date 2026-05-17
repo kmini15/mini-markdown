@@ -3,7 +3,7 @@ import { LinkCitationRenderer } from "./renderer.js";
 
 const name = "link-citation";
 
-export default {
+export const LinkCitation = {
   name: name,
   inlines: [{
     rule: new LinkCitationRule(name),

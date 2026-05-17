@@ -1,4 +1,4 @@
-import Behavior from "../../../../core/behavior.js";
+import { Behavior } from "../../../../core/behavior.js";
 
 export class JustifiedRowBehavior extends Behavior {
   constructor(type) {
@@ -25,7 +25,7 @@ export class JustifiedRowBehavior extends Behavior {
   unmount(root) {
     return;
   }
-  
+
   cacheItemRatios(root) {
     if (!root) return;
     root.querySelectorAll(".justified-row").forEach(row => {

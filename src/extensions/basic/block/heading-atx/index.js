@@ -3,7 +3,7 @@ import { HeadingAtxRenderer } from "./renderer.js";
 
 const name = "heading-atx";
 
-export default {
+export const HeadingAtx = {
   name: name,
   blocks: [{
     rule: new HeadingAtxRule(name),

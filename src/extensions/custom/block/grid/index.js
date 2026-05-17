@@ -3,7 +3,7 @@ import { GridRenderer, GridItemRenderer } from "./renderer.js";
 
 const name = "grid";
 
-export default {
+export const Grid = {
   name: name,
   blocks: [{
     rule: new GridRule(name),

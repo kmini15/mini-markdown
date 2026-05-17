@@ -1,6 +1,6 @@
-import Renderer from "../../../../core/renderer.js";
+import { Renderer } from "../../../../core/renderer.js";
 
-class ImageRenderer extends Renderer {
+export class ImageRenderer extends Renderer {
   constructor(type) {
     super(type);
   }
@@ -13,5 +13,3 @@ class ImageRenderer extends Renderer {
     return `<img class="${this.type}" src="${node.data.fields.src}"${title} alt="${text}">`;
   }
 }
-
-export { ImageRenderer };

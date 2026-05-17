@@ -3,7 +3,7 @@ import { ParagraphRenderer } from "./renderer.js";
 
 const name = "paragraph";
 
-export default {
+export const Paragraph = {
   name: name,
   blocks: [{
     rule: new ParagraphRule(name),

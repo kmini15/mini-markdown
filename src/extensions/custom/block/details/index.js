@@ -3,7 +3,7 @@ import { DetailsRenderer, DetailsSummaryRenderer } from "./renderer.js";
 
 const name = "details";
 
-export default {
+export const Details = {
   name: name,
   blocks: [{
     rule: new DetailsRule(name),

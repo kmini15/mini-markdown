@@ -3,7 +3,7 @@ import { EscapeRenderer } from "./renderer.js";
 
 const name = "escape";
 
-export default {
+export const Escape = {
   name: name,
   inlines: [{
     rule: new EscapeRule(name),

@@ -1,4 +1,4 @@
-class Renderer {
+export class Renderer {
   constructor(type) {
     this.type = type;
   }
@@ -7,5 +7,3 @@ class Renderer {
     return text;
   }
 }
-
-export default Renderer;

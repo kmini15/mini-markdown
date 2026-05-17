@@ -3,7 +3,7 @@ import { FencedCodeBlockRenderer } from "./renderer.js";
 
 const name = "fenced-code-block";
 
-export default {
+export const FencedCodeBlock = {
   name: name,
   blocks: [{
     rule: new FencedCodeBlockRule(name),

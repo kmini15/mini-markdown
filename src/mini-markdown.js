@@ -3,11 +3,11 @@ import { InlineParser } from "./parser/inline-parser.js";
 import { HtmlRenderer } from "./renderer/html-renderer.js";
 import { AstRenderer } from "./renderer/ast-renderer.js";
 
-import Basic from "./extensions/basic/index.js";
-import Extended from "./extensions/extended/index.js";
-import Custom from "./extensions/custom/index.js";
+import { Basic } from "./extensions/basic/index.js";
+import { Extended } from "./extensions/extended/index.js";
+import { Custom } from "./extensions/custom/index.js";
 
-class MiniMarkdown {
+export class MiniMarkdown {
   constructor(extensions = MiniMarkdown.defaultExtensions()) {
     this.root = null;
     this.extensions = extensions;
@@ -89,5 +89,3 @@ class MiniMarkdown {
     return this.text_markdown;
   }
 }
-
-export default MiniMarkdown;

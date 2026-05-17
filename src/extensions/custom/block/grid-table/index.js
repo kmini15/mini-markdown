@@ -3,7 +3,7 @@ import { GridTableRenderer, GridTableRowRenderer, GridTableCellRenderer } from "
 
 const name = "grid-table";
 
-export default {
+export const GridTable = {
   name: name,
   blocks: [{
     rule: new GridTableRule(name),

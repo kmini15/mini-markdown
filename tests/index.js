@@ -1,4 +1,4 @@
-import MiniMarkdown from "../src/mini-markdown.js";
+import { MiniMarkdown } from "../index.js";
 
 const mmd = new MiniMarkdown();
 const mmdRoot = document.getElementById("preview");

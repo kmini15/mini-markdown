@@ -3,7 +3,7 @@ import { HardBreakRenderer } from "./renderer.js";
 
 const name = "hard-break";
 
-export default {
+export const HardBreak = {
   name: name,
   inlines: [{
     rule: new HardBreakRule(name),

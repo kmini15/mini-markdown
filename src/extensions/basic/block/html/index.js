@@ -3,7 +3,7 @@ import { HtmlRenderer } from "./renderer.js";
 
 const name = "html";
 
-export default {
+export const Html = {
   name: name,
   blocks: [{
     rule: new HtmlRule(name),

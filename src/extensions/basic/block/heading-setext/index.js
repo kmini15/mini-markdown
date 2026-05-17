@@ -3,7 +3,7 @@ import { HeadingSetextRenderer } from "./renderer.js";
 
 const name = "heading-setext";
 
-export default {
+export const HeadingSetext = {
   name: name,
   blocks: [{
     rule: new HeadingSetextRule(name),

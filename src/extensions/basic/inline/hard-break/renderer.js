@@ -1,4 +1,4 @@
-import Renderer from "../../../../core/renderer.js";
+import { Renderer } from "../../../../core/renderer.js";
 
 export class HardBreakRenderer extends Renderer {
   constructor(type) {

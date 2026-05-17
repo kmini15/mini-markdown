@@ -1,4 +1,4 @@
-import Renderer from "../../../../core/renderer.js";
+import { Renderer } from "../../../../core/renderer.js";
 
 export class LinkCitationRenderer extends Renderer {
   constructor(type) {

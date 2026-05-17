@@ -4,7 +4,7 @@ import { JustifiedRowBehavior } from "./behavior.js";
 
 const name = "justified-row";
 
-export default {
+export const JustifiedRow = {
   name: name,
   blocks: [{
     rule: new JustifiedRowRule(name),

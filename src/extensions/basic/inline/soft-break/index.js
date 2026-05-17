@@ -3,7 +3,7 @@ import { SoftBreakRenderer } from "./renderer.js";
 
 const name = "soft-break";
 
-export default {
+export const SoftBreak = {
   name: name,
   inlines: [{
     rule: new SoftBreakRule(name),

@@ -2,7 +2,7 @@ import { LinkReferenceRule } from "./block.js";
 
 const name = "link-reference";
 
-export default {
+export const LinkReference = {
   name: name,
   blocks: [{
     rule: new LinkReferenceRule(name),

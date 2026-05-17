@@ -46,7 +46,7 @@ Example of a grid table with various alignments, spans, and headers:
 +-------+---------------+:=====================:+--------+
 */
 
-class GridTableRule extends Block {
+export class GridTableRule extends Block {
   constructor(type) {
     super(type);
     this.patternOpen = /^[+][+-]+[+]$/;
@@ -294,5 +294,3 @@ class GridTableRule extends Block {
     return align;
   }
 }
-
-export { GridTableRule };

@@ -1,4 +1,4 @@
-class Behavior {
+export class Behavior {
   constructor(type) {
     this.type = type;
   }
@@ -11,5 +11,3 @@ class Behavior {
     return;
   }
 }
-
-export default Behavior;

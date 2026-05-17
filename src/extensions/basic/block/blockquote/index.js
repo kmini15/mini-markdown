@@ -3,7 +3,7 @@ import { BlockquoteRenderer } from "./renderer.js";
 
 const name = "blockquote";
 
-export default {
+export const Blockquote = {
   name: name,
   blocks: [{
     rule: new BlockquoteRule(name),

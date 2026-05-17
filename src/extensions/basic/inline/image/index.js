@@ -3,7 +3,7 @@ import { ImageRenderer } from "./renderer.js";
 
 const name = "image";
 
-export default {
+export const Image = {
   name: name,
   inlines: [{
     rule: new ImageRule(name),

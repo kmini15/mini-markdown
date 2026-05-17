@@ -1,6 +1,6 @@
-import Renderer from "../../../../core/renderer.js";
+import { Renderer } from "../../../../core/renderer.js";
 
-class TableRenderer extends Renderer {
+export class TableRenderer extends Renderer {
   constructor(type) {
     super(type);
   }
@@ -10,7 +10,7 @@ class TableRenderer extends Renderer {
   }
 }
 
-class TableRowRenderer extends Renderer {
+export class TableRowRenderer extends Renderer {
   constructor(type) {
     super(type);
   }
@@ -20,7 +20,7 @@ class TableRowRenderer extends Renderer {
   }
 }
 
-class TableCellRenderer extends Renderer {
+export class TableCellRenderer extends Renderer {
   constructor(type) {
     super(type);
   }
@@ -40,5 +40,3 @@ class TableCellRenderer extends Renderer {
     }
   }
 }
-
-export { TableRenderer, TableRowRenderer, TableCellRenderer };

@@ -3,7 +3,7 @@ import { TableRenderer, TableRowRenderer, TableCellRenderer } from "./renderer.j
 
 const name = "table";
 
-export default {
+export const Table = {
   name: name,
   blocks: [{
     rule: new TableRule(name),

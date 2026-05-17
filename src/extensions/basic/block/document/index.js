@@ -3,7 +3,7 @@ import { DocumentRenderer } from "./renderer.js";
 
 const name = "document";
 
-export default {
+export const Document = {
   name: name,
   blocks: [{
     rule: new DocumentRule(name),

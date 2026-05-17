@@ -1,7 +1,7 @@
 import { Block } from "../../../../core/block.js";
 import { Node } from "../../../../core/node.js";
 
-class HeadingAtxRule extends Block {
+export class HeadingAtxRule extends Block {
   constructor(type) {
     super(type);
     this.pattern = /^(\s*)(#{1,6}\s)(.*)$/;
@@ -37,5 +37,3 @@ class HeadingAtxRule extends Block {
     return child;
   }
 }
-
-export { HeadingAtxRule };

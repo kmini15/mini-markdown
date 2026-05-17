@@ -1,7 +1,7 @@
 import { Block } from "../../../../core/block.js";
 import { Node } from "../../../../core/node.js";
 
-class LinkReferenceRule extends Block {
+export class LinkReferenceRule extends Block {
   constructor(type) {
     super(type);
     this.pattern = /^(\s*)(\[([^\]]+)\]:\s+(\S+?)(\s+"([^"]+)")?)(\s*)$/;
@@ -32,5 +32,3 @@ class LinkReferenceRule extends Block {
     return child;
   }
 }
-
-export { LinkReferenceRule };

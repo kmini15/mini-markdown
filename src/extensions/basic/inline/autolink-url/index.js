@@ -3,7 +3,7 @@ import { AutolinkUrlRenderer } from "./renderer.js";
 
 const name = "autolink-url";
 
-export default {
+export const AutolinkUrl = {
   name: name,
   inlines: [{
     rule: new AutolinkUrlRule(name),

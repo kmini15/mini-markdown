@@ -3,7 +3,7 @@ import { EmphasisRenderer } from "./renderer.js";
 
 const name = "emphasis";
 
-export default {
+export const Emphasis = {
   name: name,
   inlines: [{
     rule: new EmphasisRule(name),
