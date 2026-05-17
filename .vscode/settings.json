@@ -1,7 +1,0 @@
-{
-  "liveServer.settings.multiRootWorkspaceName": "mini-markdown",
-  "liveServer.settings.root": "./tests",
-  "liveServer.settings.file": "./tests/index.html",
-  "liveServer.settings.port": 5501,
-  "editor.fontFamily": "'D2Coding', Menlo, Monaco, 'Courier New', monospace"
-}

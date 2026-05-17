@@ -4,5 +4,11 @@
   "description": "Mini Markdown Parser and Renderer",
   "author": "KMini15",
   "type": "module",
-  "main": "index.js"
+  "main": "index.js",
+  "scripts": {
+    "dev:test": "vite tests"
+  },
+  "devDependencies": {
+    "vite": "^8.0.13"
+  }
 }
