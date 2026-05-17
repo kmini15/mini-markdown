@@ -41,7 +41,7 @@ export class FencedCodeBlockRule extends Block {
         break;
       }
       if (match[2].trim() === "```") {
-        context.input.advance();
+        context.input.consume(match[0].length); // indent
         isClosed = true;
         break;
       }
