@@ -1,0 +1,70 @@
+.mini-markdown {
+  --mmd-font-family-text: var(--vscode-font-family);
+  --mmd-font-family-code: var(--vscode-editor-font-family);
+  --mmd-font-size-text: var(--vscode-editor-font-size);
+  --mmd-font-size-code: var(--vscode-editor-font-size);
+  --mmd-color-background: var(--vscode-editor-background);
+  --mmd-color-foreground: var(--vscode-editor-foreground);
+  --mmd-color-code-block-background: var(--vscode-textCodeBlock-background);
+  --mmd-color-code-block-foreground: var(--vscode-textCodeBlock-foreground);
+  --mmd-color-code-inline-background: var(--vscode-textCodeBlock-background);
+  --mmd-color-code-inline-foreground: var(--vscode-textCodeBlock-foreground);
+}
+
+#preview {
+  display: none;
+}
+
+#preview-ast {
+  --color-highlight-midori-0: rgb(200, 220, 180);
+  --color-highlight-midori-1: rgb(180, 240, 120);
+  --color-highlight-midori-2: rgb(150, 240, 120);
+  --color-highlight-momoi-0: rgb(220, 180, 200);
+  --color-highlight-momoi-1: rgb(240, 120, 180);
+  --color-highlight-momoi-2: rgb(240, 120, 150);
+  --color-highlight-aris-0: rgb(180, 200, 220);
+  --color-highlight-aris-1: rgb(120, 180, 240);
+  --color-highlight-aris-2: rgb(120, 150, 240);
+  --color-highlight-yuzu-0: rgb(220, 200, 180);
+  --color-highlight-yuzu-1: rgb(240, 180, 120);
+  --color-highlight-yuzu-2: rgb(240, 150, 120);
+  --color-highlight-kei-0: rgb(220, 200, 200);
+  --color-highlight-kei-1: rgb(240, 180, 180);
+  --color-highlight-kei-2: rgb(240, 150, 180);
+}
+
+span.color-node-type {
+  color: var(--color-highlight-yuzu-1);
+}
+
+span.color-node-text {
+  color: var(--color-highlight-yuzu-2);
+}
+
+span.color-key {
+  color: var(--color-highlight-kei-1);
+}
+
+span.color-value {
+  color: var(--color-highlight-aris-1);
+}
+
+span.color-cursor-row {
+  color: var(--color-highlight-momoi-1);
+}
+
+span.color-cursor-col {
+  color: var(--color-highlight-midori-1);
+}
+
+span.color-cursor-idx {
+  color: var(--color-highlight-aris-1);
+}
+
+span.color-token-type {
+  color: var(--color-highlight-aris-1);
+}
+
+span.color-token-text {
+  color: var(--color-highlight-yuzu-2);
+}

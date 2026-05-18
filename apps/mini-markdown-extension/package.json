@@ -15,13 +15,28 @@
       {
         "command": "miniMarkdownExtension.openPreview",
         "title": "Mini Markdown Extension: Open Preview"
+      },
+      {
+        "command": "miniMarkdownExtension.openPreviewAst",
+        "title": "Mini Markdown Extension: Open Preview (Abstract Syntax Tree)"
+      },
+      {
+        "command": "miniMarkdownExtension.openPreviewHtml",
+        "title": "Mini Markdown Extension: Open Preview (HTML)"
+      },
+      {
+        "command": "miniMarkdownExtension.openPreviewToken",
+        "title": "Mini Markdown Extension: Open Preview (Token)"
       }
     ]
   },
   "scripts": {
     "dev:build:extension": "vite build --config vite.extension.config.js",
     "dev:build:open-preview": "vite build --config vite.open-preview.config.js",
-    "dev:build": "npm run dev:build:extension && npm run dev:build:open-preview",
+    "dev:build:open-preview-ast": "vite build --config vite.open-preview-ast.config.js",
+    "dev:build:open-preview-html": "vite build --config vite.open-preview-html.config.js",
+    "dev:build:open-preview-token": "vite build --config vite.open-preview-token.config.js",
+    "dev:build": "npm run dev:build:extension && npm run dev:build:open-preview && npm run dev:build:open-preview-ast && npm run dev:build:open-preview-html && npm run dev:build:open-preview-token",
     "dev:package": "npm run dev:build && mkdir -p ./outputs && vsce package --no-dependencies --out ./outputs",
     "dev:clean": "rm -rf dist outputs"
   },
