@@ -1,6 +1,5 @@
 **
 !dist/**
 !package.json
-!CHANGELOG.md
 !LICENSE.md
 !README.md
