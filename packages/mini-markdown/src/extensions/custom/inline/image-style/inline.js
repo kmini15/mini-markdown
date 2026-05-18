@@ -17,11 +17,11 @@ export class ImageStyleRule extends Inline {
   
   match(node) {
     for (let child = node.firstChild; child; child = child.next) {
-      if (child.data.type === "text") {
-        if (child.data.token.text === "![") {
+      if (child.type === "text") {
+        if (child.content.text === "![") {
           const node = this.parseBracketL(child);
           if (node) child = node;
-        } else if (child.data.token.text === "]") {
+        } else if (child.content.text === "]") {
           const node = this.parseBracketR(child);
           if (node) child = node;
         }
@@ -60,47 +60,103 @@ export class ImageStyleRule extends Inline {
     if (nodeStyle.next === null) return null; // No closing brace
     const nodeStyleClose = nodeStyle.next;
     
-    if (nodeDestOpen.data.type !== "text") return null;
-    if (nodeDestClose.data.type !== "text") return null;
-    if (nodeDest.data.type !== "text") return null;
-    if (nodeStyleOpen.data.type !== "text") return null;
-    if (nodeStyleClose.data.type !== "text") return null;
-    if (nodeStyle.data.type !== "text") return null;
+    if (nodeDestOpen.type !== "text") return null;
+    if (nodeDestClose.type !== "text") return null;
+    if (nodeDest.type !== "text") return null;
+    if (nodeStyleOpen.type !== "text") return null;
+    if (nodeStyleClose.type !== "text") return null;
+    if (nodeStyle.type !== "text") return null;
     
-    if (nodeDestOpen.data.token.text !== "(") return null;
-    if (nodeDestClose.data.token.text !== ")") return null;
-    if (nodeStyleOpen.data.token.text !== "{") return null;
-    if (nodeStyleClose.data.token.text !== "}") return null;
+    if (nodeDestOpen.content.text !== "(") return null;
+    if (nodeDestClose.content.text !== ")") return null;
+    if (nodeStyleOpen.content.text !== "{") return null;
+    if (nodeStyleClose.content.text !== "}") return null;
     
     const pattern = /^\s*([^\s]+)\s*("([^"]*)")?\s*$/
-    const match = nodeDest.data.token.text.match(pattern);
+    const match = nodeDest.content.text.match(pattern);
     if (!match) return null;
     
     const nodeLink = new Node(this.type);
-    nodeLink.data.token = {
+    nodeLink.content = {
       text: "",
-      start: nodeLabelOpen.data.token.start,
-      end: nodeLabelOpen.data.token.start,
+      start: nodeLabelOpen.content.start,
+      end: nodeLabelOpen.content.start,
     };
     nodeLink.data.fields = {
       src: match[1],
       title: match[3] || "",
-      style: `{${nodeStyle.data.token.text.trim()}}`,
+      style: `{${nodeStyle.content.text.trim()}}`,
     };
-    
-    nodeLabelOpen.insertBefore(nodeLink);
-    for (let curr = nodeLabelOpen.next; curr !== nodeStyleClose.next; curr = curr.next) {
-      nodeLink.appendChild(curr.prev);
+    nodeLink.data.tokens.push({
+      type: "marker",
+      text: nodeLabelOpen.content.text,
+      start: nodeLabelOpen.content.start,
+      end: nodeLabelOpen.content.end,
+    });
+    for (let curr = nodeLabelOpen.next; curr !== nodeLabelClose;) {
+      const next = curr.next;
+      nodeLink.data.tokens.push({
+        type: "keyword",
+        text: curr.content.text,
+        start: curr.content.start,
+        end: curr.content.end,
+      });
+      nodeLink.appendChild(curr);
+      curr = next;
     }
-    nodeLink.appendChild(nodeStyleClose);
-    nodeLabelOpen.data.type = this.type + "-label-open";
-    nodeLabelClose.data.type = this.type + "-label-close";
-    nodeDestOpen.data.type = this.type + "-destination-open";
-    nodeDestClose.data.type = this.type + "-destination-close";
-    nodeDest.data.type = this.type + "-destination";
-    nodeStyleOpen.data.type = this.type + "-style-open";
-    nodeStyleClose.data.type = this.type + "-style-close";
-    nodeStyle.data.type = this.type + "-style";
+    nodeLink.data.tokens.push(
+      {
+        type: "marker",
+        text: nodeLabelClose.content.text,
+        start: nodeLabelClose.content.start,
+        end: nodeLabelClose.content.end,
+      },
+      {
+        type: "marker",
+        text: nodeDestOpen.content.text,
+        start: nodeDestOpen.content.start,
+        end: nodeDestOpen.content.end,
+      },
+      {
+        type: "keyword",
+        text: nodeDest.content.text,
+        start: nodeDest.content.start,
+        end: nodeDest.content.end,
+      },
+      {
+        type: "marker",
+        text: nodeDestClose.content.text,
+        start: nodeDestClose.content.start,
+        end: nodeDestClose.content.end,
+      },
+      {
+        type: "marker",
+        text: nodeStyleOpen.content.text,
+        start: nodeStyleOpen.content.start,
+        end: nodeStyleOpen.content.end,
+      },
+      {
+        type: "keyword",
+        text: nodeStyle.content.text,
+        start: nodeStyle.content.start,
+        end: nodeStyle.content.end,
+      },
+      {
+        type: "marker",
+        text: nodeStyleClose.content.text,
+        start: nodeStyleClose.content.start,
+        end: nodeStyleClose.content.end,
+      },
+    );
+    nodeLabelOpen.insertBefore(nodeLink);
+    nodeLabelOpen.unlink();
+    nodeLabelClose.unlink();
+    nodeDestOpen.unlink();
+    nodeDest.unlink();
+    nodeDestClose.unlink();
+    nodeStyleOpen.unlink();
+    nodeStyle.unlink();
+    nodeStyleClose.unlink();
     return nodeLink;
   }
 }
