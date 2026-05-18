@@ -4,7 +4,7 @@ export class TokenRenderer {
   }
 
   render(node, prefix = "") {
-    let result = `[<span class="type">${node.type}</span>]`;
+    let result = `[<span class="color-node-type">${node.type}</span>]`;
     for (const token of node.data.tokens) {
       result += "\n";
       if (node.firstChild) {
@@ -12,14 +12,14 @@ export class TokenRenderer {
       } else {
         result += prefix + "   + ";
       }
-      result += `[<span class="marker">${token.type}</span>]`;
-      result += `["<span class="marker">${token.text}</span>"]`;
-      result += `[<span class="token-start-row">${token.start.row}</span>`
-      result += `:<span class="token-start-col">${token.start.col}</span>`
-      result += `(<span class="token-start-idx">${token.start.idx}</span>)`
-      result += `-<span class="token-end-row">${token.end.row}</span>`
-      result += `:<span class="token-end-col">${token.end.col}</span>`
-      result += `(<span class="token-end-idx">${token.end.idx}</span>)]`;
+      result += `[<span class="color-token-type">${token.type}</span>]`;
+      result += `["<span class="color-token-text">${token.text}</span>"]`;
+      result += `[<span class="color-cursor-row">${token.start.row}</span>`
+      result += `:<span class="color-cursor-col">${token.start.col}</span>`
+      result += `(<span class="color-cursor-idx">${token.start.idx}</span>)`
+      result += `-<span class="color-cursor-row">${token.end.row}</span>`
+      result += `:<span class="color-cursor-col">${token.end.col}</span>`
+      result += `(<span class="color-cursor-idx">${token.end.idx}</span>)]`;
     }
     result += "\n";
     for (let child = node.firstChild; child; child = child.next) {

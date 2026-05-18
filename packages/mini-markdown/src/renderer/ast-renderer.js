@@ -7,17 +7,17 @@ export class AstRenderer {
   }
 
   render(node, prefix = "") {
-    let result = `[<span class="type">${node.type}</span>]`;
+    let result = `[<span class="color-node-type">${node.type}</span>]`;
     const content = node.content;
     const fields = node.data.fields;
     if (this.renderMarker) {
-      result += "──────";
-      result += `[<span class="token-start-row">${content.start.row}</span>`
-      result += `:<span class="token-start-col">${content.start.col}</span>`
-      result += `(<span class="token-start-idx">${content.start.idx}</span>)`
-      result += `-<span class="token-end-row">${content.end.row}</span>`
-      result += `:<span class="token-end-col">${content.end.col}</span>`
-      result += `(<span class="token-end-idx">${content.end.idx}</span>)]`;
+      result += "────";
+      result += `[<span class="color-cursor-row">${content.start.row}</span>`
+      result += `:<span class="color-cursor-col">${content.start.col}</span>`
+      result += `(<span class="color-cursor-idx">${content.start.idx}</span>)`
+      result += `-<span class="color-cursor-row">${content.end.row}</span>`
+      result += `:<span class="color-cursor-col">${content.end.col}</span>`
+      result += `(<span class="color-cursor-idx">${content.end.idx}</span>)]`;
     }
     if (this.renderText) {
       let text = node.content.text.replace(/\r\n|\n/g, "\\n");
@@ -27,14 +27,14 @@ export class AstRenderer {
       const escaped_text = this.escapeHtml(text);
       const nowrap_text = escaped_text.replace(/\r\n|\n/g, "\\n");
       const render_text = nowrap_text;
-      result += `("<span class="text">${render_text}</span>")`;
+      result += `("<span class="color-node-text">${render_text}</span>")`;
     }
     if (this.renderFields) {
       const string_fields = Object.entries(fields).map(
         ([key, value]) => {
           let string = "";
-          string += `<span class="field-key">${key}</span>=`;
-          string += `<span class="field-value">${value}</span>`;
+          string += `<span class="color-key">${key}</span>=`;
+          string += `<span class="color-value">${value}</span>`;
           return string;
         }
       ).join(", ");

@@ -28,9 +28,9 @@ export class MiniMarkdown {
     this.tokenRenderer = new TokenRenderer();
 
     this.node_ast = null;
-    this.text_ast = "";
-    this.text_html = "";
-    this.text_token = "";
+    this.html_ast = "";
+    this.html_html = "";
+    this.html_token = "";
     this.text_markdown = "";
   }
 
@@ -71,29 +71,38 @@ export class MiniMarkdown {
     }
     this.node_ast = this.blockParser.parse(text);
     this.node_ast = this.inlineParser.parse(this.node_ast);
-    this.text_ast = this.astRenderer.render(this.node_ast);
-    this.text_html = this.htmlRenderer.render(this.node_ast);
-    this.text_token = this.tokenRenderer.render(this.node_ast);
+    this.html_ast = this.astRenderer.render(this.node_ast);
+    this.html_html = this.htmlRenderer.render(this.node_ast);
+    this.html_token = this.tokenRenderer.render(this.node_ast);
     this.text_markdown = text;
-    this.root.innerHTML = this.text_html;
+    this.root.innerHTML = this.html_html;
     for (const behavior of this.behaviors) {
       behavior.mount(this.root);
     }
   }
 
-  getTextAst() {
-    return this.text_ast;
+  getPreviewAst() {
+    return this.html_ast;
   }
 
-  getTextHtml() {
-    return this.text_html;
+  getPreviewHtml() {
+    return this.escapeHtml(this.html_html);
   }
 
-  getTextToken() {
-    return this.text_token;
+  getPreviewToken() {
+    return this.html_token;
   }
 
-  getTextMarkdown() {
-    return this.text_markdown;
+  getPreviewMarkdown() {
+    return this.escapeHtml(this.text_markdown);
+  }
+
+  escapeHtml(text) {
+    return text
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
   }
 }
