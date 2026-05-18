@@ -6,8 +6,9 @@ const name = "grid-table";
 export const GridTable = {
   name: name,
   blocks: [{
+    name: name,
+    order: { after: ["code-block"], before: ["paragraph"] },
     rule: new GridTableRule(name),
-    priority: { major: 4500, minor: 6000, },
   }],
   renderers: [
     new GridTableRenderer(name),

@@ -6,8 +6,9 @@ const name = "escape";
 export const Escape = {
   name: name,
   inlines: [{
+    name: name,
+    order: { after: ["hard-break", "soft-break"] },
     rule: new EscapeRule(name),
-    priority: { major: 3000, minor: 5000 },
   }],
   renderers: [new EscapeRenderer(name)],
 };

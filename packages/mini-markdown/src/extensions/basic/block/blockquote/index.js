@@ -6,8 +6,9 @@ const name = "blockquote";
 export const Blockquote = {
   name: name,
   blocks: [{
+    name: name,
+    order: { after: ["code-block"], before: ["paragraph"] },
     rule: new BlockquoteRule(name),
-    priority: { major: 3000, minor: 5000 },
   }],
   renderers: [new BlockquoteRenderer(name)],
   styles: [new URL("./style.css", import.meta.url).href],

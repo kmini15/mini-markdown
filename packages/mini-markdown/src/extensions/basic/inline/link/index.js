@@ -6,8 +6,9 @@ const name = "link";
 export const Link = {
   name: name,
   inlines: [{
+    name: name,
+    order: { after: ["escape"] },
     rule: new LinkRule(name),
-    priority: { major: 6000, minor: 5000 },
   }],
   renderers: [new LinkRenderer(name)],
   styles: [new URL("./style.css", import.meta.url).href],

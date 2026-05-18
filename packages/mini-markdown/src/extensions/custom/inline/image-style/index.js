@@ -6,8 +6,9 @@ const name = "image-style";
 export const ImageStyle = {
   name: name,
   inlines: [{
+    name: name,
+    order: { after: ["escape"], before: ["image"] },
     rule: new ImageStyleRule(name),
-    priority: { major: 5000, minor: 4000 },
   }],
   renderers: [new ImageStyleRenderer(name)],
   styles: [new URL("./style.css", import.meta.url).href],

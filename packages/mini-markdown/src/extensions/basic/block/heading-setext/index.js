@@ -6,8 +6,9 @@ const name = "heading-setext";
 export const HeadingSetext = {
   name: name,
   blocks: [{
+    name: name,
+    order: { after: ["code-block"], before: ["paragraph"] },
     rule: new HeadingSetextRule(name),
-    priority: { major: 7000, minor: 5000 },
   }],
   renderers: [new HeadingSetextRenderer(name)],
   styles: [new URL("./style.css", import.meta.url).href],

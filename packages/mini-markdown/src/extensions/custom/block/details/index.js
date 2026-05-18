@@ -6,8 +6,9 @@ const name = "details";
 export const Details = {
   name: name,
   blocks: [{
+    name: name,
+    order: { after: ["code-block"], before: ["paragraph"] },
     rule: new DetailsRule(name),
-    priority: { major: 4500, minor: 5000 },
   }],
   renderers: [
     new DetailsRenderer(name),

@@ -6,8 +6,9 @@ const name = "autolink-url";
 export const AutolinkUrl = {
   name: name,
   inlines: [{
+    name: name,
+    order: { after: ["escape"] },
     rule: new AutolinkUrlRule(name),
-    priority: { major: 8000, minor: 5000 },
   }],
   renderers: [new AutolinkUrlRenderer(name)],
   styles: [new URL("./style.css", import.meta.url).href],

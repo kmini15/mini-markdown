@@ -6,8 +6,9 @@ const name = "heading-atx";
 export const HeadingAtx = {
   name: name,
   blocks: [{
+    name: name,
+    order: { after: ["code-block"], before: ["paragraph"] },
     rule: new HeadingAtxRule(name),
-    priority: { major: 6000, minor: 5000 },
   }],
   renderers: [new HeadingAtxRenderer(name)],
   styles: [new URL("./style.css", import.meta.url).href],

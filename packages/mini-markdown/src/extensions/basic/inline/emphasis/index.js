@@ -6,8 +6,9 @@ const name = "emphasis";
 export const Emphasis = {
   name: name,
   inlines: [{
+    name: name,
+    order: { after: ["escape"] },
     rule: new EmphasisRule(name),
-    priority: { major: 10000, minor: 5000 },
   }],
   renderers: [new EmphasisRenderer(name)],
   styles: [new URL("./style.css", import.meta.url).href],

@@ -6,8 +6,9 @@ const name = "table";
 export const Table = {
   name: name,
   blocks: [{
+    name: name,
+    order: { after: ["code-block"], before: ["paragraph"] },
     rule: new TableRule(name),
-    priority: { major: 4500, minor: 6000 },
   }],
   renderers: [
     new TableRenderer(name),

@@ -6,8 +6,9 @@ const name = "document";
 export const Document = {
   name: name,
   blocks: [{
+    name: name,
+    order: { before: ["paragraph"] },
     rule: new DocumentRule(name),
-    priority: { major: 1000, minor: 5000 },
   }],
   renderers: [new DocumentRenderer(name)],
   styles: [new URL("./style.css", import.meta.url).href],

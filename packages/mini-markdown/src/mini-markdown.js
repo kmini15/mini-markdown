@@ -1,3 +1,5 @@
+import { OrderResolver } from "./core/order-resolver.js";
+
 import { BlockParser } from "./parser/block-parser.js";
 import { InlineParser } from "./parser/inline-parser.js";
 import { AstRenderer } from "./renderer/ast-renderer.js";
@@ -18,9 +20,9 @@ export class MiniMarkdown {
     this.behaviors = this.extensions.flatMap(ext => ext.behaviors ?? []);
     this.styles = this.extensions.flatMap(ext => ext.styles ?? []);
 
-    this.blocks.sort(this.comparePriority.bind(this));
-    this.inlines.sort(this.comparePriority.bind(this));
-
+    this.blocks = new OrderResolver(this.blocks).resolve();
+    this.inlines = new OrderResolver(this.inlines).resolve();
+    
     this.blockParser = new BlockParser(this.blocks.map(rule => rule.rule));
     this.inlineParser = new InlineParser(this.inlines.map(rule => rule.rule));
     this.astRenderer = new AstRenderer();

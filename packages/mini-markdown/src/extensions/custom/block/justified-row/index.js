@@ -7,11 +7,13 @@ const name = "justified-row";
 export const JustifiedRow = {
   name: name,
   blocks: [{
+    name: name,
+    order: { after: ["code-block"], before: ["paragraph"] },
     rule: new JustifiedRowRule(name),
-    priority: { major: 4500, minor: 5500 },
   }, {
+    name: name + "-item",
+    order: { after: ["code-block"], before: ["paragraph"] },
     rule: new JustifiedRowItemRule(name + "-item"),
-    priority: { major: 4500, minor: 5500 },
   }],
   renderers: [new JustifiedRowRenderer(name), new JustifiedRowItemRenderer(name + "-item")],
   behaviors: [new JustifiedRowBehavior(name)],

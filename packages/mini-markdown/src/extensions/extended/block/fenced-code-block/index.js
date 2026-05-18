@@ -6,8 +6,9 @@ const name = "fenced-code-block";
 export const FencedCodeBlock = {
   name: name,
   blocks: [{
+    name: name,
+    order: { after: ["code-block"], before: ["paragraph"] },
     rule: new FencedCodeBlockRule(name),
-    priority: { major: 4500, minor: 6000 },
   }],
   renderers: [new FencedCodeBlockRenderer(name)],
   styles: [new URL("./style.css", import.meta.url).href],

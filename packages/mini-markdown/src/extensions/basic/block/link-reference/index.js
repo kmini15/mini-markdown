@@ -5,7 +5,8 @@ const name = "link-reference";
 export const LinkReference = {
   name: name,
   blocks: [{
+    name: name,
+    order: { after: ["code-block"], before: ["paragraph"] },
     rule: new LinkReferenceRule(name),
-    priority: { major: 9000, minor: 5000 },
   }],
 };

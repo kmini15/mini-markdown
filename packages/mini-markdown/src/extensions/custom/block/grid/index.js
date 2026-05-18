@@ -6,11 +6,13 @@ const name = "grid";
 export const Grid = {
   name: name,
   blocks: [{
+    name: name,
+    order: { after: ["code-block"], before: ["paragraph"] },
     rule: new GridRule(name),
-    priority: { major: 4500, minor: 5000 },
   }, {
+    name: name + "-item",
+    order: { after: ["code-block"], before: ["paragraph"] },
     rule: new GridItemRule(name + "-item"),
-    priority: { major: 4500, minor: 5000 },
   }],
   renderers: [new GridRenderer(name), new GridItemRenderer(name + "-item")],
   styles: [new URL("./style.css", import.meta.url).href],

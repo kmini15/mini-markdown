@@ -6,8 +6,9 @@ const name = "horizontal-rule";
 export const HorizontalRule = {
   name: name,
   blocks: [{
+    name: name,
+    order: { after: ["code-block"], before: ["paragraph"] },
     rule: new HorizontalRuleRule(name),
-    priority: { major: 8000, minor: 5000 },
   }],
   renderers: [new HorizontalRuleRenderer(name)],
   styles: [new URL("./style.css", import.meta.url).href],

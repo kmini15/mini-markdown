@@ -6,8 +6,9 @@ const name = "autolink-email";
 export const AutolinkEmail = {
   name: name,
   inlines: [{
+    name: name,
+    order: { after: ["escape"] },
     rule: new AutolinkEmailRule(name),
-    priority: { major: 9000, minor: 5000 },
   }],
   renderers: [new AutolinkEmailRenderer(name)],
   styles: [new URL("./style.css", import.meta.url).href],

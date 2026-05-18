@@ -6,8 +6,9 @@ const name = "html";
 export const Html = {
   name: name,
   blocks: [{
+    name: name,
+    order: { after: ["code-block"], before: ["paragraph"] },
     rule: new HtmlRule(name),
-    priority: { major: 5000, minor: 5000 },
   }],
   renderers: [new HtmlRenderer(name)],
   styles: [new URL("./style.css", import.meta.url).href],

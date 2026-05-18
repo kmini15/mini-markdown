@@ -6,8 +6,9 @@ const name = "hard-break";
 export const HardBreak = {
   name: name,
   inlines: [{
+    name: name,
+    order: { before: ["soft-break"] },
     rule: new HardBreakRule(name),
-    priority: { major: 1000, minor: 5000 },
   }],
   renderers: [new HardBreakRenderer(name)],
 };
