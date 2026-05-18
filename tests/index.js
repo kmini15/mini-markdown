@@ -1,4 +1,5 @@
 import MiniMarkdown from "@kmini15/mini-markdown";
+import hljs from "highlight.js";
 
 const mmd = new MiniMarkdown();
 const mmdRoot = document.getElementById("preview");
@@ -29,4 +30,7 @@ function render() {
   const previewTokens = document.getElementById("preview-token");
   previewTokens.innerHTML = mmd.getPreviewToken();
   resizeTextarea();
+  mmdRoot.querySelectorAll("code.fenced-code-block").forEach((block) => {
+    hljs.highlightElement(block);
+  });
 }
