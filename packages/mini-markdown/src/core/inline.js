@@ -22,17 +22,22 @@ export class Inline {
     }
   }
 
-  dfs(root, visit) {
-    const stack = [root];
+  dfs(root, enter = null, leave = null) {
+    const stack = [[root, false]];
     while (stack.length > 0) {
-      const node = stack.pop();
-      visit(node);
+      const [node, leaving] = stack.pop();
+      if (leaving) {
+        if (leave) leave(node);
+        continue;
+      }
+      if (enter) enter(node);
+      stack.push([node, true]);
       const children = [];
       for (let child = node.firstChild; child; child = child.next) {
         children.push(child);
       }
       for (let i = children.length - 1; i >= 0; i--) {
-        stack.push(children[i]);
+        stack.push([children[i], false]);
       }
     }
   }
