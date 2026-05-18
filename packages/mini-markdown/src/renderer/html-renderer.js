@@ -8,12 +8,6 @@ export class HtmlRenderer {
   }
 
   render(node) {
-    switch (node.type) {
-      case "text":
-        return this.escapeHtml(node.content.text);
-      case "literal":
-        return this.escapeHtml(node.content.text);
-    }
     let text = "";
     for (let child = node.firstChild; child; child = child.next) {
       text += this.render(child);
@@ -23,14 +17,5 @@ export class HtmlRenderer {
       return renderer.render(text, node);
     }
     return text;
-  }
-
-  escapeHtml(text) {
-    return text
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#39;");
   }
 }

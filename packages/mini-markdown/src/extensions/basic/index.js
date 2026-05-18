@@ -17,7 +17,9 @@ import { HardBreak } from "./inline/hard-break/index.js";
 import { Image } from "./inline/image/index.js";
 import { Link } from "./inline/link/index.js";
 import { LinkCitation } from "./inline/link-citation/index.js";
+import { Literal } from "./inline/literal/index.js";
 import { SoftBreak } from "./inline/soft-break/index.js";
+import { Text } from "./inline/text/index.js";
 
 const name = "basic";
 
@@ -44,7 +46,9 @@ const inlines = [
   Image,
   Link,
   LinkCitation,
+  Literal,
   SoftBreak,
+  Text,
 ];
   
 const extensions = [
