@@ -13,8 +13,8 @@ export class ListRule extends Block {
   continue(context, node) {
     const input = context.input.current();
     const refer = this.patternItem.test(input)
-      ? node.data.token.start.col
-      : node.data.token.end.col;
+      ? node.content.start.col
+      : node.content.end.col;
     const match = this.patternIndent.exec(input);
     if (!match) return false;
     const cursor0 = context.input.capture();
@@ -30,7 +30,7 @@ export class ListRule extends Block {
   }
 
   parse(context, parent) {
-    if (parent.data.type === this.type) return null;
+    if (parent.type === this.type) return null;
     const input = context.input.current();
     const match = this.pattern.exec(input);
     if (!match) return null;
@@ -40,7 +40,7 @@ export class ListRule extends Block {
     const cursor1 = context.input.capture();
     context.input.restore(cursor0);
     const child = new Node(this.type);
-    child.data.token = {
+    child.content = {
       text: match[2],
       start: cursor0,
       end: cursor1,
@@ -48,6 +48,12 @@ export class ListRule extends Block {
     child.data.fields = {
       ordered: this.patternOrdered.test(match[2]),
     }
+    child.data.tokens.push({
+      type: "marker",
+      text: match[2],
+      start: cursor0,
+      end: cursor1,
+    });
     return child;
   }
 }
@@ -61,7 +67,7 @@ export class ListItemRule extends Block {
 
   continue(context, node) {
     const input = context.input.current();
-    const refer = node.data.token.end.col; // End
+    const refer = node.content.end.col; // End
     const match = this.patternIndent.exec(input);
     if (!match) return false;
     const cursor0 = context.input.capture();
@@ -77,7 +83,7 @@ export class ListItemRule extends Block {
   }
 
   parse(context, parent) {
-    if (parent.data.type === this.type) return null;
+    if (parent.type === this.type) return null;
     const input = context.input.current();
     const match = this.pattern.exec(input);
     if (!match) return null;
@@ -86,11 +92,17 @@ export class ListItemRule extends Block {
     context.input.consume(match[2].length); // marker
     const cursor1 = context.input.capture();
     const child = new Node(this.type, true);
-    child.data.token = {
+    child.content = {
       text: match[2],
       start: cursor0,
       end: cursor1,
     }
+    child.data.tokens.push({
+      type: "marker",
+      text: match[2],
+      start: cursor0,
+      end: cursor1,
+    });
     return child;
   }
 }

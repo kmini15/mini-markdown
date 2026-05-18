@@ -17,9 +17,9 @@ export class SoftBreakRule extends Inline {
 
   match(node) {
     for (let child = node.firstChild; child; child = child.next) {
-      if (child.data.type !== "text") continue;
-      if (/\n/.test(child.data.token.text)) {
-        child.data.type = this.type;
+      if (child.type !== "text") continue;
+      if (/\n/.test(child.content.text)) {
+        child.type = this.type;
       }
     }
   }

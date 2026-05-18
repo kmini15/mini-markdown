@@ -40,11 +40,11 @@ export class Inline {
   split(node, pattern) {
     for (let child = node.firstChild; child;) {
       const next = child.next;
-      if (child.data.type === "text") {
-        const tokens = textUtil.split(child.data.token, pattern);
+      if (child.type === "text") {
+        const tokens = textUtil.split(child.content, pattern);
         for (let i = 0; i < tokens.length; i++) {
           const text = new Node("text");
-          text.data.token = tokens[i];
+          text.content = tokens[i];
           child.insertBefore(text);
         }
         child.unlink();
@@ -56,9 +56,9 @@ export class Inline {
   merge(node) {
     let child = node.firstChild;
     while (child && child.next) {
-      if (child.data.type === "text" && child.next.data.type === "text") {
-        child.data.token.text += child.next.data.token.text;
-        child.data.token.end = child.next.data.token.end;
+      if (child.type === "text" && child.next.type === "text") {
+        child.content.text += child.next.content.text;
+        child.content.end = child.next.content.end;
         child.next.unlink();
       } else {
         child = child.next;

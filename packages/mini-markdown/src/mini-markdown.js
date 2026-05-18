@@ -1,7 +1,8 @@
 import { BlockParser } from "./parser/block-parser.js";
 import { InlineParser } from "./parser/inline-parser.js";
-import { HtmlRenderer } from "./renderer/html-renderer.js";
 import { AstRenderer } from "./renderer/ast-renderer.js";
+import { HtmlRenderer } from "./renderer/html-renderer.js";
+import { TokenRenderer } from "./renderer/token-renderer.js";
 
 import { Basic } from "./extensions/basic/index.js";
 import { Extended } from "./extensions/extended/index.js";
@@ -22,12 +23,14 @@ export class MiniMarkdown {
 
     this.blockParser = new BlockParser(this.blocks.map(rule => rule.rule));
     this.inlineParser = new InlineParser(this.inlines.map(rule => rule.rule));
-    this.htmlRenderer = new HtmlRenderer(this.renderers);
     this.astRenderer = new AstRenderer();
+    this.htmlRenderer = new HtmlRenderer(this.renderers);
+    this.tokenRenderer = new TokenRenderer();
 
     this.node_ast = null;
     this.text_ast = "";
     this.text_html = "";
+    this.text_token = "";
     this.text_markdown = "";
   }
 
@@ -70,6 +73,7 @@ export class MiniMarkdown {
     this.node_ast = this.inlineParser.parse(this.node_ast);
     this.text_ast = this.astRenderer.render(this.node_ast);
     this.text_html = this.htmlRenderer.render(this.node_ast);
+    this.text_token = this.tokenRenderer.render(this.node_ast);
     this.text_markdown = text;
     this.root.innerHTML = this.text_html;
     for (const behavior of this.behaviors) {
@@ -83,6 +87,10 @@ export class MiniMarkdown {
 
   getTextHtml() {
     return this.text_html;
+  }
+
+  getTextToken() {
+    return this.text_token;
   }
 
   getTextMarkdown() {

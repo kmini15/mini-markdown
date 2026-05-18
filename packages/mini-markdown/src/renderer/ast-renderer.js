@@ -1,26 +1,26 @@
-import { Node } from "../core/node.js";
-
 export class AstRenderer {
   constructor() {
-    this.renderToken = true;
+    this.renderText = true;
+    this.renderMarker = true;
     this.renderFields = true;
     this.maxTextLength = 30;
   }
 
   render(node, prefix = "") {
-    let result = `[<span class="type">${node.data.type}</span>]`;
-    const token = node.data.token;
+    let result = `[<span class="type">${node.type}</span>]`;
+    const content = node.content;
     const fields = node.data.fields;
-    if (this.renderToken && token) {
-      result += `[<span class="token-start-row">${token.start.row}</span>`
-      result += `:<span class="token-start-col">${token.start.col}</span>`
-      result += `(<span class="token-start-idx">${token.start.idx}</span>)`
-      result += `-<span class="token-end-row">${token.end.row}</span>`
-      result += `:<span class="token-end-col">${token.end.col}</span>`
-      result += `(<span class="token-end-idx">${token.end.idx}</span>)]`;
+    if (this.renderMarker) {
+      result += "──────";
+      result += `[<span class="token-start-row">${content.start.row}</span>`
+      result += `:<span class="token-start-col">${content.start.col}</span>`
+      result += `(<span class="token-start-idx">${content.start.idx}</span>)`
+      result += `-<span class="token-end-row">${content.end.row}</span>`
+      result += `:<span class="token-end-col">${content.end.col}</span>`
+      result += `(<span class="token-end-idx">${content.end.idx}</span>)]`;
     }
-    if (this.renderToken && token) {
-      let text = token.text.replace(/\r\n|\n/g, "\\n");
+    if (this.renderText) {
+      let text = node.content.text.replace(/\r\n|\n/g, "\\n");
       if (text && text.length > this.maxTextLength) {
         text = text.slice(0, this.maxTextLength - 3) + "...";
       }

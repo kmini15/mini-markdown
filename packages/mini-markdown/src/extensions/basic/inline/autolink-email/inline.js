@@ -16,32 +16,48 @@ export class AutolinkEmailRule extends Inline {
   
   match(node) {
     for (let child = node.firstChild; child; child = child.next) {
-      if (child.data.type !== "text") continue;
-      if (/\</.test(child.data.token.text)) {
+      if (child.type !== "text") continue;
+      if (/\</.test(child.content.text)) {
         const open = child;
         const text = child?.next;
         const close = text?.next;
         if (!text || !close) continue;
-        if (/\>/.test(close.data.token.text)) {
+        if (/\>/.test(close.content.text)) {
           const pattern = /^[^\s@]+@[^\s@]+$/;
-          const match = pattern.test(text.data.token.text);
+          const match = pattern.test(text.content.text);
           if (!match) continue;
           const linkNode = new Node(this.type);
-          linkNode.data.token = {
+          linkNode.content = {
             text: "",
-            start: open.data.token.start,
-            end: open.data.token.start,
+            start: open.content.start,
+            end: open.content.start,
           };
           linkNode.data.fields = {
-            href: "mailto:" + text.data.token.text,
+            href: "mailto:" + text.content.text,
           }
-          open.data.type = this.type + "-open";
-          text.data.type = "literal";
-          close.data.type = this.type + "-close";
+          linkNode.data.tokens.push({
+            type: "marker",
+            text: open.content.text,
+            start: open.content.start,
+            end: open.content.end,
+          },
+          {
+            type: "keyword",
+            text: text.content.text,
+            start: text.content.start,
+            end: text.content.end,
+          },
+          {
+            type: "marker",
+            text: close.content.text,
+            start: close.content.start,
+            end: close.content.end,
+          });
+          text.type = "literal";
           open.insertBefore(linkNode);
-          linkNode.appendChild(open);
           linkNode.appendChild(text);
-          linkNode.appendChild(close);
+          open.unlink();
+          close.unlink();
         }
       }
     }

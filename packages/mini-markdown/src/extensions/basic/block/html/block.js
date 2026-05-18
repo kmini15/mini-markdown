@@ -37,8 +37,8 @@ export class HtmlRule extends Block {
       const input = context.input.current();
       context.input.advance();
       const cursor1 = context.input.capture();
-      const text = new Node("html");
-      text.data.token = {
+      const text = new Node(this.type + "-text");
+      text.content = {
         text: input + "\n",
         start: cursor0,
         end: cursor1,
@@ -64,11 +64,11 @@ export class HtmlRule extends Block {
       context.input.restore(cursor);
       return null;
     }
-    const child = new Node(this.type + "-block");
-    child.data.token = {
+    const child = new Node(this.type);
+    child.content = {
       text: "",
-      start: lines[0].data.token.start,
-      end: lines[0].data.token.start,
+      start: lines[0].content.start,
+      end: lines[0].content.start,
     };
     for (const line of lines) {
       child.appendChild(line);

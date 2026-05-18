@@ -4,15 +4,15 @@ export class HtmlRenderer {
   }
 
   getRenderer(node) {
-    return this.renderers.find(renderer => renderer.type === node.data.type);
+    return this.renderers.find(renderer => renderer.type === node.type);
   }
 
   render(node) {
-    switch (node.data.type) {
+    switch (node.type) {
       case "text":
-        return this.escapeHtml(node.data.token.text);
+        return this.escapeHtml(node.content.text);
       case "literal":
-        return this.escapeHtml(node.data.token.text);
+        return this.escapeHtml(node.content.text);
     }
     let text = "";
     for (let child = node.firstChild; child; child = child.next) {

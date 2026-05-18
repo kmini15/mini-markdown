@@ -23,7 +23,7 @@ export class FencedCodeBlockRule extends Block {
     const cursor4 = context.input.capture();
     context.input.advance();
     const child = new Node(this.type);
-    child.data.token = {
+    child.content = {
       text: match[2],
       start: cursor1,
       end: cursor2,
@@ -31,29 +31,53 @@ export class FencedCodeBlockRule extends Block {
     child.data.fields = {
       language: match[3] || "",
     }
+    child.data.tokens.push({
+      type: "marker",
+      text: match[2],
+      start: cursor1,
+      end: cursor2,
+    });
+    if (match[3]) {
+      child.data.tokens.push({
+        type: "keyword",
+        text: match[3],
+        start: cursor2,
+        end: cursor3,
+      });
+    }
     let isClosed = false;
     while (!context.input.eof()) {
       const input = context.input.current();
       const match = this.patternIndent.exec(input);
       if (!match) break;
-      if (match[1].length < child.data.token.start.col) {
+      if (match[1].length < child.content.start.col) {
         isClosed = false;
         break;
       }
       if (match[2].trim() === "```") {
-        context.input.consume(match[0].length); // indent
+        const cursor0 = context.input.capture();
+        context.input.consume(match[1].length); // indent
+        const cursor1 = context.input.capture();
+        context.input.consume(match[2].length); // marker
+        const cursor2 = context.input.capture();
+        child.data.tokens.push({
+          type: "marker",
+          text: match[2],
+          start: cursor1,
+          end: cursor2,
+        });
         isClosed = true;
         break;
       }
       const cursor0 = context.input.capture();
-      context.input.consume(child.data.token.start.col); // indent
+      context.input.consume(child.content.start.col); // indent
       const cursor1 = context.input.capture();
       const line = context.input.current();
       context.input.consume(line.length); // line
       const cursor2 = context.input.capture();
       context.input.advance();
       const text = new Node("literal");
-      text.data.token = {
+      text.content = {
         text: line + "\n",
         start: cursor1,
         end: cursor2,

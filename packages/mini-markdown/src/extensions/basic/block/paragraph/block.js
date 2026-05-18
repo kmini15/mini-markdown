@@ -17,10 +17,10 @@ export class ParagraphRule extends Block {
     }
     const firstLine = context.lines[0];
     const child = new Node(this.type);
-    child.data.token = {
+    child.content = {
       text: "",
-      start: firstLine.data.token.start,
-      end: firstLine.data.token.start,
+      start: firstLine.content.start,
+      end: firstLine.content.start,
     };
     for (let line of context.lines) {
       child.appendChild(line);

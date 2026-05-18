@@ -14,7 +14,7 @@ export class DocumentRule extends Block {
     if (parent) return null;
     const cursor = context.input.capture();
     const child = new Node(this.type, true);
-    child.data.token = {
+    child.content = {
       text: "",
       start: cursor,
       end: cursor,

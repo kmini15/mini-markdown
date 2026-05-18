@@ -26,7 +26,8 @@ export class BlockParser {
         this.parseBlocks(context);
       }
       if (context.input.current().trim() !== "") {
-        const match = context.input.current().match(/^(\s*)/);
+        const input = context.input.current();
+        const match = /^(\s*)/.exec(input);
         const indent = match ? match[1].length : 0;
         context.input.consume(indent);
         const cursor0 = context.input.capture();
@@ -34,7 +35,7 @@ export class BlockParser {
         context.input.consume(line.length);
         const cursor1 = context.input.capture();
         const text = new Node("text");
-        text.data.token = {
+        text.content = {
           text: line + "\n",
           start: cursor0,
           end: cursor1,
@@ -53,7 +54,7 @@ export class BlockParser {
 
   getRule(node) {
     if (!node) return null;
-    return this.rules.find(rule => rule.type === node.data.type);
+    return this.rules.find(rule => rule.type === node.type);
   }
 
   continueBlocks(context) {
@@ -64,7 +65,7 @@ export class BlockParser {
       if (!rule) break;
       const result = rule.continue(context, node);
       if (result) {
-        this.debugRule("continue", node.data.type, context);
+        this.debugRule("continue", node.type, context);
         context.index = index;
       } else {
         break;
@@ -77,7 +78,7 @@ export class BlockParser {
     for (let rule of this.rules) {
       const child = rule.flush(context, parent);
       if (child) {
-        this.debugRule("flush", child.data.type, context);
+        this.debugRule("flush", child.type, context);
         parent?.appendChild(child);
         break;
       }
@@ -98,12 +99,12 @@ export class BlockParser {
   closeLeafBlocks(context) {
     while (context.stack.size() > context.index + 1) {
       const node = context.stack.top();
-      if (node.data.lazy) break;
+      if (node.lazy) break;
       const rule = this.getRule(node);
       if (!rule) break;
       const result = rule.close(context, node);
       if (result) {
-        this.debugRule("close leaf", node.data.type, context);
+        this.debugRule("close leaf", node.type, context);
         context.stack.pop();
       } else {
         break;
@@ -118,7 +119,7 @@ export class BlockParser {
       if (!rule) break;
       const result = rule.close(context, node);
       if (result) {
-        this.debugRule("close", node.data.type, context);
+        this.debugRule("close", node.type, context);
         continue;
       } else {
         break;
@@ -133,7 +134,7 @@ export class BlockParser {
       if (!rule) break;
       const node = rule.parse(context, parent);
       if (node) {
-        this.debugRule("parse", node.data.type, context);
+        this.debugRule("parse", node.type, context);
         parent?.appendChild(node);
         context.stack.push(node);
         context.index++;
@@ -151,7 +152,7 @@ export class BlockParser {
 
   debugStack(context) {
     if (this.DEBUG_MODE) {
-      console.log("stack", context.stack.stack.map(node => node.data.type).join(" > "));
+      console.log("stack", context.stack.stack.map(node => node.type).join(" > "));
     }
   }
 }

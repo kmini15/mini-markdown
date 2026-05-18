@@ -16,13 +16,13 @@ export class CodeBlockRule extends Block {
     const cursor1 = context.input.capture();
     context.input.consume(match[2].length); // content
     const cursor2 = context.input.capture();
-    const text = new Node("literal");
-    text.data.token = {
+    const literal = new Node("literal");
+    literal.content = {
       text: match[2] + "\n",
       start: cursor1,
       end: cursor2,
     };
-    node.appendChild(text);
+    node.appendChild(literal);
     return true;
   }
 
@@ -37,18 +37,18 @@ export class CodeBlockRule extends Block {
     context.input.consume(match[2].length); // content
     const cursor2 = context.input.capture();    
     const child = new Node(this.type);
-    child.data.token = {
+    child.content = {
       text: match[1],
       start: cursor0,
       end: cursor1,
     }
-    const text = new Node("literal");
-    text.data.token = {
+    const literal = new Node("literal");
+    literal.content = {
       text: match[2] + "\n",
       start: cursor1,
       end: cursor2,
     };
-    child.appendChild(text);
+    child.appendChild(literal);
     return child;
   }
 }

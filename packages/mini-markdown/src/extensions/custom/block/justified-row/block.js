@@ -4,7 +4,7 @@ import { Node } from "../../../../core/node.js";
 export class JustifiedRowRule extends Block {
   constructor(type) {
     super(type);
-    this.pattern = /^(\s*)(====)((\[)([^\]]+)(:[^\]]+)(\])({.*?})?)(\s*)$/;
+    this.pattern = /^(\s*)(====)(\[)([^\]]+)(:)([^\]]+)(\])({.*?})?(\s*)$/;
     this.patternItem = /^(\s*)(\[[:.' ]{2}\])({.*?})?/;
     this.patternIndent = /^(\s*)/;
   }
@@ -12,8 +12,8 @@ export class JustifiedRowRule extends Block {
   continue(context, node) {
     const input = context.input.current();
     const refer = this.patternItem.test(input)
-      ? node.data.token.start.col
-      : node.data.token.end.col;
+      ? node.content.start.col
+      : node.content.end.col;
     const match = this.patternIndent.exec(input);
     if (!match) return false;
     const cursor0 = context.input.capture();
@@ -29,7 +29,7 @@ export class JustifiedRowRule extends Block {
   }
 
   parse(context, parent) {
-    if (parent.data.type === this.type) return null;
+    if (parent.type === this.type) return null;
     const input = context.input.current();
     const match = this.pattern.exec(input);
     if (!match) return null;
@@ -38,36 +38,75 @@ export class JustifiedRowRule extends Block {
     const cursor1 = context.input.capture();
     context.input.consume(match[2].length); // marker
     const cursor2 = context.input.capture();
-    context.input.consume(match[4].length); // opening bracket
+    context.input.consume(match[3].length); // opening bracket
     const cursor3 = context.input.capture();
-    context.input.consume(match[5].length); // width
+    context.input.consume(match[4].length); // width
     const cursor4 = context.input.capture();
-    context.input.consume(match[6].length); // gap
+    context.input.consume(match[5].length); // colon
     const cursor5 = context.input.capture();
-    context.input.consume(match[7].length); // closing bracket
+    context.input.consume(match[6].length); // gap
     const cursor6 = context.input.capture();
-    context.input.consume(match[8]?.length || 0); // style
+    context.input.consume(match[7].length); // closing bracket
     const cursor7 = context.input.capture();
-    context.input.consume(match[9].length); // trailing spaces
+    context.input.consume(match[8]?.length || 0); // style
     const cursor8 = context.input.capture();
+    context.input.consume(match[9].length); // trailing spaces
+    const cursor9 = context.input.capture();
     const child = new Node(this.type);
-    child.data.token = {
+    child.content = {
       text: match[2],
       start: cursor1,
       end: cursor2,
     };
     child.data.fields = {
-      width: match[5].trim(),
-      gap: match[6].trim().slice(1), // remove leading colon
+      width: match[4].trim(),
+      gap: match[6].trim(),
       style: match[8] || "{}",
     };
-    const args = new Node(this.type + "-args");
-    args.data.token = {
+    child.data.tokens.push({
+      type: "marker",
+      text: match[2],
+      start: cursor1,
+      end: cursor2,
+    });
+    child.data.tokens.push({
+      type: "marker",
       text: match[3],
       start: cursor2,
+      end: cursor3,
+    });
+    child.data.tokens.push({
+      type: "keyword",
+      text: match[4],
+      start: cursor3,
+      end: cursor4,
+    });
+    child.data.tokens.push({
+      type: "marker",
+      text: match[5],
+      start: cursor4,
+      end: cursor5,
+    });
+    child.data.tokens.push({
+      type: "keyword",
+      text: match[6],
+      start: cursor5,
+      end: cursor6,
+    });
+    child.data.tokens.push({
+      type: "marker",
+      text: match[7],
+      start: cursor6,
       end: cursor7,
-    };
-    child.appendChild(args);
+    });
+    if (match[8]) {
+      child.data.tokens.push({
+        type: "marker",
+        text: match[8],
+        start: cursor7,
+        end: cursor8,
+      });
+    }
     return child;
   }
 }
@@ -81,7 +120,7 @@ export class JustifiedRowItemRule extends Block {
 
   continue(context, node) {
     const input = context.input.current();
-    const refer = node.data.token.end.col; // end
+    const refer = node.content.end.col; // end
     const match = this.patternIndent.exec(input);
     if (!match) return false;
     const cursor0 = context.input.capture();
@@ -97,8 +136,8 @@ export class JustifiedRowItemRule extends Block {
   }
 
   parse(context, parent) {
-    if (parent.data.type !== "justified-row") return null;
-    if (parent.data.type === this.type) return null;
+    if (parent.type !== "justified-row") return null;
+    if (parent.type === this.type) return null;
     const input = context.input.current();
     const match = this.patternItem.exec(input);
     if (!match) return null;
@@ -110,7 +149,7 @@ export class JustifiedRowItemRule extends Block {
     context.input.consume(match[3]?.length || 0); // style
     const cursor3 = context.input.capture();
     const child = new Node(this.type, true);
-    child.data.token = {
+    child.content = {
       text: match[2],
       start: cursor1,
       end: cursor2,
@@ -119,13 +158,20 @@ export class JustifiedRowItemRule extends Block {
       align: match[2],
       style: match[3] || "{}",
     };
-    const args = new Node(this.type + "-args");
-    args.data.token = {
-      text: match[3] || "",
-      start: cursor2,
-      end: cursor3,
-    };
-    child.appendChild(args);
+    child.data.tokens.push({
+      type: "marker",
+      text: match[2],
+      start: cursor1,
+      end: cursor2,
+    });
+    if (match[3]) {
+      child.data.tokens.push({
+        type: "marker",
+        text: match[3],
+        start: cursor2,
+        end: cursor3,
+      });
+    }
     return child;
   }
 }

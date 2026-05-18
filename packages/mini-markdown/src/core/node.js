@@ -1,15 +1,22 @@
 export class Node {
   constructor(type, lazy = false) {
+    /* The node structure is a doubly linked tree. */
     this.parent = null;
     this.firstChild = null;
     this.lastChild = null;
     this.prev = null;
     this.next = null;
+    /* The node data. */
+    this.type = type;
+    this.lazy = lazy;
+    this.content = {
+      text: "",
+      start: null,
+      end: null,
+    }
     this.data = {
-      type: type,
-      lazy: lazy,
-      token: { text: null, start: null, end: null },
       fields: {},
+      tokens: [],
     };
   }
 

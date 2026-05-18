@@ -19,7 +19,7 @@ export class HeadingAtxRule extends Block {
     context.input.consume(match[3].length); // text
     const cursor3 = context.input.capture();
     const child = new Node(this.type);
-    child.data.token = {
+    child.content = {
       text: match[2],
       start: cursor1,
       end: cursor2,
@@ -27,8 +27,14 @@ export class HeadingAtxRule extends Block {
     child.data.fields = {
       level: match[2].trim().length,
     };
+    child.data.tokens.push({
+      type: "marker",
+      text: match[2],
+      start: cursor1,
+      end: cursor2,
+    });
     const text = new Node("text");
-    text.data.token = {
+    text.content = {
       text: match[3],
       start: cursor2,
       end: cursor3,

@@ -25,11 +25,17 @@ export class BlockquoteRule extends Block {
     context.input.consume(match[2].length); // marker
     const cursor1 = context.input.capture();
     const child = new Node(this.type, true);
-    child.data.token = {
+    child.content = {
       text: match[2],
       start: cursor0,
       end: cursor1,
     };
+    child.data.tokens.push({
+      type: "marker",
+      text: match[2],
+      start: cursor0,
+      end: cursor1,
+    });
     return child;
   }
 }

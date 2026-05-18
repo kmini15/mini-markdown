@@ -6,6 +6,11 @@ export class HtmlRenderer extends Renderer {
   }
 
   render(text, node) {
-    return node.data.token.text;
+    let content = "";
+    for (let child = node.firstChild; child; child = child.next) {
+      content += child.content.text;
+    }
+    return content;
   }
 }
+  

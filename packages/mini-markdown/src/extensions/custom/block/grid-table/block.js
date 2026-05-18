@@ -184,7 +184,7 @@ export class GridTableRule extends Block {
   buildTableNode(tableRows) {
     const numCols = tableRows[0].colSpans.length;
     const tableNode = new Node("grid-table");
-    tableNode.data.token = {
+    tableNode.content = {
       text: "",
       start: { row: 0, col: 0, idx: 0 },
       end: { row: 0, col: 0, idx: 0 },
@@ -194,7 +194,7 @@ export class GridTableRule extends Block {
     };
     for (let row = 0; row < tableRows.length; row++) {
       const rowNode = new Node("grid-table-row");
-      rowNode.data.token = {
+      rowNode.content = {
         text: "",
         start: { row: 0, col: 0, idx: 0 },
         end: { row: 0, col: 0, idx: 0 },
@@ -220,13 +220,13 @@ export class GridTableRule extends Block {
           tableRows[row].rowSpans[col]++;
         }
         const textNode = new Node("text");
-        textNode.data.token = {
+        textNode.content = {
           text: text,
           start: { row: 0, col: 0, idx: 0 },
           end: { row: 0, col: 0, idx: 0 },
         };
         const cellNode = new Node("grid-table-cell");
-        cellNode.data.token = {
+        cellNode.content = {
           text: "",
           start: { row: 0, col: 0, idx: 0 },
           end: { row: 0, col: 0, idx: 0 },

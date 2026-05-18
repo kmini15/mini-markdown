@@ -12,7 +12,7 @@ export class DetailsRule extends Block {
 
   continue(context, node) {
     const input = context.input.current();
-    const refer = node.data.token.end.col;
+    const refer = node.content.end.col;
     const match = this.patternIndent.exec(input);
     if (!match) return false;
     const cursor0 = context.input.capture();
@@ -45,22 +45,46 @@ export class DetailsRule extends Block {
     context.input.consume(match[6].length); // trailing spaces
     const cursor6 = context.input.capture();
     const child = new Node(this.type);
-    child.data.token = {
+    child.content = {
       text: match[2],
       start: cursor1,
       end: cursor2,
     };
     child.data.fields = {
-      open: match[2] === "<\.\.>",
+      open: match[2] === "<\'\'>",
     };
-    const summary = new Node(this.type + "-summary");
-    summary.data.token = {
-      text: "",
+    child.data.tokens.push({
+      type: "marker",
+      text: match[2],
+      start: cursor1,
+      end: cursor2,
+    });
+    child.data.tokens.push({
+      type: "marker",
+      text: match[3],
       start: cursor2,
+      end: cursor3,
+    });
+    child.data.tokens.push({
+      type: "keyword",
+      text: match[4],
+      start: cursor3,
+      end: cursor4,
+    });
+    child.data.tokens.push({
+      type: "marker",
+      text: match[5],
+      start: cursor4,
+      end: cursor5,
+    });
+    const summary = new Node(this.type + "-summary");
+    summary.content = {
+      text: "",
+      start: cursor3,
       end: cursor3,
     };
     const text = new Node("text");
-    text.data.token = {
+    text.content = {
       text: match[4],
       start: cursor3,
       end: cursor4,

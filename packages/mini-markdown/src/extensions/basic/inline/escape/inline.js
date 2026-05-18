@@ -17,10 +17,29 @@ export class EscapeRule extends Inline {
   
   match(node) {
     for (let child = node.firstChild; child; child = child.next) {
-      if (child.data.type !== "text") continue;
-      if (/\\./.test(child.data.token.text)) {
-        child.data.type = this.type;
-        child.data.token.text = child.data.token.text;
+      if (child.type !== "text") continue;
+      if (/\\./.test(child.content.text)) {
+        child.type = this.type;
+        child.data.tokens.push({
+          type: "marker",
+          text: child.content.text[0],
+          start: child.content.start,
+          end: {
+            row: child.content.start.row,
+            col: child.content.start.col + 1,
+            idx: child.content.start.idx + 1,
+          }
+        });
+        child.data.tokens.push({
+          type: "keyword",
+          text: child.content.text[1],
+          start: {
+            row: child.content.start.row,
+            col: child.content.start.col + 1,
+            idx: child.content.start.idx + 1,
+          },
+          end: child.content.end,
+        });
       }
     }
   }

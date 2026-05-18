@@ -6,6 +6,6 @@ export class EscapeRenderer extends Renderer {
   }
 
   render(text, node) {
-    return node.data.token.text.slice(1);
+    return node.content.text.slice(1);
   }
 }

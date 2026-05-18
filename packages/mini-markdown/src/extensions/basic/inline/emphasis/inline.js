@@ -39,19 +39,19 @@ export class EmphasisRule extends Inline {
           continue;
         }
         // convert the matched markers to BOLD or ITALIC nodes.
-        if (on.data.fields.refer.data.token.text.length >= 2 &&
-          cn.data.fields.refer.data.token.text.length >= 2) {
+        if (on.data.fields.refer.content.text.length >= 2 &&
+          cn.data.fields.refer.content.text.length >= 2) {
           this.buildBold(on, cn);
-        } else if (on.data.fields.refer.data.token.text.length >= 1 &&
-          cn.data.fields.refer.data.token.text.length >= 1) {
+        } else if (on.data.fields.refer.content.text.length >= 1 &&
+          cn.data.fields.refer.content.text.length >= 1) {
           this.buildItalic(on, cn);
         }
         // remove the markers if their count drops to 0.
-        if (on.data.fields.refer.data.token.text.length === 0) {
+        if (on.data.fields.refer.content.text.length === 0) {
           on.data.fields.refer.unlink();
           on.unlink();
         }
-        if (cn.data.fields.refer.data.token.text.length === 0) {
+        if (cn.data.fields.refer.content.text.length === 0) {
           cn.data.fields.refer.unlink();
           cn.unlink();
         }
@@ -76,49 +76,81 @@ export class EmphasisRule extends Inline {
   buildBold(openMarker, closeMarker) {
     const onNode = this.splitMarkerOpen(openMarker, 2);
     const cnNode = this.splitMarkerClose(closeMarker, 2);
-    onNode.data.type = this.type + "-open";
-    cnNode.data.type = this.type + "-close";
     const emphasisNode = new Node(this.type);
-    emphasisNode.data.token = {
+    emphasisNode.content = {
       text: "",
-      start: onNode.data.token.start,
-      end: onNode.data.token.start,
+      start: onNode.content.start,
+      end: onNode.content.start,
     };
     emphasisNode.data.fields = {
       type: "bold"
     };
+    emphasisNode.data.tokens.push({
+      type: "marker",
+      text: onNode.content.text,
+      start: onNode.content.start,
+      end: onNode.content.end,
+    });
     for (let curr = onNode.next; curr !== cnNode;) {
       let temp = curr.next;
       emphasisNode.appendChild(curr);
+      emphasisNode.data.tokens.push({
+        type: "keyword",
+        text: curr.content.text,
+        start: curr.content.start,
+        end: curr.content.end,
+      });
       curr = temp;
     }
-    emphasisNode.prependChild(onNode);
-    emphasisNode.appendChild(cnNode);
+    emphasisNode.data.tokens.push({
+      type: "marker",
+      text: cnNode.content.text,
+      start: cnNode.content.start,
+      end: cnNode.content.end,
+    });
     openMarker.data.fields.refer.insertAfter(emphasisNode);
+    onNode.unlink();
+    cnNode.unlink();
   }
 
   buildItalic(openMarker, closeMarker) {
     const onNode = this.splitMarkerOpen(openMarker, 1);
     const cnNode = this.splitMarkerClose(closeMarker, 1);
-    onNode.data.type = this.type + "-open";
-    cnNode.data.type = this.type + "-close";
     const emphasisNode = new Node(this.type);
-    emphasisNode.data.token = {
+    emphasisNode.content = {
       text: "",
-      start: onNode.data.token.start,
-      end: onNode.data.token.start,
+      start: onNode.content.start,
+      end: onNode.content.start,
     };
     emphasisNode.data.fields = {
       type: "italic"
     };
+    emphasisNode.data.tokens.push({
+      type: "marker",
+      text: onNode.content.text,
+      start: onNode.content.start,
+      end: onNode.content.end,
+    });
     for (let curr = onNode.next; curr !== cnNode;) {
       let temp = curr.next;
       emphasisNode.appendChild(curr);
+      emphasisNode.data.tokens.push({
+        type: "keyword",
+        text: curr.content.text,
+        start: curr.content.start,
+        end: curr.content.end,
+      });
       curr = temp;
     }
-    emphasisNode.prependChild(onNode);
-    emphasisNode.appendChild(cnNode);
+    emphasisNode.data.tokens.push({
+      type: "marker",
+      text: cnNode.content.text,
+      start: cnNode.content.start,
+      end: cnNode.content.end,
+    });
     openMarker.data.fields.refer.insertAfter(emphasisNode);
+    onNode.unlink();
+    cnNode.unlink();
   }
 
   buildMarkerList(node) {
@@ -139,21 +171,21 @@ export class EmphasisRule extends Inline {
   }
 
   buildMarkerAstarisk(node) {
-    if (node.data.type !== "text") return null;
-    if (!/^\*+$/.test(node.data.token.text)) return null;
-    const char_prev = !node.prev ? " " : (node.prev.data.token.text?.at(-1) ?? "");
-    const char_next = !node.next ? " " : (node.next.data.token.text?.at(0) ?? "");
+    if (node.type !== "text") return null;
+    if (!/^\*+$/.test(node.content.text)) return null;
+    const char_prev = !node.prev ? " " : (node.prev.content.text?.at(-1) ?? "");
+    const char_next = !node.next ? " " : (node.next.content.text?.at(0) ?? "");
     const open = !/\s/.test(char_next);
     const close = !/\s/.test(char_prev);
     const marker = new Node("marker");
-    marker.data.token = {
-      text: node.data.token.text,
-      start: node.data.token.start,
-      end: node.data.token.end,
+    marker.content = {
+      text: node.content.text,
+      start: node.content.start,
+      end: node.content.end,
     }
     marker.data.fields = {
       mark: "*",
-      count: node.data.token.text.length,
+      count: node.content.text.length,
       open: open,
       close: close,
       refer: node,
@@ -162,21 +194,21 @@ export class EmphasisRule extends Inline {
   }
 
   buildMarkerUnderscore(node) {
-    if (node.data.type !== "text") return null;
-    if (!/^\_+$/.test(node.data.token.text)) return null;
-    const char_prev = !node.prev ? " " : (node.prev.data.token.text?.at(-1) ?? "");
-    const char_next = !node.next ? " " : (node.next.data.token.text?.at(0) ?? "");
+    if (node.type !== "text") return null;
+    if (!/^\_+$/.test(node.content.text)) return null;
+    const char_prev = !node.prev ? " " : (node.prev.content.text?.at(-1) ?? "");
+    const char_next = !node.next ? " " : (node.next.content.text?.at(0) ?? "");
     const open = !/\s/.test(char_next) && /\s|_|\*/.test(char_prev);
     const close = !/\s/.test(char_prev) && /\s|_|\*/.test(char_next);
     const marker = new Node("marker");
-    marker.data.token = {
-      text: node.data.token.text,
-      start: node.data.token.start,
-      end: node.data.token.end,
+    marker.content = {
+      text: node.content.text,
+      start: node.content.start,
+      end: node.content.end,
     }
     marker.data.fields = {
       mark: "_",
-      count: node.data.token.text.length,
+      count: node.content.text.length,
       open: open,
       close: close,
       refer: node,
@@ -186,7 +218,7 @@ export class EmphasisRule extends Inline {
 
   splitMarkerOpen(marker, num) {
     const refer = marker.data.fields.refer;
-    const count = marker.data.fields.refer.data.token.text.length;
+    const count = marker.data.fields.refer.content.text.length;
     const [start, end] = this.splitText(refer, count - num);
     refer.insertBefore(start);
     refer.insertAfter(end);
@@ -197,7 +229,7 @@ export class EmphasisRule extends Inline {
 
   splitMarkerClose(marker, num) {
     const refer = marker.data.fields.refer;
-    const count = marker.data.fields.refer.data.token.text.length;
+    const count = marker.data.fields.refer.content.text.length;
     const [start, end] = this.splitText(refer, num);
     refer.insertBefore(start);
     refer.insertAfter(end);
@@ -208,25 +240,25 @@ export class EmphasisRule extends Inline {
 
   splitText(node, idx) {
     const start = new Node("text");
-    start.data.token = {
-      text: node.data.token.text.slice(0, idx),
-      start: node.data.token.start,
+    start.content = {
+      text: node.content.text.slice(0, idx),
+      start: node.content.start,
       end: {
-        row: node.data.token.start.row,
-        col: node.data.token.start.col + idx,
-        idx: node.data.token.start.idx + idx,
+        row: node.content.start.row,
+        col: node.content.start.col + idx,
+        idx: node.content.start.idx + idx,
       }
     };
     start.data.fields = { ...node.data.fields };
     const end = new Node("text");
-    end.data.token = {
-      text: node.data.token.text.slice(idx),
+    end.content = {
+      text: node.content.text.slice(idx),
       start: {
-        row: node.data.token.start.row,
-        col: node.data.token.start.col + idx,
-        idx: node.data.token.start.idx + idx,
+        row: node.content.start.row,
+        col: node.content.start.col + idx,
+        idx: node.content.start.idx + idx,
       },
-      end: node.data.token.end,
+      end: node.content.end,
     };
     end.data.fields = { ...node.data.fields };
     return [start, end];
