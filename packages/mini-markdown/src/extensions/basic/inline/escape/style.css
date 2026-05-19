@@ -1,0 +1,7 @@
+.mini-markdown span.escape.token-marker {
+  color: var(--mmd-color-token-marker);
+}
+
+.mini-markdown span.escape.token-content {
+  color: var(--mmd-color-token-content);
+}

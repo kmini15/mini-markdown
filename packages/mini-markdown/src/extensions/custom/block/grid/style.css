@@ -24,3 +24,19 @@
 .mini-markdown div.grid-item video {
   vertical-align: bottom;
 }
+
+.mini-markdown span.grid.token-marker {
+  color: var(--mmd-color-token-marker);
+}
+
+.mini-markdown span.grid.token-param {
+  color: var(--mmd-color-token-param);
+}
+
+.mini-markdown span.grid-item.token-marker {
+  color: var(--mmd-color-token-marker);
+}
+
+.mini-markdown span.grid-item.token-param {
+  color: var(--mmd-color-token-param);
+}

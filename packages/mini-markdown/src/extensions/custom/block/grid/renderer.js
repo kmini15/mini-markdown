@@ -35,7 +35,7 @@ export class GridRenderer extends Renderer {
       style += `--columns: ${columns.join(" ")};`;
     }
     if (node.data.fields.style) {
-      style += node.data.fields.style.slice(1, -1);
+      style += node.data.fields.style;
     }
     if (style) {
       style = `style="${style}"`;

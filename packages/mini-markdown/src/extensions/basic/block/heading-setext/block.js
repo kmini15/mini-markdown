@@ -42,6 +42,15 @@ export class HeadingSetextRule extends Block {
       start: cursor1,
       end: cursor2,
     });
+    for (let i = 0; i < context.lines.length; i++) {
+      const line = context.lines[i];
+      child.data.tokens.push({
+        type: "content",
+        text: line.content.text,
+        start: line.content.start,
+        end: line.content.end,
+      });
+    }
     for (let line of context.lines) {
       child.appendChild(line);
     }

@@ -3,3 +3,15 @@
   height: auto;
   border-radius: var(--mmd-border-radius-md);
 }
+
+.mini-markdown span.image.token-marker {
+  color: var(--mmd-color-token-marker);
+}
+
+.mini-markdown span.image.token-content {
+  color: var(--mmd-color-token-content);
+}
+
+.mini-markdown span.image.token-param {
+  color: var(--mmd-color-token-param);
+}

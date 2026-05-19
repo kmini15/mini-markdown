@@ -5,3 +5,21 @@
 .mini-markdown em.emphasis {
   font-style: italic;
 }
+
+.mini-markdown span.emphasis.token-marker-bold {
+  color: var(--mmd-color-token-marker);
+}
+
+.mini-markdown span.emphasis.token-content-bold {
+  color: var(--mmd-color-token-content);
+  font-weight: var(--mmd-font-weight-bold);
+}
+
+.mini-markdown span.emphasis.token-marker-italic {
+  color: var(--mmd-color-token-marker);
+}
+
+.mini-markdown span.emphasis.token-content-italic {
+  color: var(--mmd-color-token-content);
+  font-style: italic;
+}

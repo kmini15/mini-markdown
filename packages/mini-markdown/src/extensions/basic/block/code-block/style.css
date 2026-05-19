@@ -14,3 +14,12 @@
   color: var(--mmd-color-code-block-foreground);
   background: none;
 }
+
+.mini-markdown span.code-block.token-marker {
+  background-color: var(--mmd-color-token-marker);
+  opacity: 0.1;
+}
+
+.mini-markdown span.code-block.token-code {
+  color: var(--mmd-color-token-code);
+}

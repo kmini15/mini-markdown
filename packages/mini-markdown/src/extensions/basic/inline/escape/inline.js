@@ -31,7 +31,7 @@ export class EscapeRule extends Inline {
           }
         });
         child.data.tokens.push({
-          type: "keyword",
+          type: "content",
           text: child.content.text[1],
           start: {
             row: child.content.start.row,

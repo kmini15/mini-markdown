@@ -23,3 +23,7 @@
   font-weight: var(--mmd-font-weight-normal);
   background-color: var(--mmd-color-table-data-background);
 }
+
+.mini-markdown span.table.token-marker {
+  color: var(--mmd-color-token-marker);
+}

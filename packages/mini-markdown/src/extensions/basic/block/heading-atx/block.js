@@ -33,6 +33,12 @@ export class HeadingAtxRule extends Block {
       start: cursor1,
       end: cursor2,
     });
+    child.data.tokens.push({
+      type: "content",
+      text: match[3],
+      start: cursor2,
+      end: cursor3,
+    });
     const text = new Node("text");
     text.content = {
       text: match[3],

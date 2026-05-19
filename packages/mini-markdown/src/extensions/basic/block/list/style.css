@@ -25,3 +25,11 @@
 .mini-markdown li.list-item > p {
   margin: 0;
 }
+
+.mini-markdown span.list.token-marker {
+  color: var(--mmd-color-token-marker);
+}
+
+.mini-markdown span.list-item.token-marker {
+  color: var(--mmd-color-token-marker);
+}

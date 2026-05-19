@@ -1,0 +1,11 @@
+.mini-markdown span.link-reference.token-marker {
+  color: var(--mmd-color-token-marker);
+}
+
+.mini-markdown span.link-reference.token-content {
+  color: var(--mmd-color-token-content);
+}
+
+.mini-markdown span.link-reference.token-param {
+  color: var(--mmd-color-token-param);
+}

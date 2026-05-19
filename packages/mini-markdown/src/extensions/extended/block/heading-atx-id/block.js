@@ -4,7 +4,7 @@ import { Node } from "../../../../core/node.js";
 export class HeadingAtxIdRule extends Block {
   constructor(type) {
     super(type);
-    this.pattern = /^(\s*)(#{1,6}\s)(.*?)(\s*)(\{)(#)(.*)(\})$/;
+    this.pattern = /^(\s*)(#{1,6}\s)(.*?)(\s*)(\{)(#)(.*)(\})(\s*)$/;
   }
   
   start(context, parent) {
@@ -49,7 +49,7 @@ export class HeadingAtxIdRule extends Block {
       end: cursor2,
     });
     child.data.tokens.push({
-      type: "keyword",
+      type: "content",
       text: match[3],
       start: cursor2,
       end: cursor3,
@@ -61,15 +61,9 @@ export class HeadingAtxIdRule extends Block {
       end: cursor5, 
     });
     child.data.tokens.push({
-      type: "marker",
-      text: match[6],
+      type: "param",
+      text: match[6] + match[7],
       start: cursor5,
-      end: cursor6,
-    });
-    child.data.tokens.push({
-      type: "keyword",
-      text: match[7],
-      start: cursor6,
       end: cursor7,
     });
     child.data.tokens.push({

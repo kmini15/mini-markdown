@@ -16,3 +16,7 @@
 .mini-markdown blockquote.blockquote > :last-child {
   margin-bottom: 0;
 }
+
+.mini-markdown span.blockquote.token-marker {
+  color: var(--mmd-color-token-marker);
+}

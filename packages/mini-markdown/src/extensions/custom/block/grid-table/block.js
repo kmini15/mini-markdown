@@ -93,6 +93,13 @@ export class GridTableRule extends Block {
       return null;
     }
     context.input.consume(context.input.current().length);
+    const cursorEnd = context.input.capture();
+    tableNode.data.tokens.push({
+      type: "marker",
+      text: openLine,
+      start: capture,
+      end: cursorEnd,
+    });
     return tableNode;
   }
 

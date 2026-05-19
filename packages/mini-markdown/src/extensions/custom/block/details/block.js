@@ -66,7 +66,7 @@ export class DetailsRule extends Block {
       end: cursor3,
     });
     child.data.tokens.push({
-      type: "keyword",
+      type: "content",
       text: match[4],
       start: cursor3,
       end: cursor4,

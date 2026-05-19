@@ -68,7 +68,7 @@ export class CodeInlineRule extends Inline {
       }
       code.appendChild(between);
       code.data.tokens.push({
-        type: "keyword",
+        type: "code",
         text: between.content.text,
         start: between.content.start,
         end: between.content.end,

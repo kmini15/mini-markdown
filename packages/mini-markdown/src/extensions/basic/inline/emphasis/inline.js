@@ -86,7 +86,7 @@ export class EmphasisRule extends Inline {
       type: "bold"
     };
     emphasisNode.data.tokens.push({
-      type: "marker",
+      type: "marker-bold",
       text: onNode.content.text,
       start: onNode.content.start,
       end: onNode.content.end,
@@ -95,7 +95,7 @@ export class EmphasisRule extends Inline {
       let temp = curr.next;
       emphasisNode.appendChild(curr);
       emphasisNode.data.tokens.push({
-        type: "keyword",
+        type: "content-bold",
         text: curr.content.text,
         start: curr.content.start,
         end: curr.content.end,
@@ -103,7 +103,7 @@ export class EmphasisRule extends Inline {
       curr = temp;
     }
     emphasisNode.data.tokens.push({
-      type: "marker",
+      type: "marker-bold",
       text: cnNode.content.text,
       start: cnNode.content.start,
       end: cnNode.content.end,
@@ -126,7 +126,7 @@ export class EmphasisRule extends Inline {
       type: "italic"
     };
     emphasisNode.data.tokens.push({
-      type: "marker",
+      type: "marker-italic",
       text: onNode.content.text,
       start: onNode.content.start,
       end: onNode.content.end,
@@ -135,7 +135,7 @@ export class EmphasisRule extends Inline {
       let temp = curr.next;
       emphasisNode.appendChild(curr);
       emphasisNode.data.tokens.push({
-        type: "keyword",
+        type: "content-italic",
         text: curr.content.text,
         start: curr.content.start,
         end: curr.content.end,
@@ -143,7 +143,7 @@ export class EmphasisRule extends Inline {
       curr = temp;
     }
     emphasisNode.data.tokens.push({
-      type: "marker",
+      type: "marker-italic",
       text: cnNode.content.text,
       start: cnNode.content.start,
       end: cnNode.content.end,

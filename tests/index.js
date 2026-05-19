@@ -18,6 +18,8 @@ document.getElementById("editor").addEventListener("input", () => {
 function resizeTextarea() {
   editor.style.height = "auto";
   editor.style.height = `${editor.scrollHeight}px`;
+  editor.style.width = "auto";
+  editor.style.width = `${editor.scrollWidth}px`;
 }
 
 function render() {
@@ -27,8 +29,10 @@ function render() {
   previewAst.innerHTML = mmd.getPreviewAst();
   const previewHtml = document.getElementById("preview-html");
   previewHtml.innerHTML = mmd.getPreviewHtml();
-  const previewTokens = document.getElementById("preview-token");
-  previewTokens.innerHTML = mmd.getPreviewToken();
+  const previewToken = document.getElementById("preview-token");
+  previewToken.innerHTML = mmd.getPreviewToken();
+  const previewSyntaxHighlight = document.getElementById("preview-syntax-highlight");
+  previewSyntaxHighlight.innerHTML = mmd.getPreviewSyntax();
   resizeTextarea();
   mmdRoot.querySelectorAll("code.fenced-code-block").forEach((block) => {
     hljs.highlightElement(block);

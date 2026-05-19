@@ -13,7 +13,16 @@ export class TokenRenderer {
         result += prefix + "   + ";
       }
       result += `[<span class="color-token-type">${token.type}</span>]`;
-      result += `["<span class="color-token-text">${token.text}</span>"]`;
+
+
+      let text = token.text.replace(/\r\n|\n/g, "\\n");
+      if (text && text.length > this.maxTextLength) {
+        text = text.slice(0, this.maxTextLength - 3) + "...";
+      }
+      const escaped_text = this.escapeHtml(text);
+      const nowrap_text = escaped_text.replace(/\r\n|\n/g, "\\n");
+      const render_text = nowrap_text;
+      result += `["<span class="color-token-text">${render_text}</span>"]`;
       result += `[<span class="color-cursor-row">${token.start.row}</span>`
       result += `:<span class="color-cursor-col">${token.start.col}</span>`
       result += `(<span class="color-cursor-idx">${token.start.idx}</span>)`

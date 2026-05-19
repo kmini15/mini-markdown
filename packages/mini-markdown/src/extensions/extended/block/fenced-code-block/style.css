@@ -14,3 +14,15 @@
   color: var(--mmd-color-code-block-foreground);
   background: none;
 }
+
+.mini-markdown span.fenced-code-block.token-marker {
+  color: var(--mmd-color-token-marker);
+}
+
+.mini-markdown span.fenced-code-block.token-code {
+  color: var(--mmd-color-token-code);
+}
+
+.mini-markdown span.fenced-code-block.token-param {
+  color: var(--mmd-color-token-param);
+}

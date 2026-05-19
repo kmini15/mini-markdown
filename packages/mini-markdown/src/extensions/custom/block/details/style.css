@@ -1,3 +1,11 @@
 .mini-markdown details.details summary {
   cursor: pointer;
 }
+
+.mini-markdown span.details.token-marker {
+  color: var(--mmd-color-token-marker);
+}
+
+.mini-markdown span.details.token-content {
+  color: var(--mmd-color-token-content);
+}

@@ -9,4 +9,5 @@ export const LinkReference = {
     order: { after: ["code-block"], before: ["paragraph"] },
     rule: new LinkReferenceRule(name),
   }],
+  styles: [new URL("./style.css", import.meta.url).href],
 };

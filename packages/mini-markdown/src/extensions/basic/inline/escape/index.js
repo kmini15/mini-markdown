@@ -11,4 +11,5 @@ export const Escape = {
     rule: new EscapeRule(name),
   }],
   renderers: [new EscapeRenderer(name)],
+  styles: [new URL("./style.css", import.meta.url).href],
 };

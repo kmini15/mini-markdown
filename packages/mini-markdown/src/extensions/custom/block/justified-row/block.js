@@ -4,7 +4,7 @@ import { Node } from "../../../../core/node.js";
 export class JustifiedRowRule extends Block {
   constructor(type) {
     super(type);
-    this.pattern = /^(\s*)(====)(\[)([^\]]+)(:)([^\]]+)(\])({.*?})?(\s*)$/;
+    this.pattern = /^(\s*)(====)(\[)([^\]]+)(:)([^\]]+)(\])(({)(.*?)(}))?(\s*)$/;
     this.patternItem = /^(\s*)(\[[:.' ]{2}\])({.*?})?/;
     this.patternIndent = /^(\s*)/;
   }
@@ -48,10 +48,14 @@ export class JustifiedRowRule extends Block {
     const cursor6 = context.input.capture();
     context.input.consume(match[7].length); // closing bracket
     const cursor7 = context.input.capture();
-    context.input.consume(match[8]?.length || 0); // style
+    context.input.consume(match[9]?.length || 0); // open brace
     const cursor8 = context.input.capture();
-    context.input.consume(match[9].length); // trailing spaces
+    context.input.consume(match[10]?.length || 0); // style
     const cursor9 = context.input.capture();
+    context.input.consume(match[11]?.length || 0); // close brace
+    const cursor10 = context.input.capture();
+    context.input.consume(match[12].length); // trailing spaces
+    const cursor11 = context.input.capture();
     const child = new Node(this.type);
     child.content = {
       text: match[2],
@@ -61,7 +65,7 @@ export class JustifiedRowRule extends Block {
     child.data.fields = {
       width: match[4].trim(),
       gap: match[6].trim(),
-      style: match[8] || "{}",
+      style: match[10] || "",
     };
     child.data.tokens.push({
       type: "marker",
@@ -76,7 +80,7 @@ export class JustifiedRowRule extends Block {
       end: cursor3,
     });
     child.data.tokens.push({
-      type: "keyword",
+      type: "param",
       text: match[4],
       start: cursor3,
       end: cursor4,
@@ -88,7 +92,7 @@ export class JustifiedRowRule extends Block {
       end: cursor5,
     });
     child.data.tokens.push({
-      type: "keyword",
+      type: "param",
       text: match[6],
       start: cursor5,
       end: cursor6,
@@ -102,9 +106,21 @@ export class JustifiedRowRule extends Block {
     if (match[8]) {
       child.data.tokens.push({
         type: "marker",
-        text: match[8],
+        text: match[9],
         start: cursor7,
         end: cursor8,
+      });
+      child.data.tokens.push({
+        type: "param",
+        text: match[10],
+        start: cursor8,
+        end: cursor9,
+      });
+      child.data.tokens.push({
+        type: "marker",
+        text: match[11],
+        start: cursor9,
+        end: cursor10,
       });
     }
     return child;
@@ -114,7 +130,7 @@ export class JustifiedRowRule extends Block {
 export class JustifiedRowItemRule extends Block {
   constructor(type) {
     super(type);
-    this.patternItem = /^(\s*)(\[[:.' ]{2}\])({.*?})?/;
+    this.patternItem = /^(\s*)(\[[:.' ]{2}\])(({)(.*?)(}))?/;
     this.patternIndent = /^(\s*)/;
   }
 
@@ -146,8 +162,12 @@ export class JustifiedRowItemRule extends Block {
     const cursor1 = context.input.capture();
     context.input.consume(match[2].length); // marker
     const cursor2 = context.input.capture();
-    context.input.consume(match[3]?.length || 0); // style
+    context.input.consume(match[4]?.length || 0); // open brace
     const cursor3 = context.input.capture();
+    context.input.consume(match[5]?.length || 0); // style
+    const cursor4 = context.input.capture();
+    context.input.consume(match[6]?.length || 0); // close brace
+    const cursor5 = context.input.capture();
     const child = new Node(this.type, true);
     child.content = {
       text: match[2],
@@ -156,7 +176,7 @@ export class JustifiedRowItemRule extends Block {
     };
     child.data.fields = {
       align: match[2],
-      style: match[3] || "{}",
+      style: match[5] || "",
     };
     child.data.tokens.push({
       type: "marker",
@@ -167,9 +187,21 @@ export class JustifiedRowItemRule extends Block {
     if (match[3]) {
       child.data.tokens.push({
         type: "marker",
-        text: match[3],
+        text: match[4],
         start: cursor2,
         end: cursor3,
+      });
+      child.data.tokens.push({
+        type: "param",
+        text: match[5],
+        start: cursor3,
+        end: cursor4,
+      });
+      child.data.tokens.push({
+        type: "marker",
+        text: match[6],
+        start: cursor4,
+        end: cursor5,
       });
     }
     return child;

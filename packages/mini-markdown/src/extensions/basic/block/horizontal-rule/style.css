@@ -3,3 +3,7 @@
   border-top: 2px solid var(--mmd-color-border-subtle);
   margin: var(--mmd-spacing-md) 0;
 }
+
+.mini-markdown span.horizontal-rule.token-marker {
+  color: var(--mmd-color-token-marker);
+}

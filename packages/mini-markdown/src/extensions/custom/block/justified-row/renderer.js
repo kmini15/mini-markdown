@@ -14,7 +14,7 @@ export class JustifiedRowRenderer extends Renderer {
       style += `--gap: ${node.data.fields.gap};`;
     }
     if (node.data.fields.style) {
-      style += node.data.fields.style.slice(1, -1);
+      style += node.data.fields.style;
     }
     if (style) {
       style = `style="${style}"`;

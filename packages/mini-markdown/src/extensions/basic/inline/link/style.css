@@ -7,3 +7,15 @@
   color: var(--mmd-color-link-hover);
   text-decoration: underline;
 }
+
+.mini-markdown span.link.token-marker {
+  color: var(--mmd-color-token-marker);
+}
+
+.mini-markdown span.link.token-content {
+  color: var(--mmd-color-token-content);
+}
+
+.mini-markdown span.link.token-param {
+  color: var(--mmd-color-token-param);
+}

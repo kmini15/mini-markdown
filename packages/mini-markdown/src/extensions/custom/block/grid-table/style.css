@@ -27,3 +27,7 @@
   background-color: var(--mmd-color-table-data-background);
   color: var(--mmd-color-table-data-foreground);
 }
+
+.mini-markdown span.grid-table.token-marker {
+  color: var(--mmd-color-token-marker);
+}

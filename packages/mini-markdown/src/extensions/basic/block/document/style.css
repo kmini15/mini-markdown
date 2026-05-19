@@ -84,6 +84,27 @@
   --mmd-color-table-data-background: rgba(60, 60, 60, 1.0);
   --mmd-color-table-data-foreground: rgba(200, 200, 200, 1.0);
   --mmd-color-table-data-border: rgba(100, 100, 100, 1.0);
+  /* Color - Custom */
+  --mmd-color-midori-0: rgb(200, 220, 180);
+  --mmd-color-midori-1: rgb(180, 240, 120);
+  --mmd-color-midori-2: rgb(150, 240, 120);
+  --mmd-color-momoi-0: rgb(220, 180, 200);
+  --mmd-color-momoi-1: rgb(240, 120, 180);
+  --mmd-color-momoi-2: rgb(240, 120, 150);
+  --mmd-color-aris-0: rgb(180, 200, 220);
+  --mmd-color-aris-1: rgb(120, 180, 240);
+  --mmd-color-aris-2: rgb(120, 150, 240);
+  --mmd-color-yuzu-0: rgb(220, 200, 180);
+  --mmd-color-yuzu-1: rgb(240, 180, 120);
+  --mmd-color-yuzu-2: rgb(240, 150, 120);
+  --mmd-color-kei-0: rgb(220, 200, 200);
+  --mmd-color-kei-1: rgb(240, 180, 180);
+  --mmd-color-kei-2: rgb(240, 150, 180);
+  /* Highlight */
+  --mmd-color-token-content: var(--mmd-color-aris-2);
+  --mmd-color-token-marker: var(--mmd-color-aris-1);
+  --mmd-color-token-param: var(--mmd-color-kei-1);
+  --mmd-color-token-code: var(--mmd-color-kei-2);
 }
 
 .mini-markdown div.document {

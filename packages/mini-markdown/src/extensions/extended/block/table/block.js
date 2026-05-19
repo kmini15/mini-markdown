@@ -121,6 +121,13 @@ export class TableRule extends Block {
       tableNode.appendChild(tableRowNode);
     }
     context.input.consume(context.input.current().length);
+    const cursorEnd = context.input.capture();
+    tableNode.data.tokens.push({
+      type: "marker",
+      text: "",
+      start: capture,
+      end: cursorEnd,
+    });
     return tableNode;
   }
 

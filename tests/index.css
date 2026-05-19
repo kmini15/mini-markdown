@@ -41,11 +41,11 @@ section {
 }
 
 section.section-0 {
-  grid-column: span 3;
+  grid-column: span 2;
 }
 
 section.section-1 {
-  grid-column: span 3;
+  grid-column: span 2;
 }
 
 section.section-2 {
@@ -56,11 +56,11 @@ section.section-3 {
   grid-column: span 2;
 }
 
-section.section-3 {
+section.section-4 {
   grid-column: span 2;
 }
-
-section.section-4 {
+  
+section.section-5 {
   grid-column: span 2;
 }
 
@@ -86,13 +86,14 @@ section.section-4 {
   text-decoration: none;
   border: none;
   outline: none;
+  white-space: pre;
 }
 
 #editor,
-#preview,
 #preview-ast,
 #preview-html,
-#preview-token {
+#preview-token,
+#preview-syntax-highlight {
   width: 100%;
   padding: 8px;
   outline: none;
@@ -102,7 +103,8 @@ section.section-4 {
 #editor,
 #preview-ast,
 #preview-html,
-#preview-token {
+#preview-token,
+#preview-syntax-highlight {
   font-family: 'D2Coding', Menlo, Monaco, 'Courier New', monospace;
 }
 

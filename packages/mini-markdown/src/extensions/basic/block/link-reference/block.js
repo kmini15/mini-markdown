@@ -59,7 +59,7 @@ export class LinkReferenceRule extends Block {
         end: cursor2,
       },
       {
-        type: "keyword",
+        type: "content",
         text: m_label,
         start: cursor2,
         end: cursor3,
@@ -77,7 +77,7 @@ export class LinkReferenceRule extends Block {
         end: cursor5,
       },
       {
-        type: "keyword",
+        type: "param",
         text: m_href,
         start: cursor5,
         end: cursor6,
@@ -92,7 +92,7 @@ export class LinkReferenceRule extends Block {
           end: cursor8,
         },
         {
-          type: "keyword",
+          type: "param",
           text: m_title,
           start: cursor8,
           end: cursor9,

@@ -6,3 +6,11 @@
   padding: var(--mmd-spacing-xs) var(--mmd-spacing-sm);
   border-radius: var(--mmd-border-radius-md);
 }
+
+.mini-markdown span.code-inline.token-marker {
+  color: var(--mmd-color-token-marker);
+}
+
+.mini-markdown span.code-inline.token-code {
+  color: var(--mmd-color-token-code);
+}

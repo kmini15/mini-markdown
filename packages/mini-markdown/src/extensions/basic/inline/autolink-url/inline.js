@@ -42,7 +42,7 @@ export class AutolinkUrlRule extends Inline {
             end: open.content.end,
           },
           {
-            type: "keyword",
+            type: "content",
             text: text.content.text,
             start: text.content.start,
             end: text.content.end,

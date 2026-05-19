@@ -96,7 +96,7 @@ export class ImageStyleRule extends Inline {
     for (let curr = nodeLabelOpen.next; curr !== nodeLabelClose;) {
       const next = curr.next;
       nodeLink.data.tokens.push({
-        type: "keyword",
+        type: "content",
         text: curr.content.text,
         start: curr.content.start,
         end: curr.content.end,
@@ -118,7 +118,7 @@ export class ImageStyleRule extends Inline {
         end: nodeDestOpen.content.end,
       },
       {
-        type: "keyword",
+        type: "param",
         text: nodeDest.content.text,
         start: nodeDest.content.start,
         end: nodeDest.content.end,
@@ -136,7 +136,7 @@ export class ImageStyleRule extends Inline {
         end: nodeStyleOpen.content.end,
       },
       {
-        type: "keyword",
+        type: "param",
         text: nodeStyle.content.text,
         start: nodeStyle.content.start,
         end: nodeStyle.content.end,

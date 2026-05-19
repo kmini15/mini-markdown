@@ -4,7 +4,7 @@ import { Node } from "../../../../core/node.js";
 export class GridRule extends Block {
   constructor(type) {
     super(type);
-    this.pattern = /^(\s*)(::::)(\[)([^\]]+)(:)([^\]]+)(:)([^\]]+)(\])({.*?})?(\s*)$/;
+    this.pattern = /^(\s*)(::::)(\[)([^\]]+)(:)([^\]]+)(:)([^\]]+)(\])(({)(.*?)(}))?(\s*)$/;
     this.patternItem = /^(\s*)(\[[:.' ]{2}\])({.*?})?/;
     this.patternIndent = /^(\s*)/;
   }
@@ -52,10 +52,14 @@ export class GridRule extends Block {
     const cursor8 = context.input.capture();
     context.input.consume(match[9]?.length || 0); // closing bracket
     const cursor9 = context.input.capture();
-    context.input.consume(match[10]?.length || 0); // style
+    context.input.consume(match[11]?.length || 0); // open brace
     const cursor10 = context.input.capture();
-    context.input.consume(match[11].length); // trailing spaces
+    context.input.consume(match[12]?.length || 0); // style
     const cursor11 = context.input.capture();
+    context.input.consume(match[13]?.length || 0); // close brace
+    const cursor12 = context.input.capture();
+    context.input.consume(match[14]?.length); // trailing spaces
+    const cursor13 = context.input.capture();
     const child = new Node(this.type);
     child.content = {
       text: match[2],
@@ -68,49 +72,75 @@ export class GridRule extends Block {
       columns: match[8].trim(), // remove leading colon
       style: match[10] || "{}",
     };
-    child.data.tokens.push({
-      type: "marker",
-      text: match[3],
-      start: cursor1,
-      end: cursor2,
-    },
-    {
-      type: "keyword",
-      text: match[4],
-      start: cursor3,
-      end: cursor4,
-    },
-    {
-      type: "marker",
-      text: match[5],
-      start: cursor4,
-      end: cursor5,
-    },
-    {
-      type: "keyword",
-      text: match[6],
-      start: cursor5,
-      end: cursor6,
-    },
-    {
-      type: "marker",
-      text: match[7],
-      start: cursor6,
-      end: cursor7,
-    },
-    {
-      type: "keyword",
-      text: match[8],
-      start: cursor7,
-      end: cursor8,
-    });
-    if (match[9]) {
-      child.data.tokens.push({
+    child.data.tokens.push(
+      {
+        type: "marker",
+        text: match[2],
+        start: cursor1,
+        end: cursor2,
+      },
+      {
+        type: "marker",
+        text: match[3],
+        start: cursor2,
+        end: cursor3,
+      },
+      {
+        type: "param",
+        text: match[4],
+        start: cursor3,
+        end: cursor4,
+      },
+      {
+        type: "marker",
+        text: match[5],
+        start: cursor4,
+        end: cursor5,
+      },
+      {
+        type: "param",
+        text: match[6],
+        start: cursor5,
+        end: cursor6,
+      },
+      {
+        type: "marker",
+        text: match[7],
+        start: cursor6,
+        end: cursor7,
+      },
+      {
+        type: "param",
+        text: match[8],
+        start: cursor7,
+        end: cursor8,
+      },
+      {
         type: "marker",
         text: match[9],
         start: cursor8,
         end: cursor9,
       });
+    if (match[10]) {
+      child.data.tokens.push(
+        {
+          type: "marker",
+          text: match[11],
+          start: cursor9,
+          end: cursor10,
+        },
+        {
+          type: "param",
+          text: match[12],
+          start: cursor10,
+          end: cursor11,
+        },
+        {
+          type: "marker",
+          text: match[13],
+          start: cursor11,
+          end: cursor12,
+        });
     }
     return child;
   }
@@ -119,7 +149,7 @@ export class GridRule extends Block {
 export class GridItemRule extends Block {
   constructor(type) {
     super(type);
-    this.patternItem = /^(\s*)(\[[:.' ]{2}\])({.*?})?/;
+    this.patternItem = /^(\s*)(\[[:.' ]{2}\])(({)(.*?)(}))?/;
     this.patternIndent = /^(\s*)/;
   }
 
@@ -151,8 +181,14 @@ export class GridItemRule extends Block {
     const cursor1 = context.input.capture();
     context.input.consume(match[2].length); // marker
     const cursor2 = context.input.capture();
-    context.input.consume(match[3]?.length || 0); // style
+    context.input.consume(match[4]?.length || 0); // open brace
     const cursor3 = context.input.capture();
+    context.input.consume(match[5]?.length || 0); // style
+    const cursor4 = context.input.capture();
+    context.input.consume(match[6]?.length || 0); // close brace
+    const cursor5 = context.input.capture();
+    context.input.consume(match[7]?.length || 0); // trailing spaces
+    const cursor6 = context.input.capture();
     const child = new Node(this.type, true);
     child.content = {
       text: match[2],
@@ -161,7 +197,7 @@ export class GridItemRule extends Block {
     };
     child.data.fields = {
       align: match[2],
-      style: match[3] || "{}",
+      style: match[5] || "",
     };
     child.data.tokens.push({
       type: "marker",
@@ -170,12 +206,25 @@ export class GridItemRule extends Block {
       end: cursor2,
     });
     if (match[3]) {
-      child.data.tokens.push({
-        type: "marker",
-        text: match[3],
-        start: cursor2,
-        end: cursor3,
-      });
+      child.data.tokens.push(
+        {
+          type: "marker",
+          text: match[4],
+          start: cursor2,
+          end: cursor3,
+        },
+        {
+          type: "param",
+          text: match[5],
+          start: cursor3,
+          end: cursor4,
+        },
+        {
+          type: "marker",
+          text: match[6],
+          start: cursor4,
+          end: cursor5,
+        });
     }
     return child;
   }

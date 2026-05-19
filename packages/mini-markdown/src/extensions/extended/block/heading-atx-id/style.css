@@ -40,3 +40,15 @@
   font-size: var(--mmd-font-size-sm);
   line-height: var(--mmd-line-height-text);
 }
+
+.mini-markdown span.heading-atx-id.token-marker {
+  color: var(--mmd-color-token-marker);
+}
+
+.mini-markdown span.heading-atx-id.token-content {
+  color: var(--mmd-color-token-content);
+}
+
+.mini-markdown span.heading-atx-id.token-param {
+  color: var(--mmd-color-token-param);
+}

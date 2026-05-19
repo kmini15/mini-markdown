@@ -6,6 +6,8 @@ import { AstRenderer } from "./renderer/ast-renderer.js";
 import { HtmlRenderer } from "./renderer/html-renderer.js";
 import { TokenRenderer } from "./renderer/token-renderer.js";
 
+import { SyntaxHighlightRenderer } from "./renderer/syntax-highlight-renderer.js";
+
 import { Basic } from "./extensions/basic/index.js";
 import { Extended } from "./extensions/extended/index.js";
 import { Custom } from "./extensions/custom/index.js";
@@ -22,18 +24,18 @@ export class MiniMarkdown {
 
     this.blocks = new OrderResolver(this.blocks).resolve();
     this.inlines = new OrderResolver(this.inlines).resolve();
-    
+
     this.blockParser = new BlockParser(this.blocks.map(rule => rule.rule));
     this.inlineParser = new InlineParser(this.inlines.map(rule => rule.rule));
     this.astRenderer = new AstRenderer();
     this.htmlRenderer = new HtmlRenderer(this.renderers);
     this.tokenRenderer = new TokenRenderer();
 
+    this.syntaxHighlightRenderer = new SyntaxHighlightRenderer();
+
+    this.text_markdown = null;
     this.node_ast = null;
-    this.html_ast = "";
-    this.html_html = "";
-    this.html_token = "";
-    this.text_markdown = "";
+    this.html_html = null;
   }
 
   static defaultExtensions() {
@@ -71,12 +73,10 @@ export class MiniMarkdown {
     for (const behavior of this.behaviors) {
       behavior.unmount(this.root);
     }
+    this.text_markdown = text;
     this.node_ast = this.blockParser.parse(text);
     this.node_ast = this.inlineParser.parse(this.node_ast);
-    this.html_ast = this.astRenderer.render(this.node_ast);
     this.html_html = this.htmlRenderer.render(this.node_ast);
-    this.html_token = this.tokenRenderer.render(this.node_ast);
-    this.text_markdown = text;
     this.root.innerHTML = this.html_html;
     for (const behavior of this.behaviors) {
       behavior.mount(this.root);
@@ -84,7 +84,7 @@ export class MiniMarkdown {
   }
 
   getPreviewAst() {
-    return this.html_ast;
+    return this.astRenderer.render(this.node_ast);
   }
 
   getPreviewHtml() {
@@ -92,7 +92,11 @@ export class MiniMarkdown {
   }
 
   getPreviewToken() {
-    return this.html_token;
+    return this.tokenRenderer.render(this.node_ast);
+  }
+  
+  getPreviewSyntax() {
+    return this.syntaxHighlightRenderer.render(this.node_ast, this.text_markdown);
   }
 
   getPreviewMarkdown() {

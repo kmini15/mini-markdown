@@ -40,3 +40,11 @@
   font-size: var(--mmd-font-size-sm);
   line-height: var(--mmd-line-height-text);
 }
+
+.mini-markdown span.heading-setext.token-marker {
+  color: var(--mmd-color-token-marker);
+}
+
+.mini-markdown span.heading-setext.token-content {
+  color: var(--mmd-color-token-content);
+}

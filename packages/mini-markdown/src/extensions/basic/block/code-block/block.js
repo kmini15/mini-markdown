@@ -16,6 +16,18 @@ export class CodeBlockRule extends Block {
     const cursor1 = context.input.capture();
     context.input.consume(match[2].length); // content
     const cursor2 = context.input.capture();
+    node.data.tokens.push({
+      type: "marker",
+      text: match[1],
+      start: cursor0,
+      end: cursor1,
+    });
+    node.data.tokens.push({
+      type: "code",
+      text: "",
+      start: cursor1,
+      end: cursor2,
+    });
     const literal = new Node("literal");
     literal.content = {
       text: match[2],
@@ -42,6 +54,18 @@ export class CodeBlockRule extends Block {
       start: cursor0,
       end: cursor1,
     }
+    child.data.tokens.push({
+      type: "marker",
+      text: match[1],
+      start: cursor0,
+      end: cursor1,
+    });
+    child.data.tokens.push({
+      type: "code",
+      text: "",
+      start: cursor1,
+      end: cursor2,
+    });
     const literal = new Node("literal");
     literal.content = {
       text: match[2],

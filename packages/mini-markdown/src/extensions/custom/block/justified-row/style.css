@@ -28,3 +28,19 @@
   max-width: none;
   max-height: none;
 }
+
+.mini-markdown span.justified-row.token-marker {
+  color: var(--mmd-color-token-marker);
+}
+
+.mini-markdown span.justified-row.token-param {
+  color: var(--mmd-color-token-param);
+}
+
+.mini-markdown span.justified-row-item.token-marker {
+  color: var(--mmd-color-token-marker);
+}
+
+.mini-markdown span.justified-row-item.token-param {
+  color: var(--mmd-color-token-param);
+}
