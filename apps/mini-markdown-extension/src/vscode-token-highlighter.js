@@ -37,7 +37,7 @@ export class VSCodeTokenHighlighter {
         this.clear(editor);
         return;
       }
-      const segments = this.parser.segmentBuilder.build(root);
+      const segments = this.parser.tokenSegmentBuilder.build(root);
       const groups = this.groupSegments(editor.document, segments);
       this.applyGroups(editor, groups);
       this.clearUnusedDecorations(editor, groups);
