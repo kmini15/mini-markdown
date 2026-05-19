@@ -6,6 +6,7 @@ import { AstRenderer } from "./renderer/ast-renderer.js";
 import { HtmlRenderer } from "./renderer/html-renderer.js";
 import { TokenRenderer } from "./renderer/token-renderer.js";
 
+import { TokenSegmentBuilder } from "./renderer/token-segment-builder.js";
 import { SyntaxHighlightRenderer } from "./renderer/syntax-highlight-renderer.js";
 
 import { Basic } from "./extensions/basic/index.js";
@@ -31,6 +32,7 @@ export class MiniMarkdown {
     this.htmlRenderer = new HtmlRenderer(this.renderers);
     this.tokenRenderer = new TokenRenderer();
 
+    this.tokenSegmentBuilder = new TokenSegmentBuilder();
     this.syntaxHighlightRenderer = new SyntaxHighlightRenderer();
 
     this.text_markdown = null;
@@ -73,14 +75,23 @@ export class MiniMarkdown {
     for (const behavior of this.behaviors) {
       behavior.unmount(this.root);
     }
-    this.text_markdown = text;
-    this.node_ast = this.blockParser.parse(text);
-    this.node_ast = this.inlineParser.parse(this.node_ast);
-    this.html_html = this.htmlRenderer.render(this.node_ast);
+    
+    this.html_html = this.htmlRenderer.render(this.parse(text));
     this.root.innerHTML = this.html_html;
     for (const behavior of this.behaviors) {
       behavior.mount(this.root);
     }
+  }
+  
+  parse(text) {
+    this.text_markdown = text;
+    this.node_ast = this.blockParser.parse(text);
+    this.node_ast = this.inlineParser.parse(this.node_ast);
+    return this.node_ast;
+  }
+  
+  parseSegments(node) {
+    return this.tokenSegmentBuilder.build(node);
   }
 
   getPreviewAst() {
@@ -92,7 +103,7 @@ export class MiniMarkdown {
   }
 
   getPreviewToken() {
-    return this.tokenRenderer.render(this.node_ast);
+    return this.tokenRenderer.render(this.node_ast, this.text_markdown);
   }
   
   getPreviewSyntax() {

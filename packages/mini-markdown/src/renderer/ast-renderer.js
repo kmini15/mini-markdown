@@ -11,13 +11,10 @@ export class AstRenderer {
     const content = node.content;
     const fields = node.data.fields;
     if (this.renderMarker) {
-      result += "────";
-      result += `[<span class="color-cursor-row">${content.start.row}</span>`
-      result += `:<span class="color-cursor-col">${content.start.col}</span>`
-      result += `(<span class="color-cursor-idx">${content.start.idx}</span>)`
-      result += `-<span class="color-cursor-row">${content.end.row}</span>`
-      result += `:<span class="color-cursor-col">${content.end.col}</span>`
-      result += `(<span class="color-cursor-idx">${content.end.idx}</span>)]`;
+      result += `[<span class="color-cursor-row">${content.start.row}</span>`;
+      result += `:<span class="color-cursor-col">${content.start.col}</span>`;
+      result += `-<span class="color-cursor-row">${content.end.row}</span>`;
+      result += `:<span class="color-cursor-col">${content.end.col}</span>]`;
     }
     if (this.renderText) {
       let text = node.content.text.replace(/\r\n|\n/g, "\\n");

@@ -6,8 +6,10 @@ function advance(text, start, ruler = textRuler) {
     let row = start.row;
     let col = start.col;
     let idx = start.idx;
+    let offset = start.offset;
 
     for (const ch of text) {
+      offset++;
       if (ch === "\n") {
         row++;
         col = 0;
@@ -18,7 +20,7 @@ function advance(text, start, ruler = textRuler) {
       }
     }
 
-    return { row, col, idx };
+    return { row, col, idx, offset };
   }
 
 export function split(token, pattern, ruler = textRuler) {
