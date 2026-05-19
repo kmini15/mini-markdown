@@ -33,14 +33,12 @@ export class FencedCodeBlockRule extends Block {
     }
     child.data.tokens.push({
       type: "marker",
-      text: match[2],
       start: cursor1,
       end: cursor2,
     });
     if (match[3]) {
       child.data.tokens.push({
         type: "param",
-        text: match[3],
         start: cursor2,
         end: cursor3,
       });
@@ -62,7 +60,6 @@ export class FencedCodeBlockRule extends Block {
         const cursor2 = context.input.capture();
         child.data.tokens.push({
           type: "marker",
-          text: match[2],
           start: cursor1,
           end: cursor2,
         });
@@ -78,7 +75,6 @@ export class FencedCodeBlockRule extends Block {
       context.input.advance();
       child.data.tokens.push({
         type: "code",
-        text: line,
         start: cursor1,
         end: cursor2,
       });

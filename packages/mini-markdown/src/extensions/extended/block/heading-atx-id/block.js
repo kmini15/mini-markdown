@@ -44,31 +44,26 @@ export class HeadingAtxIdRule extends Block {
     };
     child.data.tokens.push({
       type: "marker",
-      text: match[2],
       start: cursor1,
       end: cursor2,
     });
     child.data.tokens.push({
       type: "content",
-      text: match[3],
       start: cursor2,
       end: cursor3,
     });
     child.data.tokens.push({
       type: "marker",
-      text: match[5],
       start: cursor4,
       end: cursor5, 
     });
     child.data.tokens.push({
       type: "param",
-      text: match[6] + match[7],
       start: cursor5,
       end: cursor7,
     });
     child.data.tokens.push({
       type: "marker",
-      text: match[8],
       start: cursor7,
       end: cursor8,
     });

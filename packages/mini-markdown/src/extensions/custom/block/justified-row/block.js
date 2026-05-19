@@ -69,56 +69,47 @@ export class JustifiedRowRule extends Block {
     };
     child.data.tokens.push({
       type: "marker",
-      text: match[2],
       start: cursor1,
       end: cursor2,
     });
     child.data.tokens.push({
       type: "marker",
-      text: match[3],
       start: cursor2,
       end: cursor3,
     });
     child.data.tokens.push({
       type: "param",
-      text: match[4],
       start: cursor3,
       end: cursor4,
     });
     child.data.tokens.push({
       type: "marker",
-      text: match[5],
       start: cursor4,
       end: cursor5,
     });
     child.data.tokens.push({
       type: "param",
-      text: match[6],
       start: cursor5,
       end: cursor6,
     });
     child.data.tokens.push({
       type: "marker",
-      text: match[7],
       start: cursor6,
       end: cursor7,
     });
     if (match[8]) {
       child.data.tokens.push({
         type: "marker",
-        text: match[9],
         start: cursor7,
         end: cursor8,
       });
       child.data.tokens.push({
         type: "param",
-        text: match[10],
         start: cursor8,
         end: cursor9,
       });
       child.data.tokens.push({
         type: "marker",
-        text: match[11],
         start: cursor9,
         end: cursor10,
       });
@@ -180,26 +171,22 @@ export class JustifiedRowItemRule extends Block {
     };
     child.data.tokens.push({
       type: "marker",
-      text: match[2],
       start: cursor1,
       end: cursor2,
     });
     if (match[3]) {
       child.data.tokens.push({
         type: "marker",
-        text: match[4],
         start: cursor2,
         end: cursor3,
       });
       child.data.tokens.push({
         type: "param",
-        text: match[5],
         start: cursor3,
         end: cursor4,
       });
       child.data.tokens.push({
         type: "marker",
-        text: match[6],
         start: cursor4,
         end: cursor5,
       });

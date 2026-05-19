@@ -38,7 +38,6 @@ export class HeadingSetextRule extends Block {
     };
     child.data.tokens.push({
       type: "marker",
-      text: match[2],
       start: cursor1,
       end: cursor2,
     });
@@ -46,7 +45,6 @@ export class HeadingSetextRule extends Block {
       const line = context.lines[i];
       child.data.tokens.push({
         type: "content",
-        text: line.content.text,
         start: line.content.start,
         end: line.content.end,
       });

@@ -29,13 +29,11 @@ export class HeadingAtxRule extends Block {
     };
     child.data.tokens.push({
       type: "marker",
-      text: match[2],
       start: cursor1,
       end: cursor2,
     });
     child.data.tokens.push({
       type: "content",
-      text: match[3],
       start: cursor2,
       end: cursor3,
     });

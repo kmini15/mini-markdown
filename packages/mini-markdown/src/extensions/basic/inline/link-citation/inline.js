@@ -88,7 +88,6 @@ export class LinkCitationRule extends Inline {
     };
     nodeLink.data.tokens.push({
       type: "marker",
-      text: nodeLabelOpen.content.text,
       start: nodeLabelOpen.content.start,
       end: nodeLabelOpen.content.end,
     });
@@ -96,7 +95,6 @@ export class LinkCitationRule extends Inline {
       const next = curr.next;
       nodeLink.data.tokens.push({
         type: "content",
-        text: curr.content.text,
         start: curr.content.start,
         end: curr.content.end,
       });
@@ -106,25 +104,21 @@ export class LinkCitationRule extends Inline {
     nodeLink.data.tokens.push(
       {
         type: "marker",
-        text: nodeLabelClose.content.text,
         start: nodeLabelClose.content.start,
         end: nodeLabelClose.content.end,
       },
       {
         type: "marker",
-        text: nodeDestOpen.content.text,
         start: nodeDestOpen.content.start,
         end: nodeDestOpen.content.end,
       },
       {
         type: "param",
-        text: nodeDest.content.text,
         start: nodeDest.content.start,
         end: nodeDest.content.end,
       },
       {
         type: "marker",
-        text: nodeDestClose.content.text,
         start: nodeDestClose.content.start,
         end: nodeDestClose.content.end,
       }

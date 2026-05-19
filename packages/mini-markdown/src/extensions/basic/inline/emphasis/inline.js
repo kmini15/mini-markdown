@@ -87,7 +87,6 @@ export class EmphasisRule extends Inline {
     };
     emphasisNode.data.tokens.push({
       type: "marker-bold",
-      text: onNode.content.text,
       start: onNode.content.start,
       end: onNode.content.end,
     });
@@ -96,7 +95,6 @@ export class EmphasisRule extends Inline {
       emphasisNode.appendChild(curr);
       emphasisNode.data.tokens.push({
         type: "content-bold",
-        text: curr.content.text,
         start: curr.content.start,
         end: curr.content.end,
       });
@@ -104,7 +102,6 @@ export class EmphasisRule extends Inline {
     }
     emphasisNode.data.tokens.push({
       type: "marker-bold",
-      text: cnNode.content.text,
       start: cnNode.content.start,
       end: cnNode.content.end,
     });
@@ -127,7 +124,6 @@ export class EmphasisRule extends Inline {
     };
     emphasisNode.data.tokens.push({
       type: "marker-italic",
-      text: onNode.content.text,
       start: onNode.content.start,
       end: onNode.content.end,
     });
@@ -136,7 +132,6 @@ export class EmphasisRule extends Inline {
       emphasisNode.appendChild(curr);
       emphasisNode.data.tokens.push({
         type: "content-italic",
-        text: curr.content.text,
         start: curr.content.start,
         end: curr.content.end,
       });
@@ -144,7 +139,6 @@ export class EmphasisRule extends Inline {
     }
     emphasisNode.data.tokens.push({
       type: "marker-italic",
-      text: cnNode.content.text,
       start: cnNode.content.start,
       end: cnNode.content.end,
     });

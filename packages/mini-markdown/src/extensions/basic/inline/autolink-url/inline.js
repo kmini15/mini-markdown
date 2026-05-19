@@ -37,19 +37,16 @@ export class AutolinkUrlRule extends Inline {
           }
           linkNode.data.tokens.push({
             type: "marker",
-            text: open.content.text,
             start: open.content.start,
             end: open.content.end,
           },
           {
             type: "content",
-            text: text.content.text,
             start: text.content.start,
             end: text.content.end,
           },
           {
             type: "marker",
-            text: close.content.text,
             start: close.content.start,
             end: close.content.end,
           });

@@ -18,13 +18,11 @@ export class CodeBlockRule extends Block {
     const cursor2 = context.input.capture();
     node.data.tokens.push({
       type: "marker",
-      text: match[1],
       start: cursor0,
       end: cursor1,
     });
     node.data.tokens.push({
       type: "code",
-      text: "",
       start: cursor1,
       end: cursor2,
     });
@@ -56,13 +54,11 @@ export class CodeBlockRule extends Block {
     }
     child.data.tokens.push({
       type: "marker",
-      text: match[1],
       start: cursor0,
       end: cursor1,
     });
     child.data.tokens.push({
       type: "code",
-      text: "",
       start: cursor1,
       end: cursor2,
     });

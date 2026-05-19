@@ -50,7 +50,6 @@ export class ListRule extends Block {
     }
     child.data.tokens.push({
       type: "marker",
-      text: match[2],
       start: cursor0,
       end: cursor1,
     });
@@ -99,7 +98,6 @@ export class ListItemRule extends Block {
     }
     child.data.tokens.push({
       type: "marker",
-      text: match[2],
       start: cursor0,
       end: cursor1,
     });

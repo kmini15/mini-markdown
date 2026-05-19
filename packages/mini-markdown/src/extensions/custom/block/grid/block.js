@@ -75,49 +75,41 @@ export class GridRule extends Block {
     child.data.tokens.push(
       {
         type: "marker",
-        text: match[2],
         start: cursor1,
         end: cursor2,
       },
       {
         type: "marker",
-        text: match[3],
         start: cursor2,
         end: cursor3,
       },
       {
         type: "param",
-        text: match[4],
         start: cursor3,
         end: cursor4,
       },
       {
         type: "marker",
-        text: match[5],
         start: cursor4,
         end: cursor5,
       },
       {
         type: "param",
-        text: match[6],
         start: cursor5,
         end: cursor6,
       },
       {
         type: "marker",
-        text: match[7],
         start: cursor6,
         end: cursor7,
       },
       {
         type: "param",
-        text: match[8],
         start: cursor7,
         end: cursor8,
       },
       {
         type: "marker",
-        text: match[9],
         start: cursor8,
         end: cursor9,
       });
@@ -125,19 +117,16 @@ export class GridRule extends Block {
       child.data.tokens.push(
         {
           type: "marker",
-          text: match[11],
           start: cursor9,
           end: cursor10,
         },
         {
           type: "param",
-          text: match[12],
           start: cursor10,
           end: cursor11,
         },
         {
           type: "marker",
-          text: match[13],
           start: cursor11,
           end: cursor12,
         });
@@ -201,7 +190,6 @@ export class GridItemRule extends Block {
     };
     child.data.tokens.push({
       type: "marker",
-      text: match[2],
       start: cursor1,
       end: cursor2,
     });
@@ -209,19 +197,16 @@ export class GridItemRule extends Block {
       child.data.tokens.push(
         {
           type: "marker",
-          text: match[4],
           start: cursor2,
           end: cursor3,
         },
         {
           type: "param",
-          text: match[5],
           start: cursor3,
           end: cursor4,
         },
         {
           type: "marker",
-          text: match[6],
           start: cursor4,
           end: cursor5,
         });

@@ -22,7 +22,6 @@ export class EscapeRule extends Inline {
         child.type = this.type;
         child.data.tokens.push({
           type: "marker",
-          text: child.content.text[0],
           start: child.content.start,
           end: {
             row: child.content.start.row,
@@ -32,7 +31,6 @@ export class EscapeRule extends Inline {
         });
         child.data.tokens.push({
           type: "content",
-          text: child.content.text[1],
           start: {
             row: child.content.start.row,
             col: child.content.start.col + 1,

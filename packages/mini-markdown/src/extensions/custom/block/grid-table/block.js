@@ -96,7 +96,6 @@ export class GridTableRule extends Block {
     const cursorEnd = context.input.capture();
     tableNode.data.tokens.push({
       type: "marker",
-      text: openLine,
       start: capture,
       end: cursorEnd,
     });

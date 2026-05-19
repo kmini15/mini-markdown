@@ -26,7 +26,6 @@ export class HorizontalRuleRule extends Block {
     }
     child.data.tokens.push({
       type: "marker",
-      text: match[2],
       start: cursor1,
       end: cursor2,
     });

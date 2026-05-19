@@ -54,31 +54,26 @@ export class LinkReferenceRule extends Block {
     child.data.tokens.push(
       {
         type: "marker",
-        text: m_open,
         start: cursor1,
         end: cursor2,
       },
       {
         type: "content",
-        text: m_label,
         start: cursor2,
         end: cursor3,
       },
       {
         type: "marker",
-        text: m_close,
         start: cursor3,
         end: cursor4,
       },
       {
         type: "marker",
-        text: m_sep,
         start: cursor4,
         end: cursor5,
       },
       {
         type: "param",
-        text: m_href,
         start: cursor5,
         end: cursor6,
       },
@@ -87,19 +82,16 @@ export class LinkReferenceRule extends Block {
       child.data.tokens.push(
         {
           type: "marker",
-          text: m_quote1,
           start: cursor7,
           end: cursor8,
         },
         {
           type: "param",
-          text: m_title,
           start: cursor8,
           end: cursor9,
         },
         {
           type: "marker",
-          text: m_quote2,
           start: cursor9,
           end: cursor10,
         }

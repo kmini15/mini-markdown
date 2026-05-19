@@ -57,7 +57,6 @@ export class CodeInlineRule extends Inline {
     };
     code.data.tokens.push({
       type: "marker",
-      text: open.content.text,
       start: open.content.start,
       end: open.content.end,
     });
@@ -69,7 +68,6 @@ export class CodeInlineRule extends Inline {
       code.appendChild(between);
       code.data.tokens.push({
         type: "code",
-        text: between.content.text,
         start: between.content.start,
         end: between.content.end,
       });
@@ -77,7 +75,6 @@ export class CodeInlineRule extends Inline {
     }
     code.data.tokens.push({
       type: "marker",
-      text: close.content.text,
       start: close.content.start,
       end: close.content.end,
     });
