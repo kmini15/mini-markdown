@@ -5,7 +5,7 @@ export class FencedCodeBlockRule extends Block {
   constructor(type) {
     super(type);
     this.pattern = /^(\s*)(```)(\w+)?(\s*)$/;
-    this.patternIndent = /^(\s*)(.*)$/;
+    this.patternIndent = /^(\s*)([\s\S]*)$/;
   }
 
   parse(context, parent) {
@@ -78,7 +78,7 @@ export class FencedCodeBlockRule extends Block {
       context.input.advance();
       const text = new Node("literal");
       text.content = {
-        text: line + "\n",
+        text: line,
         start: cursor1,
         end: cursor2,
       };

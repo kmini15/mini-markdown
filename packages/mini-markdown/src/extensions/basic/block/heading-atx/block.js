@@ -4,7 +4,7 @@ import { Node } from "../../../../core/node.js";
 export class HeadingAtxRule extends Block {
   constructor(type) {
     super(type);
-    this.pattern = /^(\s*)(#{1,6}\s)(.*)$/;
+    this.pattern = /^(\s*)(#{1,6}\s)([\s\S]*)$/;
   }
 
   parse(context, parent) {

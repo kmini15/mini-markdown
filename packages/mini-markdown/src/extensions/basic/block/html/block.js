@@ -39,7 +39,7 @@ export class HtmlRule extends Block {
       const cursor1 = context.input.capture();
       const text = new Node(this.type + "-text");
       text.content = {
-        text: input + "\n",
+        text: input,
         start: cursor0,
         end: cursor1,
       };

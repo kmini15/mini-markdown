@@ -4,7 +4,7 @@ import { Node } from "../../../../core/node.js";
 export class CodeBlockRule extends Block {
   constructor(type) {
     super(type);
-    this.pattern = /^(\s{4})(.*)$/;
+    this.pattern = /^(\s{4})([\s\S]*)$/;
   }
 
   continue(context, node) {
@@ -18,7 +18,7 @@ export class CodeBlockRule extends Block {
     const cursor2 = context.input.capture();
     const literal = new Node("literal");
     literal.content = {
-      text: match[2] + "\n",
+      text: match[2],
       start: cursor1,
       end: cursor2,
     };
@@ -44,7 +44,7 @@ export class CodeBlockRule extends Block {
     }
     const literal = new Node("literal");
     literal.content = {
-      text: match[2] + "\n",
+      text: match[2],
       start: cursor1,
       end: cursor2,
     };

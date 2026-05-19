@@ -3,7 +3,7 @@ import { TextRuler } from "./text-ruler.js";
 export class TextContext {
   constructor(text, ruler = new TextRuler()) {
     this.ruler = ruler;
-    this.lines = text.replace(/\r\n?/g, "\n").split("\n");
+    this.lines = text.replace(/\r\n?/g, "\n").split(/(?<=\n)/);
     this.numLines = this.lines.length;
     this.row = 0; // line number in text
     this.col = 0; // column number in line

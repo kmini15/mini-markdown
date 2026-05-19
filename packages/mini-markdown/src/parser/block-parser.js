@@ -11,7 +11,7 @@ export class BlockParser {
 
   parse(text) {
     const context = {
-      input: new TextContext(text + "\n"),
+      input: new TextContext(text),
       stack: new NodeStack(),
       index: -1,
       lines: [],
@@ -36,7 +36,7 @@ export class BlockParser {
         const cursor1 = context.input.capture();
         const text = new Node("text");
         text.content = {
-          text: line + "\n",
+          text: line,
           start: cursor0,
           end: cursor1,
         };

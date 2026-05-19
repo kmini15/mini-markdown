@@ -4,9 +4,9 @@ import { Node } from "../../../../core/node.js";
 export class ListRule extends Block {
   constructor(type) {
     super(type);
-    this.pattern = /^(\s*)([-+*]\s|\d+\.\s)(.*)/;
-    this.patternItem = /^(\s*)([-+*]\s|\d+\.\s)(.*)/;
-    this.patternIndent = /^(\s*)[^\s]/;
+    this.pattern = /^(\s*)([-+*]\s|\d+\.\s)/;
+    this.patternItem = /^(\s*)([-+*]\s|\d+\.\s)/;
+    this.patternIndent = /^(\s*)/;
     this.patternOrdered = /^\d+\.\s/;
   }
 
@@ -61,8 +61,8 @@ export class ListRule extends Block {
 export class ListItemRule extends Block {
   constructor(type) {
     super(type);
-    this.pattern = /^(\s*)([-+*]\s|\d+\.\s)(.*)/;
-    this.patternIndent = /^(\s*)[^\s]/;
+    this.patternItem = /^(\s*)([-+*]\s|\d+\.\s)/;
+    this.patternIndent = /^(\s*)/;
   }
 
   continue(context, node) {
@@ -85,7 +85,7 @@ export class ListItemRule extends Block {
   parse(context, parent) {
     if (parent.type === this.type) return null;
     const input = context.input.current();
-    const match = this.pattern.exec(input);
+    const match = this.patternItem.exec(input);
     if (!match) return null;
     context.input.consume(match[1].length); // indent
     const cursor0 = context.input.capture();
