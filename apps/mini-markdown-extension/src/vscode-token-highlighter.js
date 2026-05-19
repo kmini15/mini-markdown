@@ -4,7 +4,6 @@ import MiniMarkdown from "@kmini15/mini-markdown";
 export class VSCodeTokenHighlighter {
   constructor() {
     this.parser = new MiniMarkdown();
-    this.segmentBuilder = this.parser.tokenSegmentBuilder;
     this.decorationTypes = new Map();
     this.disposables = [];
   }
@@ -38,7 +37,7 @@ export class VSCodeTokenHighlighter {
         this.clear(editor);
         return;
       }
-      const segments = this.segmentBuilder.build(root);
+      const segments = this.parser.segmentBuilder.build(root);
       const groups = this.groupSegments(editor.document, segments);
       this.applyGroups(editor, groups);
       this.clearUnusedDecorations(editor, groups);

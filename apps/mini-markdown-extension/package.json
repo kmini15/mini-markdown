@@ -2,7 +2,7 @@
   "name": "mini-markdown-extension",
   "displayName": "Mini Markdown Extension",
   "description": "Mini Markdown Extension for VS Code",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "publisher": "KMini15",
   "repository": "https://github.com/kmini15/mini-markdown",
   "engines": {
@@ -45,6 +45,6 @@
   "devDependencies": {
     "vite": "^8.0.12",
     "highlight.js": "^11.11.1",
-    "@kmini15/mini-markdown": "^0.1.4"
+    "@kmini15/mini-markdown": "^0.1.6"
   }
 }

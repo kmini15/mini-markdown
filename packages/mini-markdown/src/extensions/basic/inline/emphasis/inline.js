@@ -9,7 +9,7 @@ export class EmphasisRule extends Inline {
 
   parse(node) {
     this.stack = [];
-    this.dfs(node, (child) => {
+    this.dfs(node, null, (child) => {
       this.split(child, /(\*+|\_+)/);
       this.match(child);
       this.merge(child);
@@ -241,6 +241,7 @@ export class EmphasisRule extends Inline {
         row: node.content.start.row,
         col: node.content.start.col + idx,
         idx: node.content.start.idx + idx,
+        offset: node.content.start.offset + idx,
       }
     };
     start.data.fields = { ...node.data.fields };
@@ -251,6 +252,7 @@ export class EmphasisRule extends Inline {
         row: node.content.start.row,
         col: node.content.start.col + idx,
         idx: node.content.start.idx + idx,
+        offset: node.content.start.offset + idx,
       },
       end: node.content.end,
     };
