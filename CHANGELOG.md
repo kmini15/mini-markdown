@@ -36,6 +36,10 @@
   - Fixed the CSS.
 
 - **v0.1.6**:
-  - Fixed VS Code token highlighting to use `parser.segmentBuilder` directly instead of a stale cached reference.
-  - Updated emphasis inline parsing DFS call signature.
+  - Removed the cached `tokenSegmentBuilder` reference and switched VS Code token highlighting to use `parser.segmentBuilder` directly.
+  - Updated emphasis inline parsing DFS call signature to pass the post-order callback correctly.
   - Added missing `offset` propagation when splitting emphasis tokens.
+  - Bumped `@kmini15/mini-markdown` and extension package versions.
+
+- **v0.1.7**:
+  - Fixed VS Code token highlighting to use `parser.tokenSegmentBuilder` instead of `parser.segmentBuilder`.

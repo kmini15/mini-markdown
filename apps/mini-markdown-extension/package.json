@@ -2,7 +2,7 @@
   "name": "mini-markdown-extension",
   "displayName": "Mini Markdown Extension",
   "description": "Mini Markdown Extension for VS Code",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "publisher": "KMini15",
   "repository": "https://github.com/kmini15/mini-markdown",
   "engines": {
