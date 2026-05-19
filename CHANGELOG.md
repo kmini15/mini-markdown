@@ -25,3 +25,12 @@
     - `Mini Markdown Extension: Open Preview (Token)`
     - `Mini Markdown Extension: Open Preview (HTML)`
 
+- **v0.1.5**:
+  - Fixed the code-inline bug and adjusted text and literal handling in the extension layer.
+  - Changed the parser pipeline to use a topological sort based approach.
+  - Updated `TextContext` so line data includes newline characters.
+  - Added cursor offset support.
+  - Changed token data so it no longer stores text directly.
+  - Added a syntax highlight renderer and VS Code highlight support.
+  - Fixed the CSS.
+
